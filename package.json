@@ -2,34 +2,32 @@
   "name": "cryptobox",
   "version": "0.0.1",
   "description": "encrypt file systems",
-  "main": "src/main/main.js",
+  "main": "./dist/main.js",
   "dependencies": {
-    "bootstrap": "^4.3.1",
-    "bootswatch": "^4.3.1",
-    "colors": "^1.3.3",
-    "electron": "^7.1.2",
-    "electron-log": "^3.0.9",
-    "electron-settings": "^3.0.7",
-    "electron-shortcut-normalizer": "^1.0.0",
-    "jquery": "^3.4.1",
-    "popper": "^1.0.1",
-    "popper.js": "^1.15.0",
+    "@types/shelljs": "^0.8.7",
+    "bootswatch": "^4.4.1",
+    "electron": "^8.2.1",
+    "electron-log": "^4.1.1",
+    "electron-store": "^5.1.1",
     "shelljs": "^0.8.3",
-    "string-format": "^2.0.0",
-    "update-electron-app": "^1.1.1"
+    "update-electron-app": "^1.5.0",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
-    "mocha": "^6.2.2",
-    "electron-builder": "^21.2.0",
-    "electron-packager": "^14.1.1"
+    "electron-reload": "^1.5.0",
+    "mocha": "^7.1.1",
+    "sucrase": "^3.13.0",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "electron .",
-    "pack": "sh darwin-pack.sh",
-    "build": " ./node_modules/.bin/electron-builder --publish never --config electron-builder.yaml",
-    "app": "sh darwin-pack.sh && open release-builds/cloud-enc-darwin-x64/cloud-enc.app",
-    "test": "mocha src/**/*.spec.js"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "npm run build && electron ./dist/main.js",
+    "test": "npm run build && mocha src/**/*.spec.ts -r ./require-sucrase.js"
   },
   "repository": {
     "type": "git",

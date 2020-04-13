@@ -1,8 +1,0 @@
-next steps
-    make the pack/build work
-    add the tray icon
-    add persistency with electron-setting
-    add logs with electron logs
-    error handling functions
-    convert CloudEnt to Class again and have on per entry, all of them on settings
-    add auto update function

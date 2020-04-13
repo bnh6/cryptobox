@@ -1,0 +1,52 @@
+name: "testing on push"
+on: push
+
+jobs:
+  testing:
+    name: Testing ${{github.ref}} on 
+    runs-on:  ${{ matrix.os}}
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        os: [ ubuntu-latest, macos-latest]
+        node-version: [13.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      
+      - name: Using node version ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}        
+      
+      - name: Prepare linux
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-16.04' || matrix.os == 'ubuntu-18.04'
+        run: |
+          set -euo pipefail
+          set -x
+          sudo apt install encfs -y
+          
+      - name: Prepare MAC
+        if: matrix.os == 'macos-latest' || matrix.os == 'macos'
+        run: |
+          set -euo pipefail
+          set -x
+          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          brew cask install osxfuse
+          brew install encfs
+          sudo security unlock-keychain
+          echo "testing mac"
+          mkdir  -p /tmp/testencfs/src
+          mkdir  -p /tmp/testencfs/dst
+          echo "test-encfs" > /tmp/testencfs/pass
+          encfs  /tmp/testencfs/src /tmp/testencfs/dst --extpass='cat /tmp/testencfs/pass'  --idle=0 --standard
+          sleep 3
+          mount
+          umount /tmp/testencfs/dst
+
+      - name: Running the tests with node ${{ matrix.node-version }} and ${{ matrix.os}}
+        run: |
+          npm ci
+          # npm run build # embedded on the "npm run test"
+          npm run test

@@ -2,18 +2,37 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Main Process",
+      "name": "Electron: Main",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
       "windows": {
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "args": [
-        "."
+        ".",
+        "--remote-debugging-port=9223"
       ],
       "outputCapture": "std"
+    },
+    {
+      "name": "Electron: Renderer",
+      "type": "chrome", //install this plugin -> msjsdiag.debugger-for-chrome
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}",
+      "timeout": 30000
+  }
+  ],
+  "compounds": [
+    {
+        "name": "Electron: All",
+        "configurations": [
+            "Electron: Main",
+            "Electron: Renderer"
+        ]
     }
-  ]
+]
 }

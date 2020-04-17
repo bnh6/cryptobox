@@ -27,19 +27,19 @@ export class MountVolume {
   }
 
   public mount(): { [k: string]: any } {
-    let response: { [k: string]: any } = {};
+    const response: { [k: string]: any } = {};
 
     try {
       response.volume = this.volume;
 
-      let passwordApp = new PasswordApplication()
+      const passwordApp = new PasswordApplication()
       if (!passwordApp.passwordExists(this.volume)) {
         response.status = "error";
         response.message = `try again when there is a password for ${this.volume.encryptedFolderPath}`
         return response;
       }
 
-      let isMounted = this.encryptionService.isMounted(this.volume);
+      const isMounted = this.encryptionService.isMounted(this.volume);
       response.isMounted = isMounted
       log.info(`${this.volume} is already mounted? = ${isMounted}`)
 
@@ -54,6 +54,7 @@ export class MountVolume {
       response.status = "success"
 
     } catch (error) {
+      log.error("there was an error to mound/umount the volume ", error)
       response.status = "error";
       response.message = "operation failed :("
       response.error = error

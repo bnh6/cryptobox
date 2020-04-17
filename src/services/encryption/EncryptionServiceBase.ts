@@ -32,7 +32,7 @@ export abstract class EncryptionServiceBase implements EncryptionService {
     let cmd = this.getIsMountedCMD(volume);
     log.debug(`checking if is mounted command: ${cmd}`);
 
-    let [statusCode, stdout, stderr] = ShellHelper.execute(cmd, false, false);
+    let [statusCode, stdout, stderr] = ShellHelper.execute(cmd, [], false);
 
     if (statusCode == 0) {
       log.info(`folder [${volume.decryptedFolderPath}] is already mounted`);

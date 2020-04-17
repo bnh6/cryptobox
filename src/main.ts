@@ -4,6 +4,11 @@ import * as path from "path";
 import { log } from "./utils/LogUtil";
 import * as store from "./services/store/StoreManager"
 
+import * as ShellHelper from "./utils/ShellUtil";
+
+// TODO th proccess env was missing /usr/local/bin, where encfs is...
+process.env.PATH += ":/usr/local/bin"
+log.debug("proccess path ",process.env.PATH)
 
 log.debug(`config store ->${store}`);
 // log.debug(store)
@@ -11,12 +16,17 @@ log.debug(`config store ->${store}`);
 // https://github.com/electron/electron/issues/18397
 app.allowRendererProcessReuse = true;
 
-// hot reload of web content
-require('electron-reload')(require("path").join(__dirname, "../static/"));
-// require('electron-reload')(__dirname);
-// require('electron-reload')(__dirname, {
-//   electron: require('electron')
-// });
+
+const isDev = process.argv0.includes("node_modules")
+log.info(`isDev = ${isDev}`)
+if (isDev) {
+  // hot reload of web content
+  require('electron-reload')(require("path").join(__dirname, "../static/"));
+  // require('electron-reload')(__dirname);
+  // require('electron-reload')(__dirname, {
+  //   electron: require('electron')
+  // });
+}
 
 
 
@@ -60,6 +70,7 @@ function createWindow() {
 }
 
 app.on("ready", () => {
+  statupPreReq()
   loadScripts();
   createWindow();
 
@@ -78,6 +89,7 @@ app.on("activate", function () {
 process.on("uncaughtException", function (error) {
   log.error("UNCATCH EXCEPTION FOUND ");
   log.error(error);
+  app.quit()
   // console.error(error)
 });
 
@@ -90,6 +102,16 @@ function loadScripts() {
   //       import("./client/" + script) &&
   //       log.debug(`imported: ${script} `);
   //   });
+}
+
+function statupPreReq(){
+
+  ShellHelper.checkOSSupport();
+  if (!ShellHelper.checkRequirements()){
+    log.error("environment does not meet requirements ...")
+    app.quit();
+  }
+
 }
 
 

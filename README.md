@@ -1,5 +1,11 @@
 # Cryptobox
 
+
+| Branch        | Travis           | GitHub  |
+| :------------- |:-------------|:-----|
+| MASTER        |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=master)](https://travis-ci.org/bnh6/cryptobox)| ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/testing%20on%20all%20PUSH%20and%20PR/badge.svg?branch=master) |
+| DEV           |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=dev)](https://travis-ci.org/bnh6/cryptobox)      |   ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/testing%20on%20all%20PUSH%20and%20PR/badge.svg?branch=dev)|
+
 Cryptobox is a desktop and mobile application (future) cloud agnistic solution to preserve privacy. In short, it mounts a virtual volume where the user interecat with unecrypted files, while the cloud provider only see encrypted filesoutside of the virtual volume. 
 
 Because it is totally cloud agnostic (we mean it), it can be used with any cloud provider, in fact Cryptobox can be used to encrypt files within the local disk as well, a cloud provider it is not required to use cryptbox.

@@ -11,12 +11,11 @@ export class EncryptionServiceLinux extends EncryptionServiceBase
   getUnmountCMD(volume: Volume): string {
     // return `umount "${volume.decryptedFolderPath}"`;
     return `fusermount -u "${volume.decryptedFolderPath}"`;
-    
   }
 
   getMountCMD(volume: Volume, passwordCommand: string): string {
     let impl = "encfs";
-    return `${impl} ${volume.encryptedFolderPath} ${volume.decryptedFolderPath} --standard --extpass='${passwordCommand}' --require-macs -ohard_remove --idle=${volume.ttl}`;
+    return `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' --standard --extpass='${passwordCommand}' --require-macs -ohard_remove --idle=${volume.ttl}`;
   }
 }
 

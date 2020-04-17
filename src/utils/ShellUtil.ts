@@ -1,37 +1,49 @@
-import * as shell from "shelljs";
-import {log} from "./LogUtil";
+import { log } from "./LogUtil";
 import * as constants from "./constants";
-
-import * as path from "path";
-import * as fs from "fs";
+// import { execSync } from 'child_process';  // since node 4
+import { spawnSync } from 'child_process'; // since node 12
 import * as os from "os";
 
-// TODO: replace with https://www.npmjs.com/package/shelljs.exec
-// INFO: https://github.com/shelljs/shelljs/wiki/Electron-compatibility
-shell.config.execPath = shell.which("node").stdout;
 
+
+// https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options
 export function execute(
-  cmd: any,
-  silent: boolean = false,
+  command: string,
+  args: string[] = [],
   failOnNonZeroReturn: boolean = true,
-  timeout: number = 5000
-) {
-  log.debug(`executing command ${cmd}`);
+  timeout: number = 7000): [number, string, string] {
 
-  var result = shell.exec(cmd, { silent: silent, timeout: timeout });
-  log.info(
-    `the [${cmd}] exit with code [${result.code}], stdout:[${result.stdout}] and stderr:[${result.stderr}]`
-  );
+  log.debug(`executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`);
 
-  if (failOnNonZeroReturn && result && result.code && 0 != result.code) {
-    throw new Error(`The command returned non-zero code [${result.code}]`);
+  const result = spawnSync(command, args, {
+    timeout,
+    shell: true,
+    windowsHide: true
+  });
+
+  if (result && result.error) {
+    log.error(`command [${command}] failed with error = [${result.error}] ...`)
+    log.error(result)
+    throw result.error
   }
 
-  return [result.code, result.stdout, result.stderr];
+  if (failOnNonZeroReturn && result && result.status && 0 !== result.status) {
+    throw new Error(`The command returned non-zero code [${result.status}]`);
+  }
+
+  log.debug(`command [${command}] returned status [${result.status}]`);
+
+  return [
+    result.status,
+    result.stdout.toString(),
+    result.stderr.toString()];
 }
 
-export function getOS() {
-  let platform: string = os.platform();
+
+
+
+export function checkOSSupport() {
+  const platform: string = os.platform();
 
   if (!Object.values(constants.SUPPORTED_PLATFORM).includes(platform)) {
     log.error(`unsuported platform [${platform}]`);
@@ -42,41 +54,40 @@ export function getOS() {
   }
 }
 
-export function checkOSSupport() {
-  // https://nodejs.org/dist/latest-v5.x/docs/api/os.html#os_os_platform
-  log.debug(`running on OS type [${os.type()}], release [${os.release()}]`);
+export function checkRequirements(): boolean {
+  // log.debug(execute("env"))
 
-  // if (constants.SUPPORTED_PLATFORM.indexOf(os.platform()) < 0) {
-  //     log.error(`unsuported platform ${os.platform()}`)
-  //     throw new Error(`unsuported platform ${os.platform()}`)
-  // }
-  // log.info(`platform supported ${os.platform()}`.green)
-
-  // cheking ENCFS
-  // var result = shell.which(constants.ENCFS)
-  // if (result.code === 0)
-  //     log.info(`found encfs at ${result.stdout}`)
-  // else {
-  //     log.debug(result)
-  //     throw new Error("EncFS not found, please install")
-  // }
-}
-
-export function checkDir(dir: string) {
-  var fullpath = path.resolve(dir);
-  log.debug(`absolute path: ${fullpath}`);
-
-  if (!fs.existsSync(fullpath)) {
-    log.debug(`directory [${fullpath}] does not exist, creating ...`);
-    fs.mkdirSync(fullpath);
+  const result = execute("which", ["encfs"], false)
+  if (!result) {
+    log.error("erron on findin encfs ")
+    return false
   }
 
-  if (fs.statSync(fullpath).isDirectory()) {
-    return fullpath;
-  } else {
-    log.error(`[${fullpath}] it is not a directory ...`);
-    throw new Error(`[${fullpath}] is not a directory`);
+  if (result[0] === 0) {
+    log.info(`found encfs at ${result[1]}`)
+    return true
   }
+  else {
+    log.debug("encfs not found", result)
+    return false;
+  }
+
 }
 
-// module.exports = { checkOSSupport, getOS, execute, checkDir };
+// export function checkDir(dir: string) {
+//   const fullpath = path.resolve(dir);
+//   log.debug(`absolute path: ${fullpath}`);
+
+//   if (!fs.existsSync(fullpath)) {
+//     log.debug(`directory [${fullpath}] does not exist, creating ...`);
+//     fs.mkdirSync(fullpath);
+//   }
+
+//   if (fs.statSync(fullpath).isDirectory()) {
+//     return fullpath;
+//   } else {
+//     log.error(`[${fullpath}] it is not a directory ...`);
+//     throw new Error(`[${fullpath}] is not a directory`);
+//   }
+// }
+

@@ -1,0 +1,36 @@
+dist: trusty
+language: node_js
+node_js: 13
+
+
+jobs:
+  include:
+    - os: linux
+      env: LABEL=linux
+    - os: osx
+      env: LABEL=osx
+      osx_image: xcode9.2
+cache:
+  directories:
+    - "node_modules"
+before_install:
+  - |
+    if [ $TRAVIS_OS_NAME = 'osx' ]; then
+      echo -e "\n\n\t>>>> running on MAC\t\t"
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      brew cask install osxfuse
+      brew install encfs
+      sudo security unlock-keychain -u
+    fi
+    if [ $TRAVIS_OS_NAME = 'linux' ]; then
+      echo -e "\n\n\t>>>> running on LINUX\t\t"
+      sudo apt clean
+      sudo apt update
+      sudo apt install encfs -y
+      sudo apt install snapd -y
+      mkdir -p ~/cryptobox/ && echo "12345" > ~/cryptobox/pass.txt
+    fi
+
+# script:
+  # - |
+    # npm run make

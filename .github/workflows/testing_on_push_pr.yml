@@ -1,6 +1,5 @@
+name: "testing on all PUSH and PR"
 on:
-  schedule:
-    - cron:  '0 16 * * FRI'
   push:
     branches:
       - '*'
@@ -38,6 +37,8 @@ jobs:
         run: |
           sudo apt install encfs -y
           mkdir -p ~/cryptobox/ && echo "12345" > ~/cryptobox/pass.txt
+          npm ci
+          npm test
           
       - name: Prepare MAC
         if: matrix.os == 'macos-latest' || matrix.os == 'macos'
@@ -45,10 +46,13 @@ jobs:
           /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
           brew cask install osxfuse
           brew install encfs
-          sudo security unlock-keychain
-
-
-      - name: Running the tests with node ${{ matrix.node-version }} and ${{ matrix.os}}
-        run: |
+          sudo security unlock-keychain -u
           npm ci
-          npm test
+          # npm run make
+
+
+      # - name: Running the tests with node ${{ matrix.node-version }} and ${{ matrix.os}}
+      #   run: |
+      #       npm ci
+      #       npm test
+

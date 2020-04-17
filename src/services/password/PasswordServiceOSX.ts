@@ -23,7 +23,7 @@ export class PasswordServiceOSX extends PasswordServiceBase
     let command = this.retrievePasswordCommand(volume);
 
 
-    let [result, stdout, stderr] = ShellHelper.execute(command, true, false);
+    let [result, stdout, stderr] = ShellHelper.execute(command, [], false);
 
     if (result === 0) return new Password(String(stdout));
     if (result === 44)
@@ -47,7 +47,7 @@ export class PasswordServiceOSX extends PasswordServiceBase
 
   deletePassword(volume: Volume): void {
     const command = `security delete-generic-password -a "${constants.PASSWORD_MANAGER_ALIAS}" -s '${volume.getVolumeAlias()}'`
-    ShellHelper.execute(command, false, false);
+    ShellHelper.execute(command, []);
   }
 
 }

@@ -1,0 +1,24 @@
+{
+    "appId": "org.bnh6.cryptobox",
+    "productName": "CryptoBox",
+    "copyright": "Copyright © 2020 ${author}",
+    "directories": {
+        "output": "release"
+    },
+    "mac": {
+        "icon": "static/resources/cloud-enc.icns",
+        "target": ["dmg"],
+        "type": "distribution",
+        "category":"Utilities"
+    },
+    "linux":{
+        "icon": "static/resources/cloud-enc.icns",
+        "category": "Utility",
+        "target": ["deb","rpm", "tar.gz"]
+    },
+    "dmg": {
+        "backgroundColor": "#3f4247",
+        "title": "${productName} ${version}",
+        "icon": "static/resources/cloud-enc.icns"
+    }
+}

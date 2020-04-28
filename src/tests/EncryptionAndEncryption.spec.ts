@@ -58,7 +58,7 @@ describe("testing password and encryption together", () => {
     const passwordService: PasswordService = PasswordServiceFactory.create();
     returnedPassword = passwordService.searchForPassword(volume);
 
-    expect(returnedPassword.passwordValue).to.eql(passwordValue + "\n");
+    expect(returnedPassword.passwordValue).to.eql(passwordValue);
   });
 
   it("mount volume", () => {

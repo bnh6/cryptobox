@@ -2,10 +2,10 @@ name: "testing on all PUSH and PR"
 on:
   push:
     branches:
-      - '*'
+      - 'master'
   pull_request:
     branches:
-      - '*'
+      - 'master'
 
 jobs:
   testing:

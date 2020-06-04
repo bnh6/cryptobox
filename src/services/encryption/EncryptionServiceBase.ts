@@ -42,7 +42,9 @@ export abstract class EncryptionServiceBase implements EncryptionService {
       log.info(`folder [${volume.decryptedFolderPath}] is NOT mounted`);
       return false;
     } else {
-      let msg = `Failed to check is [${volume.decryptedFolderPath}] mounted\n\n return = ${statusCode}\n\n stderr=[${stderr}] \n\n stdout=[${stdout}]`;
+      let msg = `Failed to check is [${volume.decryptedFolderPath}] \
+      mounted\n\n return = ${statusCode}\n\n \
+      stderr=[${stderr}] \n\n stdout=[${stdout}]`;
       log.error(msg);
       return false;
     }
@@ -50,7 +52,8 @@ export abstract class EncryptionServiceBase implements EncryptionService {
 
   mount(volume: Volume): void {
     log.debug(
-      `about to mount directory [${volume.encryptedFolderPath}] into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
+      `about to mount directory [${volume.encryptedFolderPath}] \
+      into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
     );
     if (this.isMounted(volume)) {
       log.debug(
@@ -72,7 +75,8 @@ export abstract class EncryptionServiceBase implements EncryptionService {
 
       log.debug(`mounting command [${mountCMD}]`);
       log.debug(
-        `mounting directory [${volume.encryptedFolderPath}] into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
+        `mounting directory [${volume.encryptedFolderPath}] \
+        into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
       );
       console.time();
       ShellHelper.execute(mountCMD);

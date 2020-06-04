@@ -14,7 +14,7 @@ export class PasswordApplication {
     let password = this.passwordService.searchForPassword(sourceVol);
 
     if (password) {
-      log.info(` password found *******`);
+      log.info(" password found *******");
       return true;
     } else {
       log.info("password not found, prompting one");

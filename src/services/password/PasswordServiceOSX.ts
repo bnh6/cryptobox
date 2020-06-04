@@ -22,7 +22,7 @@ export class PasswordServiceOSX extends PasswordServiceBase
 
     let [result, stdout, stderr] = ShellHelper.execute(command, [], false);
 
-    const passwordDecoded = Buffer.from(stdout, 'base64').toString('ascii');
+    const passwordDecoded = Buffer.from(stdout, "base64").toString("ascii");
 
     if (result === 0) return new Password(passwordDecoded);
     if (result === 44)
@@ -40,11 +40,11 @@ export class PasswordServiceOSX extends PasswordServiceBase
 
     let comment = "Created by cryptobox @ $( date +'%Y.%m.%d-%H:%M')";
 
-    const encodedPassword = Buffer.from(password.passwordValue, 'ascii').toString('base64')
+    const encodedPassword = Buffer.from(password.passwordValue, "ascii").toString("base64");
 
     let command = `security add-generic-password -a '${
       constants.PASSWORD_MANAGER_ALIAS
-    }' -s '${volume.getVolumeAlias()}' -D 'application password' -j \"${comment}\" -w'${
+    }' -s '${volume.getVolumeAlias()}' -D 'application password' -j "${comment}" -w'${
       encodedPassword
     }' -U`;
     let result = ShellHelper.execute(command);

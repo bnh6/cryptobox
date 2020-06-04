@@ -30,7 +30,7 @@ cancel.onclick = () => {
 
 function submit_password_form() {
   var args = {
-    password: passwd.innerText,
+    password: passwd.value,
     source: source,
   };
   var result = ipcRenderer.send(constants.IPC_SAVE_PASSWOD, args);
@@ -49,8 +49,7 @@ save.onclick = submit_password_form;
 passwwdForm.onsubmit = submit_password_form;
 
 passwd.onkeypress = () => {
-  const resp = zxcvbn(passwd.innerText);
-  // console.log(resp)
+  const resp = zxcvbn(passwd.value);
   // value = "\nscore = " + resp.score;
   var value = "";
   if (resp.feedback.suggestions != "")
@@ -72,7 +71,7 @@ passwd.onkeypress = () => {
 
   feedback.className = `${static_class}${badge}`;
 
-  console.log(feedback.innerText);
+  // console.log(feedback.innerText);
 };
 
 function defineBadge(respScore: any): string {

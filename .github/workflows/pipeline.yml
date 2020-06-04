@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "linting the app"
           npm ci
-          npm run lint || true # lint is currently failling
+          npm run lint
 
 
   GitHub-Testing:

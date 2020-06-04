@@ -6,20 +6,22 @@
 | MASTER        |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=master)](https://travis-ci.org/bnh6/cryptobox)| ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/testing%20on%20all%20PUSH%20and%20PR/badge.svg?branch=master) |
 | DEV           |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=dev)](https://travis-ci.org/bnh6/cryptobox)      |   ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/testing%20on%20all%20PUSH%20and%20PR/badge.svg?branch=dev)|
 
-Cryptobox is a desktop and mobile application (future) cloud agnistic solution to preserve privacy. In short, it mounts a virtual volume where the user interecat with unecrypted files, while the cloud provider only see encrypted filesoutside of the virtual volume. 
+Cryptobox is a desktop and mobile application (future), cloud agnostic solution to preserve privacy. 
 
-Because it is totally cloud agnostic (we mean it), it can be used with any cloud provider, in fact Cryptobox can be used to encrypt files within the local disk as well, a cloud provider it is not required to use cryptbox.
+In short, it allows the user to mount a virtual volume from a given folder, enabling the user to interact with unecrypted files only while the cloud provider only see the encrypted version of the same folder. 
+
+Because it is totally cloud agnostic (we mean it!), it can be used with any cloud provider. In fact, Cryptobox can be used to encrypt files within the local disk as well, a cloud provider it is not required to use cryptbox.
 
 
 Features:
- - Encrypt files individually, so cloud providers dont need to synchorised the entire folder everytime a file is changed
- - Encrypt both file content as well as file and folder names, so not information is leaked about the data.
- - It automatically unmount the volume after no active (idle) for X minutes
- - Store user's password on Keystore (for mac, linux and windows under dev), so customer just need to type its password once.
+ - Encrypt files individually, so cloud providers don't need to synchronize the entire folder everytime a file is changed.
+ - Encrypt both file content file/folder name, therefore none information is leaked about the data.
+ - It automatically unmount the volume after no active (idle) for X minutes.
+ - Store user's password on Keystore (for mac -linux and windows under dev), so user just need to type its password once.
 
 
 # Development details
-Requiremets:
+Requirements:
  - homebrew \
     `$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
  - encfs \

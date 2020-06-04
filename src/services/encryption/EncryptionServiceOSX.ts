@@ -14,9 +14,14 @@ export class EncryptionServiceOSX extends EncryptionServiceBase
 
   getMountCMD(volume: Volume, passwordCommand: string): string {
     let impl = "encfs";
-    return `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' --extpass='${passwordCommand}'  --idle=${volume.ttl} --standard --require-macs -ovolname=${volume.name} -oallow_root -olocal -ohard_remove -oauto_xattr -onolocalcaches`;
+
+    return (
+      `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' ` +
+      `--extpass='${passwordCommand}'  --idle=${volume.ttl} ` +
+      `--standard --require-macs -ovolname="${volume.name}" ` +
+      "-oallow_root -olocal -ohard_remove -oauto_xattr -onolocalcaches"
+    );
+
     // return `${impl}  ${volume.encryptedFolderPath} ${volume.decryptedFolderPath} --extpass='${passwordCommand}';
   }
 }
-
-module.exports = { EncryptionServiceOSX };

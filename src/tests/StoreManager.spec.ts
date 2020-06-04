@@ -1,4 +1,4 @@
-const expect = require("chai").expect;
+// const expect = require("chai").expect;
 // const store = require("../../services/store/StoreManager");
 
 // TODO failing to mock electron
@@ -29,4 +29,3 @@ const expect = require("chai").expect;
 //     });
 //   });
 // });
-

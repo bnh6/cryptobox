@@ -15,8 +15,8 @@ export class EncryptionServiceLinux extends EncryptionServiceBase
 
   getMountCMD(volume: Volume, passwordCommand: string): string {
     let impl = "encfs";
-    return `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' --standard --extpass='${passwordCommand}' --require-macs -ohard_remove --idle=${volume.ttl}`;
+    const cmd = `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+    --standard --extpass='${passwordCommand}' --require-macs -ohard_remove --idle=${volume.ttl}`;
+    return cmd;
   }
 }
-
-module.exports = { EncryptionServiceLinux };

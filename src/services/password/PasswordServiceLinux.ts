@@ -2,15 +2,13 @@ import { Password } from "../../entities/Password";
 import { Volume } from "../../entities/Volume";
 import { PasswordServiceBase } from "./PasswordServiceBase";
 import { PasswordService } from "./PasswordService";
-
-import { log } from "../../utils/LogUtil";
+import log from "../../utils/LogUtil";
 import * as ShellHelper from "../../utils/ShellUtil";
 
 export class PasswordServiceLinux extends PasswordServiceBase
   implements PasswordService {
-
   //  TODO implement a proper password manager
-  passwordWorkAround = "/tmp/cryptobox/pass.txt"
+  passwordWorkAround = "/tmp/cryptobox/pass.txt";
 
   retrievePasswordCommand(volume: Volume): string {
     return `cat ${this.passwordWorkAround}`;
@@ -18,7 +16,9 @@ export class PasswordServiceLinux extends PasswordServiceBase
 
   searchForPassword(volume: Volume): Password | null {
     log.info(`searching password for ${volume}`);
-    let [result, stdout, stderr] = ShellHelper.execute(this.retrievePasswordCommand(volume));
+    let [result, stdout, stderr] = ShellHelper.execute(
+      this.retrievePasswordCommand(volume)
+    );
     return new Password(String(stdout));
   }
 
@@ -29,8 +29,6 @@ export class PasswordServiceLinux extends PasswordServiceBase
   }
 
   deletePassword(volume: Volume): void {
-    ShellHelper.execute(`rm -rf ${this.passwordWorkAround}`)
+    ShellHelper.execute(`rm -rf ${this.passwordWorkAround}`);
   }
 }
-
-module.exports = { PasswordServiceLinux };

@@ -1,36 +1,44 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Cryptobox - Preserve your privacy</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="../../node_modules/bootswatch/dist/darkly/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link
+      href="../../node_modules/bootswatch/dist/darkly/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-</head>
-
-<body>
+  <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-        <h2>CRYPTOBOX</h2>
+      <h2>CRYPTOBOX</h2>
     </nav>
     <form id="cloudEncForm">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="source">Secured Folder</label>
-                <input class="form-control" id="source" placeholder="" required type="text">
-                <div class="invalid-feedback">
-                    Please provide an folder to be encrypted.
-                </div>
-            </div>
-            <div class="form-group col-md-2">
-                <span id="statusLbl"></span> <br>
-                <button class="btn btn-primary" id="mountBtn" type="submit">Mount</button>
-            </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="source">Secured Folder</label>
+          <input
+            class="form-control"
+            id="source"
+            placeholder=""
+            required
+            type="text"
+          />
+          <div class="invalid-feedback">
+            Please provide an folder to be encrypted.
+          </div>
         </div>
+        <div class="form-group col-md-2">
+          <span id="statusLbl"></span> <br />
+          <button class="btn btn-primary" id="mountBtn" type="submit">
+            Mount
+          </button>
+        </div>
+      </div>
     </form>
     <script>
-        require('./volume-renderer.js')
+      require("../../dist/ui_renderers/volume-renderer.js");
     </script>
-</body>
-
+  </body>
 </html>

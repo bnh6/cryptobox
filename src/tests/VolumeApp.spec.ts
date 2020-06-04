@@ -1,7 +1,6 @@
-const expect = require("chai").expect;
-import { PasswordApplication } from "../applications/PasswordApp"
-import { Volume } from "../entities/Volume"
-
+// const expect = require("chai").expect;
+// import { PasswordApplication } from "../applications/PasswordApp"
+// import { Volume } from "../entities/Volume"
 
 // const volumeSrc: Volume = new Volume(
 //     "testingVolume",
@@ -9,8 +8,6 @@ import { Volume } from "../entities/Volume"
 //     null,
 //     0
 // );
-
-
 
 // describe("application/VolumeApps", () => {
 //     describe("testing volume app", () => {
@@ -20,14 +17,8 @@ import { Volume } from "../entities/Volume"
 //     //     let volumeApp =  new PasswordApplication();
 //     //     volumeApp.checkSource(volumeSrc)
 
-//     //   expect(1).to.eql(1); // 
+//     //   expect(1).to.eql(1); //
 //     // });
-
 
 //     });
 // });
-
-
-
-
-

@@ -1,30 +1,30 @@
-import { log } from "./LogUtil";
-import * as constants from "./constants";
+import log from "./LogUtil";
+import { constants } from "./constants";
 // import { execSync } from 'child_process';  // since node 4
-import { spawnSync } from 'child_process'; // since node 12
+import { spawnSync } from "child_process"; // since node 12
 import * as os from "os";
-
-
 
 // https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options
 export function execute(
   command: string,
   args: string[] = [],
   failOnNonZeroReturn: boolean = true,
-  timeout: number = 7000): [number, string, string] {
-
-  log.debug(`executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`);
+  timeout: number = 7000
+): [number, string, string] {
+  log.debug(
+    `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
+  );
 
   const result = spawnSync(command, args, {
     timeout,
     shell: true,
-    windowsHide: true
+    windowsHide: true,
   });
 
   if (result && result.error) {
-    log.error(`command [${command}] failed with error = [${result.error}] ...`)
-    log.error(result)
-    throw result.error
+    log.error(`command [${command}] failed with error = [${result.error}] ...`);
+    log.error(result);
+    throw result.error;
   }
 
   if (failOnNonZeroReturn && result && result.status && 0 !== result.status) {
@@ -33,14 +33,8 @@ export function execute(
 
   log.debug(`command [${command}] returned status [${result.status}]`);
 
-  return [
-    result.status,
-    result.stdout.toString(),
-    result.stderr.toString()];
+  return [result.status, result.stdout.toString(), result.stderr.toString()];
 }
-
-
-
 
 export function checkOSSupport() {
   const platform: string = os.platform();
@@ -57,21 +51,19 @@ export function checkOSSupport() {
 export function checkRequirements(): boolean {
   // log.debug(execute("env"))
 
-  const result = execute("which", ["encfs"], false)
+  const result = execute("which", ["encfs"], false);
   if (!result) {
-    log.error("erron on findin encfs ")
-    return false
-  }
-
-  if (result[0] === 0) {
-    log.info(`found encfs at ${result[1]}`)
-    return true
-  }
-  else {
-    log.debug("encfs not found", result)
+    log.error("erron on findin encfs ");
     return false;
   }
 
+  if (result[0] === 0) {
+    log.info(`found encfs at ${result[1]}`);
+    return true;
+  } else {
+    log.debug("encfs not found", result);
+    return false;
+  }
 }
 
 // export function checkDir(dir: string) {
@@ -90,4 +82,3 @@ export function checkRequirements(): boolean {
 //     throw new Error(`[${fullpath}] is not a directory`);
 //   }
 // }
-

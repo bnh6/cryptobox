@@ -1,4 +1,4 @@
-const expect = require("chai").expect;
+import { expect } from "chai";
 const PasswordManagerLinux = require("../services/password/PasswordServiceLinux");
 
 describe.skip("scripts/PasswordManagers/PasswordServiceLinux", () => {

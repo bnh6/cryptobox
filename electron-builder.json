@@ -1,6 +1,6 @@
 {
-    "appId": "org.bnh6.cryptobox",
-    "productName": "CryptoBox",
+    "appId": "dev.bnh6.cryptobox",
+    "productName": "cryptobox",
     "copyright": "Copyright © 2020 ${author}",
     "directories": {
         "output": "release"
@@ -9,7 +9,8 @@
         "icon": "static/resources/cloud-enc.icns",
         "target": ["dmg"],
         "type": "distribution",
-        "category":"Utilities"
+        "category":"Utilities",
+        "darkModeSupport": "true"
     },
     "linux":{
         "icon": "static/resources/cloud-enc.icns",

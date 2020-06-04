@@ -1,5 +1,4 @@
-var log = require("../utils/LogUtil").log;
-
+import log from "../utils/LogUtil";
 import { EncryptionService } from "../services/encryption/EncryptionService";
 import { EncryptionServiceFactory } from "../services/encryption/EncryptionServiceFactory";
 
@@ -7,14 +6,12 @@ import { Password } from "../entities/Password";
 import { Volume } from "../entities/Volume";
 import { PasswordApplication } from "./PasswordApp";
 
-
-let response_example = {
-  "status": "operation with success/error",
-  "message": "detailed message, not to be displayed to user, it will contain stacktraces...",
-  "isMounted": "boolean"
-}
-
-
+// let response_example = {
+//   status: "operation with success/error",
+//   message:
+//     "detailed message, not to be displayed to user, it will contain stacktraces...",
+//   isMounted: "boolean",
+// };
 
 export class MountVolume {
   encryptionService: EncryptionService;
@@ -32,35 +29,37 @@ export class MountVolume {
     try {
       response.volume = this.volume;
 
-      const passwordApp = new PasswordApplication()
+      const passwordApp = new PasswordApplication();
       if (!passwordApp.passwordExists(this.volume)) {
         response.status = "error";
-        response.message = `try again when there is a password for ${this.volume.encryptedFolderPath}`
+        response.message = `try again when there is a password for ${this.volume.encryptedFolderPath}`;
         return response;
       }
 
       const isMounted = this.encryptionService.isMounted(this.volume);
-      response.isMounted = isMounted
-      log.info(`${this.volume} is already mounted? = ${isMounted}`)
+      response.isMounted = isMounted;
+      log.info(`${this.volume} is already mounted? = ${isMounted}`);
 
       if (isMounted) {
-        this.encryptionService.unmount(this.volume)
-        response.message = "volume unmounted!"
+        this.encryptionService.unmount(this.volume);
+        response.message = "volume unmounted!";
       } else {
-        this.encryptionService.mount(this.volume, passwordApp.findPassword(this.volume))
-        response.message = "volume mounted!"
+        this.encryptionService.mount(
+          this.volume,
+          passwordApp.findPassword(this.volume)
+        );
+        response.message = "volume mounted!";
       }
 
-      response.status = "success"
-
+      response.status = "success";
     } catch (error) {
-      log.error("there was an error to mound/umount the volume ", error)
+      log.error("there was an error to mound/umount the volume ", error);
       response.status = "error";
-      response.message = "operation failed :("
-      response.error = error
+      response.message = "operation failed :(";
+      response.error = error;
       // throw new Error(error);
     }
-    return response
+    return response;
   }
 
   public isMount(): { [k: string]: any } {
@@ -68,21 +67,18 @@ export class MountVolume {
 
     try {
       response.volume = this.volume;
+      response.isMounted = this.encryptionService.isMounted(this.volume);
 
       let isMounted = this.encryptionService.isMounted(this.volume);
-      response.isMounted = isMounted
+      response.isMounted = isMounted;
 
-      response.status = "success"
-
+      response.status = "success";
     } catch (error) {
       response.status = "error";
-      response.message = "operation failed :("
-      response.error = error
+      response.message = "operation failed :(";
+      response.error = error;
       // throw new Error(error);
     }
-    return response
+    return response;
   }
-
-
-
 }

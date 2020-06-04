@@ -7,7 +7,7 @@ export class PasswordServiceFactory {
   public static create(): PasswordService {
     const services: any = {
       darwin: PasswordServiceOSX,
-      linux: PasswordServiceLinux
+      linux: PasswordServiceLinux,
     };
 
     const platform: string = os.platform();

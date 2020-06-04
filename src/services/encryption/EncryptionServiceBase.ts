@@ -3,13 +3,14 @@ import { Volume } from "../../entities/Volume";
 import { EncryptionService } from "./EncryptionService";
 import { PasswordServiceFactory } from "../password/PasswordServiceFactory";
 
-import { log } from "../../utils/LogUtil";
+import log from "../../utils/LogUtil";
 import * as ShellHelper from "../../utils/ShellUtil";
-import { shell } from "electron";
 
 export abstract class EncryptionServiceBase implements EncryptionService {
   abstract getMountCMD(volume: Volume, passwordCommand: string): string;
+
   abstract getUnmountCMD(volume: Volume): string;
+
   abstract getIsMountedCMD(volume: Volume): string;
 
   unmount(volume: Volume): void {
@@ -41,15 +42,18 @@ export abstract class EncryptionServiceBase implements EncryptionService {
       log.info(`folder [${volume.decryptedFolderPath}] is NOT mounted`);
       return false;
     } else {
-      let msg = `Failed to check is [${volume.decryptedFolderPath}] mounted\n\n return = ${statusCode}\n\n stderr=[${stderr}] \n\n stdout=[${stdout}]`;
+      let msg = `Failed to check is [${volume.decryptedFolderPath}] \
+      mounted\n\n return = ${statusCode}\n\n \
+      stderr=[${stderr}] \n\n stdout=[${stdout}]`;
       log.error(msg);
       return false;
     }
   }
 
-  mount(volume: Volume, password: Password): void {
+  mount(volume: Volume): void {
     log.debug(
-      `about to mount directory [${volume.encryptedFolderPath}] into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
+      `about to mount directory [${volume.encryptedFolderPath}] \
+      into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
     );
     if (this.isMounted(volume)) {
       log.debug(
@@ -71,7 +75,8 @@ export abstract class EncryptionServiceBase implements EncryptionService {
 
       log.debug(`mounting command [${mountCMD}]`);
       log.debug(
-        `mounting directory [${volume.encryptedFolderPath}] into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
+        `mounting directory [${volume.encryptedFolderPath}] \
+        into [${volume.decryptedFolderPath}] with volumeName [${volume.name}]`
       );
       console.time();
       ShellHelper.execute(mountCMD);

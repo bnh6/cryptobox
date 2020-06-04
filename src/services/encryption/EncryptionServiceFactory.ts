@@ -7,7 +7,7 @@ export class EncryptionServiceFactory {
   public static create(): EncryptionService {
     const services: any = {
       darwin: EncryptionServiceOSX,
-      linux: EncryptionServiceLinux
+      linux: EncryptionServiceLinux,
     };
 
     const platform: string = os.platform();

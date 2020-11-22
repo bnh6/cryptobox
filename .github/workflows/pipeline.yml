@@ -12,9 +12,8 @@ on:
       - master'
       - 'feature-*'         
   schedule:
-    - cron: 0 16 * * 0
-    - brances:
-        - 'master'
+    cron: 0 16 * * 0
+
     
 
 jobs:

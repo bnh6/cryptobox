@@ -1,16 +1,21 @@
 name: "Cryptobox CI"
 
 on:
-  push:
+  - push:
+    branches:
+      - 'dev'
+      - 'master'
+      - 'feature-*'
+  - pull_request:
     branches:
       - 'dev'
       - master'
       - 'feature-*'
-  pull_request:
-    branches:
-      - 'dev'
-      - master'
-      - 'feature-*'
+  - schedule:
+    cron: 47 15 * * 0
+    brances:
+        - 'master'
+    
 
 jobs:
      

@@ -17,9 +17,12 @@ before_install:
   - |
     if [ $TRAVIS_OS_NAME = 'osx' ]; then
       echo -e "\n\n\t>>>> running on MAC\t\t"
+      csrutil status
+      csrutil disable
+      id
       # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       brew update
-      brew cask install osxfuse
+      brew cask install osxfuse --appdir=/tmp
       brew install encfs
       sudo security unlock-keychain -u
     fi

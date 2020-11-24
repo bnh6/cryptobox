@@ -11,9 +11,6 @@ on:
       - 'dev'
       - master'
       - 'feature-*'         
-  schedule:
-    cron: 0 16 * * 0
-
     
 
 jobs:

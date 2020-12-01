@@ -14,6 +14,7 @@ log.debug(`generated password = [${password}]`);
 log.debug(`generated volume = [${volume.getVolumeAlias()}]`);
 log.info("testing password service");
 
+
 async function cleanPassword() {
     try {
         await passwordService.deletePassword(volume);
@@ -36,13 +37,6 @@ describe("password service tests", () => {
         await passwordService.savePassword(password, volume);
     });
 
-    it("create password with null", async () => {
-        expect(await passwordService.savePassword(null, volume)).to.throw(PasswordServiceError);
-    });
-
-    it("create password with null volume", async () => {
-        expect(await passwordService.savePassword(password, volume)).to.throw(PasswordServiceError);
-    });
 
     it("retrieve password correclty", async () => {
         let returnedPassword = await passwordService.searchForPassword(volume);
@@ -59,7 +53,21 @@ describe("password service tests", () => {
     });
 
     it("delete non-existing password", async () => {
-        expect(await passwordService.deletePassword(volume)).to.throw(PasswordServiceError);
+        expect(async () => {
+            await passwordService.deletePassword(volume);
+        }).not.to.throw(PasswordServiceError);
+    });
+
+    it("create password with null", () => {
+        passwordService.savePassword(null, volume).catch(error => {
+            expect(error).to.be.an.instanceOf(PasswordServiceError);
+        });
+    });
+
+    it("create password with null volume", () => {
+        passwordService.savePassword(password, null).catch(error => {
+            expect(error).to.be.an.instanceOf(PasswordServiceError);
+        });
     });
 
     after(() => {

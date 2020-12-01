@@ -16,6 +16,8 @@ import * as keytar from "keytar";
  * 
  */
 export class PasswordService {
+
+
     /**
      * if succeed return void, if failed throws PasswordError
      * @param password represents the password value 
@@ -29,6 +31,7 @@ export class PasswordService {
                 volume.getVolumeAlias(),
                 constants.PASSWORD_MANAGER_ACCOUNT,
                 encodedPassword);
+
             log.debug(`password saved for ${volume.getVolumeAlias()}`);
 
         } catch (error) {
@@ -37,6 +40,7 @@ export class PasswordService {
             throw new PasswordServiceError(msg);
         }
     }
+
 
     /**
      * if succeed return void, if failed throws PasswordError
@@ -55,6 +59,7 @@ export class PasswordService {
             throw new PasswordServiceError(msg);
         }
     }
+
 
     /**
      * if password not found returns null.

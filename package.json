@@ -7,14 +7,15 @@
     "bootswatch": "^4.4.1",
     "electron-log": "^4.1.1",
     "electron-store": "^5.1.1",
+    "keytar": "^7.2.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
     "@types/zxcvbn": "^4.4.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
-    "@types/chai": "^4.2.11",
-    "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
     "electron": "^8.5.2",
     "electron-builder": "^22.4.1",

@@ -1,13 +1,12 @@
 import { PasswordService } from "./PasswordService";
-import { PasswordServiceOSX } from "./PasswordServiceOSX";
-import { PasswordServiceLinux } from "./PasswordServiceLinux";
+import { PasswordServiceImpl } from "./PasswordServiceImpl";
 import * as os from "os";
 
 export class PasswordServiceFactory {
   public static create(): PasswordService {
     const services: any = {
-      darwin: PasswordServiceOSX,
-      linux: PasswordServiceLinux,
+      darwin: PasswordServiceImpl,
+      linux: PasswordServiceImpl,
     };
 
     const platform: string = os.platform();

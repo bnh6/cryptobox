@@ -1,12 +1,13 @@
 import { Password } from "../../entities/Password";
 import { Volume } from "../../entities/Volume";
+import PasswordServiceError from "./PasswordError";
 
 export interface PasswordService {
-  retrievePasswordCommand(volume: Volume): string;
+  savePassword(password: Password, volume: Volume): void | PasswordServiceError;
 
-  saveNewPassword(password: Password, volume: Volume): void;
+  deletePassword(volume: Volume): void | PasswordServiceError;
 
-  deletePassword(volume: Volume): void;
+  searchForPassword(volume: Volume): Password | null |PasswordServiceError;
 
-  searchForPassword(volume: Volume): Password | null;
+  searchForCredentials(): string[] | PasswordServiceError;
 }

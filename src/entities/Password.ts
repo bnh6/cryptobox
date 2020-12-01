@@ -7,8 +7,3 @@ export class Password {
   }
 }
 
-export enum PasswordState {
-  Saved,
-  NotSaved,
-  UserProvided,
-}

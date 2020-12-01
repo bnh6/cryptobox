@@ -68,7 +68,7 @@ export abstract class EncryptionServiceBase implements EncryptionService {
       let passwordService = PasswordServiceFactory.create();
       let mountCMD = this.getMountCMD(
         volume,
-        passwordService.retrievePasswordCommand(volume)
+        "" //TODO won't work
       );
 
       ShellHelper.execute(`mkdir -p "${volume.decryptedFolderPath}"`); //TODO here is the place for it.

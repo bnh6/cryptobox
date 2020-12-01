@@ -27,6 +27,6 @@ export class PasswordApplication {
   }
 
   savePassword(password: Password, volume: Volume): void {
-    this.passwordService.saveNewPassword(password, volume);
+    this.passwordService.savePassword(password, volume);
   }
 }

@@ -1,7 +1,7 @@
 export const constants = Object.freeze({
   ENCFS: "encfs",
 
-  PASSWORD_MANAGER_ALIAS: "CryptoBox",
+  PASSWORD_MANAGER_ACCOUNT: "CryptoBox",
   VOLUME_ALIAS_SUFFIX: "cryptobox",
 
   CONFIG_FILE: "settings",

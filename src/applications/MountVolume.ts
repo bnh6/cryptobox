@@ -40,16 +40,17 @@ export class MountVolume {
             response.isMounted = isMounted;
             log.info(`${this.volume} is already mounted? = ${isMounted}`);
 
-            if (isMounted) {
-                this.encryptionService.unmount(this.volume);
-                response.message = "volume unmounted!";
-            } else {
-                this.encryptionService.mount(
-                    this.volume,
-                    passwordApp.findPassword(this.volume)
-                );
-                response.message = "volume mounted!";
-            }
+            //TODO fix this, move to async
+            // if (isMounted) {
+            //     this.encryptionService.unmount(this.volume);
+            //     response.message = "volume unmounted!";
+            // } else {
+            //     this.encryptionService.mount(
+            //         this.volume,
+            //         await passwordApp.findPassword(this.volume)
+            //     );
+            //     response.message = "volume mounted!";
+            // }
 
             response.status = "success";
         } catch (error) {

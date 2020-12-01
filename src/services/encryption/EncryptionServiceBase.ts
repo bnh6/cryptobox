@@ -1,7 +1,7 @@
 import { Password } from "../../entities/Password";
 import { Volume } from "../../entities/Volume";
 import { EncryptionService } from "./EncryptionService";
-import { PasswordServiceFactory } from "../password/PasswordServiceFactory";
+import { PasswordService } from "../password/PasswordService";
 
 import log from "../../utils/LogUtil";
 import * as ShellHelper from "../../utils/ShellUtil";
@@ -65,7 +65,7 @@ export abstract class EncryptionServiceBase implements EncryptionService {
                 `volume[${volume.decryptedFolderPath}] NOT mounted, mounting ...`
             );
 
-            let passwordService = PasswordServiceFactory.create();
+            let passwordService = new PasswordService();
             let mountCMD = this.getMountCMD(
                 volume,
                 "" //TODO won't work

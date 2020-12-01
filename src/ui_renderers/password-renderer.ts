@@ -7,7 +7,7 @@ import { remote } from "electron";
 import log from "../utils/LogUtil";
 
 let query = querystring.parse(location.search);
-let source = query["?source"]; ß
+let source = query["?source"];
 
 const passwd = <HTMLInputElement>document.getElementById("passwd");
 const passwdLabel = <HTMLLabelElement>document.getElementById("passwdLabel");

@@ -39,7 +39,7 @@ jobs:
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install libsecret-1-dev gnome-keyring
+          sudo apt install libsecret-1-dev gnome-keyring dbus-x11
           npm ci
           # using recommendation from: https://github.com/atom/node-keytar/issues/132
           export DISPLAY=:99.0;  sleep 3;

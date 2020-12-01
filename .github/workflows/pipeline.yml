@@ -49,7 +49,7 @@ jobs:
           npm run test
   Travis-Testing:
     runs-on: ubuntu-latest
-    if: false
+    if: true
     env:
       BRANCH_FULL: ${{ github.ref }}
       TRAVIS_TOKEN: ${{ secrets.TRAVIS_TOKEN }}

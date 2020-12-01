@@ -39,6 +39,8 @@ jobs:
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
+          sudo apt install libsecret-1-dev gnome-keyring
+          npm ci
           # using recommendation from: https://github.com/atom/node-keytar/issues/132
           export DISPLAY=:99.0;  sleep 3;
           export NO_AT_BRIDGE=1; # Don't use dbus accessibility bridge
@@ -46,19 +48,10 @@ jobs:
           eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
           eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
           /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
-          sudo apt install  libsecret-1-dev
-          npm ci
           npm run test
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |
-          # using recommendation from: https://github.com/atom/node-keytar/issues/132
-          export DISPLAY=:99.0; sleep 3;
-          export NO_AT_BRIDGE=1; # Don't use dbus accessibility bridge
-          eval $(dbus-launch --sh-syntax);
-          eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
-          eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
-          /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
           npm ci
           npm run test
   Travis-Testing:

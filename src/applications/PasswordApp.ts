@@ -5,28 +5,28 @@ import { PasswordServiceFactory } from "../services/password/PasswordServiceFact
 import log from "../utils/LogUtil";
 
 export class PasswordApplication {
-  passwordService: PasswordService;
-  constructor() {
-    this.passwordService = PasswordServiceFactory.create();
-  }
-
-  passwordExists(sourceVol: Volume): boolean {
-    let password = this.passwordService.searchForPassword(sourceVol);
-
-    if (password) {
-      log.info(" password found *******");
-      return true;
-    } else {
-      log.info("password not found, prompting one");
-      return false;
+    passwordService: PasswordService;
+    constructor() {
+        this.passwordService = PasswordServiceFactory.create();
     }
-  }
 
-  findPassword(volume: Volume): Password {
-    return this.passwordService.searchForPassword(volume);
-  }
+    passwordExists(sourceVol: Volume): boolean {
+        let password = this.passwordService.searchForPassword(sourceVol.getVolumeAlias());
 
-  savePassword(password: Password, volume: Volume): void {
-    this.passwordService.savePassword(password, volume);
-  }
+        if (password) {
+            log.info(" password found *******");
+            return true;
+        } else {
+            log.info("password not found, prompting one");
+            return false;
+        }
+    }
+
+    findPassword(volume: Volume): Password {
+        return new Password(this.passwordService.searchForPassword(volume.getVolumeAlias()));
+    }
+
+    savePassword(password: Password, volume: Volume): void {
+        this.passwordService.savePassword(password.passwordValue, volume.getVolumeAlias());
+    }
 }

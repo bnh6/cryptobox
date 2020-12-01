@@ -1,6 +1,6 @@
 class PasswordServiceError extends Error {
-  constructor(m: string) {
-    super(m);
-  }
+    constructor(m: string) {
+        super(m);
+    }
 }
 export default PasswordServiceError;

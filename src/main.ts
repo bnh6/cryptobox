@@ -17,12 +17,12 @@ app.allowRendererProcessReuse = true;
 const isDev = process.argv0.includes("node_modules");
 log.info(`isDev = ${isDev}`);
 if (isDev) {
-  // hot reload of web content
-  require("electron-reload")(require("path").join(__dirname, "../static/"));
-  // require('electron-reload')(__dirname);
-  // require('electron-reload')(__dirname, {
-  //   electron: require('electron')
-  // });
+    // hot reload of web content
+    require("electron-reload")(require("path").join(__dirname, "../static/"));
+    // require('electron-reload')(__dirname);
+    // require('electron-reload')(__dirname, {
+    //   electron: require('electron')
+    // });
 }
 
 // require("update-electron-app")({
@@ -36,70 +36,70 @@ let mainWindow: BrowserWindow;
 const icoPath = "./static/resources/elec.icns";
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 600,
-    height: 350,
-    fullscreenable: false,
-    resizable: true,
-    icon: path.join(__dirname, icoPath),
-    webPreferences: {
-      nodeIntegration: true,
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
+    mainWindow = new BrowserWindow({
+        width: 600,
+        height: 350,
+        fullscreenable: false,
+        resizable: true,
+        icon: path.join(__dirname, icoPath),
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, "preload.js"),
+        },
+    });
 
-  mainWindow.setVisibleOnAllWorkspaces(true);
-  mainWindow.loadFile(path.join(__dirname, "../static/ui/volume.html"));
+    mainWindow.setVisibleOnAllWorkspaces(true);
+    mainWindow.loadFile(path.join(__dirname, "../static/ui/volume.html"));
 
-  const fs = require("fs");
-  mainWindow.on("closed", function () {
-    mainWindow = null;
-  });
+    const fs = require("fs");
+    mainWindow.on("closed", function () {
+        mainWindow = null;
+    });
 
-  mainWindow.on("unresponsive", function () {
-    log.info("unresponsive, response to be implemented ...");
-  });
+    mainWindow.on("unresponsive", function () {
+        log.info("unresponsive, response to be implemented ...");
+    });
 }
 
 app.on("ready", () => {
-  statupPreReq();
-  loadScripts();
-  createWindow();
+    statupPreReq();
+    loadScripts();
+    createWindow();
 
-  // enabled debug
-  // mainWindow.webContents.openDevTools();
+    // enabled debug
+    // mainWindow.webContents.openDevTools();
 });
 
 app.on("window-all-closed", function () {
-  app.quit();
+    app.quit();
 });
 
 app.on("activate", function () {
-  if (mainWindow === null) createWindow();
+    if (mainWindow === null) createWindow();
 });
 
 process.on("uncaughtException", function (error) {
-  log.error("UNCATCH EXCEPTION FOUND ");
-  log.error(error);
-  app.quit();
-  // console.error(error)
+    log.error("UNCATCH EXCEPTION FOUND ");
+    log.error(error);
+    app.quit();
+    // console.error(error)
 });
 
 function loadScripts() {
-  import("./controllers/IPCManager");
+    import("./controllers/IPCManager");
 
-  //   const scripts = fs.readdirSync("./dist/client");
-  //   scripts.forEach(function(script: string) {
-  //     script.endsWith(".js") &&
-  //       import("./client/" + script) &&
-  //       log.debug(`imported: ${script} `);
-  //   });
+    //   const scripts = fs.readdirSync("./dist/client");
+    //   scripts.forEach(function(script: string) {
+    //     script.endsWith(".js") &&
+    //       import("./client/" + script) &&
+    //       log.debug(`imported: ${script} `);
+    //   });
 }
 
 function statupPreReq() {
-  ShellHelper.checkOSSupport();
-  if (!ShellHelper.checkRequirements()) {
-    log.error("environment does not meet requirements ...");
-    app.quit();
-  }
+    ShellHelper.checkOSSupport();
+    if (!ShellHelper.checkRequirements()) {
+        log.error("environment does not meet requirements ...");
+        app.quit();
+    }
 }

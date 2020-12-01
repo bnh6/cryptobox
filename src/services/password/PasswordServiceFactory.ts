@@ -3,17 +3,17 @@ import { PasswordServiceImpl } from "./PasswordServiceImpl";
 import * as os from "os";
 
 export class PasswordServiceFactory {
-  public static create(): PasswordService {
-    const services: any = {
-      darwin: PasswordServiceImpl,
-      linux: PasswordServiceImpl,
-    };
+    public static create(): PasswordService {
+        const services: any = {
+            darwin: PasswordServiceImpl,
+            linux: PasswordServiceImpl,
+        };
 
-    const platform: string = os.platform();
+        const platform: string = os.platform();
 
-    if (!(platform in services)) {
-      throw new Error(`The platform ${platform} is not currently supported.`);
+        if (!(platform in services)) {
+            throw new Error(`The platform ${platform} is not currently supported.`);
+        }
+        return new services[platform]();
     }
-    return new services[platform]();
-  }
 }

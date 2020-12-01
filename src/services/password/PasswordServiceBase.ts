@@ -6,12 +6,12 @@ import PasswordServiceError from "./PasswordError";
 
 export abstract class PasswordServiceBase implements PasswordService {
 
-  abstract savePassword(password: Password, volume: Volume): void | PasswordServiceError;;
+    abstract savePassword(password: string, volume: string): void | never;;
 
-  abstract deletePassword(volume: Volume): void | PasswordServiceError;;
+    abstract deletePassword(volume: string): void | never;
 
-  abstract searchForPassword(volume: Volume): Password | null | PasswordServiceError;;
+    abstract searchForPassword(volume: string): string | null | never;;
 
-  abstract searchForCredentials(): string[] | PasswordServiceError;;
+    abstract searchForCredentials(): string[] | never;;
 
 }

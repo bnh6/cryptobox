@@ -11,70 +11,70 @@ import { Password } from "../entities/Password";
 log.info("IPCManager loaded !");
 
 ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
-  log.info("[IPC_MAIN] native directoy dialog ...");
-  let directory = UIHelper.getDirectoryNatively();
-  if (directory) {
-    event.returnValue = directory[0];
-  } else {
-    event.returnValue = null;
-  }
+    log.info("[IPC_MAIN] native directoy dialog ...");
+    let directory = UIHelper.getDirectoryNatively();
+    if (directory) {
+        event.returnValue = directory[0];
+    } else {
+        event.returnValue = null;
+    }
 });
 
 ipcMain.on(constants.IPC_MOUNT_UNMOUNT, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
+    let source = arg["source"];
+    log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-  let volume = new Volume(source);
+    let volume = new Volume(source);
 
-  log.info("IPC mount/umount");
-  let mountApp = new MountVolume(volume);
-  event.returnValue = mountApp.mount();
+    log.info("IPC mount/umount");
+    let mountApp = new MountVolume(volume);
+    event.returnValue = mountApp.mount();
 });
 
 ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] isMounted for  "${source}"`);
-  let volume = new Volume(source);
+    let source = arg["source"];
+    log.info(`[IPC_MAIN] isMounted for  "${source}"`);
+    let volume = new Volume(source);
 
-  let mountApp = new MountVolume(volume);
-  event.returnValue = mountApp.isMount();
+    let mountApp = new MountVolume(volume);
+    event.returnValue = mountApp.isMount();
 });
 
 ipcMain.on(constants.IPC_SAVE_PASSWOD, (event, arg) => {
-  let source = arg["source"];
-  let passwordStr = arg["password"];
-  log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
+    let source = arg["source"];
+    let passwordStr = arg["password"];
+    log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-  let volume = new Volume(source);
-  let password = new Password(passwordStr);
+    let volume = new Volume(source);
+    let password = new Password(passwordStr);
 
-  let passwdApp = new PasswordApplication();
-  passwdApp.savePassword(password, volume);
+    let passwdApp = new PasswordApplication();
+    passwdApp.savePassword(password, volume);
 
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
 ipcMain.on(constants.IPC_PASSWORD_EXIST, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] password exists for "${source}"`);
+    let source = arg["source"];
+    log.info(`[IPC_MAIN] password exists for "${source}"`);
 
-  let volume = new Volume(source);
+    let volume = new Volume(source);
 
-  let passwdApp = new PasswordApplication();
-  if (!passwdApp.findPassword(volume)) {
-    UIHelper.passwordPrompt(volume);
-  }
+    let passwdApp = new PasswordApplication();
+    if (!passwdApp.findPassword(volume)) {
+        UIHelper.passwordPrompt(volume);
+    }
 
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
 ipcMain.on(constants.IPC_NOTIFICATION, (event, arg) => {
-  let message = arg["message"];
-  log.info(`[IPC_MAIN] notification "${message}"`);
+    let message = arg["message"];
+    log.info(`[IPC_MAIN] notification "${message}"`);
 
-  UIHelper.notify(message);
+    UIHelper.notify(message);
 
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
 // UIHelper.passwordPrompt( new Volume("/tmp/testfdd /sdf"));

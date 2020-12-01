@@ -6,11 +6,11 @@ import * as os from "os";
 
 log.info("initialising config store ...");
 const store = new Store({
-  cwd: path.join(os.homedir(), constants.CONFIG_DIR),
-  name: constants.CONFIG_FILE,
-  fileExtension: "json",
-  encryptionKey: constants.CONFIG_ENCKEY,
-  clearInvalidConfig: false,
+    cwd: path.join(os.homedir(), constants.CONFIG_DIR),
+    name: constants.CONFIG_FILE,
+    fileExtension: "json",
+    encryptionKey: constants.CONFIG_ENCKEY,
+    clearInvalidConfig: false,
 });
 
 const runDate = new Date().toLocaleString();

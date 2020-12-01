@@ -47,7 +47,7 @@ jobs:
           eval $(dbus-launch --sh-syntax);
           eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
           eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
-          # /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
+          /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
           npm run test
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')

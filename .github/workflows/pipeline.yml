@@ -39,7 +39,7 @@ jobs:
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install encfs -y
+          sudo apt install  libsecret-1-dev
           npm ci
           npm run test
       - name: Test on ${{ matrix.target }}

@@ -8,33 +8,38 @@ jobs:
       env: LABEL=linux
     - os: osx
       env: LABEL=osx
-      osx_image: xcode9.2
+      # osx_image: xcode9.2
 cache:
   directories:
     - "node_modules"
 before_install:
   - |
-    if [ $TRAVIS_OS_NAME = 'osx' ]; then
-      echo -e "\n\n\t>>>> running on MAC\t\t"
-      csrutil status
-      csrutil disable
-      id
-      # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      # brew update
-      # brew cask install osxfuse --appdir=/tmp
-      # brew install encfs
-      # sudo security unlock-keychain -u
-    fi
-    if [ $TRAVIS_OS_NAME = 'linux' ]; then
-      echo -e "\n\n\t>>>> running on LINUX\t\t"
-      sudo apt clean
-      sudo apt update
-      # sudo apt install encfs -y
-      # sudo apt install snapd -y
-       sudo apt install  libsecret-1-dev
-      
-    fi
+    npm install
+    npm run build
+    npm run test
 
-# script:
-# - |
-# npm run make
+    # if [ $TRAVIS_OS_NAME = 'osx' ]; then
+    #   echo -e "\n\n\t>>>> running on MAC\t\t"
+    #   csrutil status
+    #   csrutil disable
+    #   id
+    #   # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    #   # brew update
+    #   # brew cask install osxfuse --appdir=/tmp
+    #   # brew install encfs
+    #   # sudo security unlock-keychain -u
+    # fi
+    # if [ $TRAVIS_OS_NAME = 'linux' ]; then
+    #   echo -e "\n\n\t>>>> running on LINUX\t\t"
+    #   sudo apt clean
+    #   sudo apt update
+    #   # sudo apt install encfs -y
+    #   # sudo apt install snapd -y
+    #    sudo apt install  libsecret-1-dev
+      
+    # fi
+script:
+- |
+    npm install
+    npm run build
+    npm run test

@@ -40,7 +40,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           # using recommendation from: https://github.com/atom/node-keytar/issues/132
-          export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; sleep 3;
+          export DISPLAY=:99.0;  sleep 3;
           export NO_AT_BRIDGE=1; # Don't use dbus accessibility bridge
           eval $(dbus-launch --sh-syntax);
           eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
@@ -53,7 +53,7 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: |
           # using recommendation from: https://github.com/atom/node-keytar/issues/132
-          export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; sleep 3;
+          export DISPLAY=:99.0; sleep 3;
           export NO_AT_BRIDGE=1; # Don't use dbus accessibility bridge
           eval $(dbus-launch --sh-syntax);
           eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
@@ -63,7 +63,7 @@ jobs:
           npm run test
   Travis-Testing:
     runs-on: ubuntu-latest
-    if: true
+    if: false
     env:
       BRANCH_FULL: ${{ github.ref }}
       TRAVIS_TOKEN: ${{ secrets.TRAVIS_TOKEN }}

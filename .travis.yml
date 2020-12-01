@@ -13,9 +13,6 @@ cache:
     - "node_modules"
 before_install:
   - |
-    npm install
-    npm run build
-
     if [ $TRAVIS_OS_NAME = 'osx' ]; then
       echo -e "\n\n\t>>>> running on MAC\t\t"
       csrutil status
@@ -38,5 +35,7 @@ before_install:
     fi
 script:
 - |
+    npm install
+    npm run build
     npm run lint
     npm run test

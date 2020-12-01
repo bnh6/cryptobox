@@ -16,30 +16,28 @@ before_install:
   - |
     npm install
     npm run build
-    npm run test
 
-    # if [ $TRAVIS_OS_NAME = 'osx' ]; then
-    #   echo -e "\n\n\t>>>> running on MAC\t\t"
-    #   csrutil status
-    #   csrutil disable
-    #   id
-    #   # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    #   # brew update
-    #   # brew cask install osxfuse --appdir=/tmp
-    #   # brew install encfs
-    #   # sudo security unlock-keychain -u
-    # fi
-    # if [ $TRAVIS_OS_NAME = 'linux' ]; then
-    #   echo -e "\n\n\t>>>> running on LINUX\t\t"
-    #   sudo apt clean
-    #   sudo apt update
-    #   # sudo apt install encfs -y
-    #   # sudo apt install snapd -y
-    #    sudo apt install  libsecret-1-dev
-      
-    # fi
+    if [ $TRAVIS_OS_NAME = 'osx' ]; then
+      echo -e "\n\n\t>>>> running on MAC\t\t"
+      csrutil status
+      id
+      # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      # brew update
+      # brew cask install osxfuse --appdir=/tmp
+      # brew install encfs
+      # sudo security unlock-keychain -u
+      npm run test
+    fi
+    if [ $TRAVIS_OS_NAME = 'linux' ]; then
+      echo -e "\n\n\t>>>> running on LINUX\t\t"
+      id
+      # sudo apt clean
+      sudo apt update
+      # sudo apt install encfs -y
+      # sudo apt install snapd -y
+       sudo apt install  libsecret-1-dev      
+    fi
 script:
 - |
-    npm install
-    npm run build
+    npm run lint
     npm run test

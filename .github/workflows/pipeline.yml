@@ -31,7 +31,7 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [14.x,s 16.x]
     steps:
       - uses: actions/checkout@v1
@@ -41,6 +41,7 @@ jobs:
         run: |
           sudo apt install libsecret-1-dev gnome-keyring dbus-x11
           npm ci
+          npm run build
           # using recommendation from: https://github.com/atom/node-keytar/issues/132
           export DISPLAY=:99.0;  sleep 3;
           export NO_AT_BRIDGE=1; # Don't use dbus accessibility bridge
@@ -53,6 +54,13 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: |
           npm ci
+          npm run build
+          npm run test
+      - name: Test on ${{ matrix.target }}
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          npm ci
+          npm run build
           npm run test
   Travis-Testing:
     runs-on: ubuntu-latest

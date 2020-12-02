@@ -1,5 +1,5 @@
-import { PasswordService } from "../services/password/PasswordService";
-import PasswordServiceError from "../services/password/PasswordError";
+import { PasswordService } from "../services/PasswordService";
+import PasswordServiceError from "../services/PasswordError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 import log from "../utils/LogUtil";

@@ -1,5 +1,5 @@
-import log from "../../utils/LogUtil";
-import { constants } from "../../utils/constants";
+import log from "../utils/LogUtil";
+import { constants } from "../utils/constants";
 import * as Store from "electron-store";
 import * as path from "path";
 import * as os from "os";

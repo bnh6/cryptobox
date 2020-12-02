@@ -1,9 +1,9 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 import log from "./utils/LogUtil";
-import * as store from "./services/store/StoreManager";
+import * as store from "./services/ConfigService";
 import * as ShellHelper from "./utils/ShellUtil";
-import { PasswordService } from "./services/password/PasswordService";
+import { PasswordService } from "./services/PasswordService";
 import { Volume } from "./entities/Volume";
 
 // TODO th proccess env was missing /usr/local/bin, where encfs is...

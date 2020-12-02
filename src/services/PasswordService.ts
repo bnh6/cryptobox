@@ -1,7 +1,7 @@
 import PasswordServiceError from "./PasswordError";
-import { Volume } from "../../entities/Volume";
-import { constants } from "../../utils/constants";
-import log from "../../utils/LogUtil";
+import { Volume } from "../entities/Volume";
+import { constants } from "../utils/constants";
+import log from "../utils/LogUtil";
 import * as keytar from "keytar";
 
 
@@ -82,6 +82,21 @@ export class PasswordService {
             }
         } catch (error) {
             const msg = `unknown error when searching password ->${error}`;
+            log.error(msg);
+            throw new PasswordServiceError(msg);
+        }
+    }
+
+    async passwordExist(volume: Volume): Promise<boolean> {
+        try {
+            const pass = await this.searchForPassword(volume);
+            if (pass != null)
+                return true;
+            else
+                return false;
+
+        } catch (error) {
+            const msg = `unknown error when searching if password exists ->${error}`;
             log.error(msg);
             throw new PasswordServiceError(msg);
         }

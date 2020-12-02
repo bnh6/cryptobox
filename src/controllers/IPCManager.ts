@@ -2,11 +2,10 @@ import { ipcMain } from "electron";
 import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
 import * as UIHelper from "./UIHelper";
+import { PasswordService } from "../services/PasswordService"
 
 import { MountVolume } from "../applications/MountVolume";
-import { PasswordApplication } from "../applications/PasswordApp";
 import { Volume } from "../entities/Volume";
-import { Password } from "../entities/Password";
 
 log.info("IPCManager loaded !");
 
@@ -40,28 +39,29 @@ ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
     event.returnValue = mountApp.isMount();
 });
 
-ipcMain.on(constants.IPC_SAVE_PASSWOD, (event, arg) => {
+ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
     let source = arg["source"];
-    let passwordStr = arg["password"];
+    let password = arg["password"];
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
     let volume = new Volume(source);
-    let password = new Password(passwordStr);
 
-    let passwdApp = new PasswordApplication();
-    passwdApp.savePassword(password, volume);
+    //TODO trycatch and async
+    let passwordservice = new PasswordService();
+    await passwordservice.savePassword(password, volume);
 
     event.returnValue = "success";
 });
 
-ipcMain.on(constants.IPC_PASSWORD_EXIST, (event, arg) => {
+ipcMain.on(constants.IPC_PASSWORD_EXIST, async (event, arg) => {
     let source = arg["source"];
     log.info(`[IPC_MAIN] password exists for "${source}"`);
-
     let volume = new Volume(source);
 
-    let passwdApp = new PasswordApplication();
-    if (!passwdApp.findPassword(volume)) {
+    //TODO trycatch and async
+    let passwordservice = new PasswordService();
+    let passwordExists = await passwordservice.passwordExist(volume);
+    if (!passwordExists) {
         UIHelper.passwordPrompt(volume);
     }
 

@@ -21,5 +21,10 @@
         "backgroundColor": "#3f4247",
         "title": "${productName} ${version}",
         "icon": "static/resources/cloud-enc.icns"
+    },
+    "win": {
+        "target" : "portable",
+        "icon": "static/resources/cloud-enc.icns",
+        "legalTrademarks": "Cryptobox by BNH6"
     }
 }

@@ -24,6 +24,14 @@ jobs:
           echo "linting the app"
           npm ci
           npm run lint
+    SIP:
+    runs-on: macos-10.15
+    if: true
+    steps:
+      - run: |
+        csrutil status
+        csrutil disable
+        id
   GitHub-Testing:
     if: true
     runs-on: macos-10.15

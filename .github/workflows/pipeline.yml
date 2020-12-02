@@ -14,8 +14,8 @@ on:
 
 jobs:
   Linting:
-    runs-on: ubuntu-latest
-    if: true
+    runs-on: ubuntu-20.04
+    if: false
     steps:
       - uses: actions/checkout@v2
       - run: set -xeuo pipefail
@@ -24,32 +24,51 @@ jobs:
           echo "linting the app"
           npm ci
           npm run lint
+  SIP:
+    runs-on: macos-10.15
+    if: false
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          csrutil status
+          csrutil disable
+          id
   GitHub-Testing:
     if: true
-    runs-on: ubuntu-latest
+    runs-on: macos-10.15
     strategy:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        node-version: [12.x, 13.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [14.x, s 16.x]
     steps:
       - uses: actions/checkout@v1
       - run: set -xeuo pipefail
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt install  libsecret-1-dev
           npm ci
+          npm run build
+          npm run lint
           npm run test
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |
           npm ci
+          npm run build
+          npm run lint
+          npm run test
+      - name: Test on ${{ matrix.target }}
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          npm ci
+          npm run build
+          npm run lint
           npm run test
   Travis-Testing:
     runs-on: ubuntu-latest
-    if: true
+    if: false
     env:
       BRANCH_FULL: ${{ github.ref }}
       TRAVIS_TOKEN: ${{ secrets.TRAVIS_TOKEN }}
@@ -67,19 +86,20 @@ jobs:
           python3 travis.py
   Building-Artefacts:
     runs-on: ${{matrix.os}}
-    if: false
+    if: true
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
-      - run: set -xeuo pipefail
+      # - run: set -xeuo pipefail
       - name: Building artefacts => ${{ github.ref }}
         run: |
           echo "building artefacts"
           uname -a
           npm ci
+          npm run build
           npm run make
       - name: uploading artefacts
         uses: actions/upload-artifact@v2

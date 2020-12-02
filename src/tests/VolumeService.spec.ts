@@ -5,8 +5,8 @@ import { expect } from "chai";
 
 
 const password = Math.random().toString(36).substr(2, 16);
-const volume = new Volume("/tmp/enc");
-volume.decryptedFolderPath = "/tmp/dec";
+const volume = new Volume("/tmp/cryptobox-enc");
+volume.decryptedFolderPath = "/tmp/cryptobox-dec";
 const volumeService = new VolumeService();
 
 describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {

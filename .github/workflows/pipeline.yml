@@ -24,16 +24,16 @@ jobs:
           echo "linting the app"
           npm ci
           npm run lint
-  SIP:
-    runs-on: macos-10.15
-    if: true
-    steps:
-      - uses: actions/checkout@v2
-      - name: Linting => ${{ github.ref }}
-      - run: |
-        csrutil status
-        csrutil disable
-        id
+  # SIP:
+  #   runs-on: macos-10.15
+  #   if: true
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Linting => ${{ github.ref }}
+  #     - run: |
+  #       csrutil status
+  #       csrutil disable
+  #       id
   GitHub-Testing:
     if: true
     runs-on: macos-10.15
@@ -87,11 +87,11 @@ jobs:
           python3 travis.py
   Building-Artefacts:
     runs-on: ${{matrix.os}}
-    if: false
+    if: true
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - run: set -xeuo pipefail

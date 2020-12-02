@@ -93,7 +93,7 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
-      - run: set -xeuo pipefail
+      # - run: set -xeuo pipefail
       - name: Building artefacts => ${{ github.ref }}
         run: |
           echo "building artefacts"

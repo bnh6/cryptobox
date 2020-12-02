@@ -28,11 +28,11 @@
         "target": [
             {
               "target": "portable",
-              "arch": [  "ia32" ]
+              "arch": [ "x64", "ia32" ]
             },
             {
                 "target": "msi",
-                "arch": [ "ia32" ]
+                "arch": [ "x64", "ia32" ]
             }
         ]
     }

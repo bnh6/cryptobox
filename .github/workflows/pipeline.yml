@@ -90,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-2016]
     steps:
       - uses: actions/checkout@v2
       # - run: set -xeuo pipefail

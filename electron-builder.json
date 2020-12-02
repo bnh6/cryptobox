@@ -23,7 +23,6 @@
         "icon": "static/resources/cloud-enc.icns"
     },
     "win": {
-        "icon": "static/resources/cloud-enc.icns",
         "legalTrademarks": "Cryptobox by BNH6",
         "target": [
             {

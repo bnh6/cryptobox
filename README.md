@@ -6,6 +6,17 @@
 | MASTER        |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=master)](https://travis-ci.org/bnh6/cryptobox)| ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/Cryptobox%20CI/badge.svg?branch=master) |
 | DEV           |[![Build Status](https://travis-ci.org/bnh6/cryptobox.svg?branch=dev)](https://travis-ci.org/bnh6/cryptobox)      |   ![testing on all PUSH and PR](https://github.com/bnh6/cryptobox/workflows/Cryptobox%20CI/badge.svg?branch=dev)|
 
+
+testing dynamic tag:
+```{r, echo=FALSE, eval=TRUE, results="asis"}
+travis_url <- "https://travis-ci.org/bnh6/cryptobox.svg?branch="
+shield <- paste0("[![Build Status](",
+                 travis_url,
+                 system("git rev-parse --abbrev-ref HEAD", intern = TRUE),
+                 ")](https://travis-ci.org/bnh6/cryptobox)")
+cat(shield)
+```
+
 Cryptobox is a desktop and mobile application (future), cloud agnostic solution to preserve privacy. 
 
 In short, it allows the user to mount a virtual volume from a given folder, enabling the user to interact with unecrypted files only while the cloud provider only see the encrypted version of the same folder. 

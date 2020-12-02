@@ -15,7 +15,7 @@ const store = new Store({
 
 const runDate = new Date().toLocaleString();
 log.info(`last run -> ${store.get("last-run")}`);
-let o = store.set("last-run", runDate);
+const o = store.set("last-run", runDate);
 log.info(o);
 
 module.exports.config = store;

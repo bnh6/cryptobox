@@ -8,7 +8,7 @@ import log from "../utils/LogUtil";
 export function notify(message: string) {
     log.info("is notification supported ", Notification.isSupported()); // TODO do something with it
 
-    let myNotification = new Notification({
+    const myNotification = new Notification({
         title: constants.WINDOWS_TITLE,
         // subtitle: "testing subtitle",
         body: message,
@@ -30,14 +30,14 @@ export function notify(message: string) {
 }
 
 export function getDirectoryNatively() {
-    var directory = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
+    const directory = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
     log.info(`getDirectoryNatively result: [${directory}]`);
     return directory;
 }
 
 export function passwordPrompt(volume: Volume) {
     log.debug("rendering password prompt modal...");
-    let activeWindow = BrowserWindow.getAllWindows()[0]; // TODO will fail if there is more than one window
+    const activeWindow = BrowserWindow.getAllWindows()[0]; // TODO will fail if there is more than one window
     console.log(activeWindow.getSize());
 
     let promptWindow = new BrowserWindow({

@@ -13,7 +13,7 @@ export class EncryptionServiceOSX extends EncryptionServiceBase
     }
 
     getMountCMD(volume: Volume, passwordCommand: string): string {
-        let impl = "encfs";
+        const impl = "encfs";
 
         return (
             `${impl} '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' ` +

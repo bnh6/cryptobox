@@ -29,10 +29,10 @@ export abstract class EncryptionServiceBase implements EncryptionService {
     isMounted(volume: Volume): boolean {
         log.debug(`checking if "${volume.decryptedFolderPath}" is mounted`);
 
-        let cmd = this.getIsMountedCMD(volume);
+        const cmd = this.getIsMountedCMD(volume);
         log.debug(`checking if is mounted command: ${cmd}`);
 
-        let [statusCode, stdout, stderr] = ShellHelper.execute(cmd, [], false);
+        const [statusCode, stdout, stderr] = ShellHelper.execute(cmd, [], false);
 
         if (statusCode == 0) {
             log.info(`folder [${volume.decryptedFolderPath}] is already mounted`);
@@ -41,7 +41,7 @@ export abstract class EncryptionServiceBase implements EncryptionService {
             log.info(`folder [${volume.decryptedFolderPath}] is NOT mounted`);
             return false;
         } else {
-            let msg = `Failed to check is [${volume.decryptedFolderPath}] \
+            const msg = `Failed to check is [${volume.decryptedFolderPath}] \
       mounted\n\n return = ${statusCode}\n\n \
       stderr=[${stderr}] \n\n stdout=[${stdout}]`;
             log.error(msg);
@@ -64,8 +64,8 @@ export abstract class EncryptionServiceBase implements EncryptionService {
                 `volume[${volume.decryptedFolderPath}] NOT mounted, mounting ...`
             );
 
-            let passwordService = new PasswordService();
-            let mountCMD = this.getMountCMD(
+            const passwordService = new PasswordService();
+            const mountCMD = this.getMountCMD(
                 volume,
                 "" //TODO won't work
             );

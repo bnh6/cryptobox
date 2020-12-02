@@ -23,21 +23,21 @@ class VolumeService {
             const command =
                 `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
-            let [code, stdout, stderr] = await shell.execute(command, [], false, 4000);
+            const [code, stdout, stderr] = await shell.execute(command, [], false, 4000);
 
             switch (code) {
-                case 0: {
-                    //success
-                    break;
-                }
-                case 11: {
-                    //wrong passwordf
-                    return false;
-                }
-                default: {
-                    throw new VolumeServiceError(
-                        `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-                }
+            case 0: {
+                //success
+                break;
+            }
+            case 11: {
+                //wrong passwordf
+                return false;
+            }
+            default: {
+                throw new VolumeServiceError(
+                    `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+            }
             }
         } catch (error) {
             throw new VolumeServiceError(
@@ -53,7 +53,7 @@ class VolumeService {
                 return;
             }
             const command = `cryfs-unmount "${volume.encryptedFolderPath}" `;
-            let [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
+            const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
             //TODO continue method
 
@@ -101,21 +101,21 @@ class VolumeService {
 
 
     isVolumeOperationsSupported(): boolean {
-        let [code, stdout, stderr] = shell.execute("cryfs", [], false);
+        const [code, stdout, stderr] = shell.execute("cryfs", [], false);
         switch (code) {
-            case 0: {
-                log.debug("crfs installed...");
-                return true;
-                break;
-            }
-            case 127: {
-                log.debug("cyfs not installed, need to present installatin instruction");
-                return false;
-            }
-            default: {
-                throw new VolumeServiceError(
-                    `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-            }
+        case 0: {
+            log.debug("crfs installed...");
+            return true;
+            break;
+        }
+        case 127: {
+            log.debug("cyfs not installed, need to present installatin instruction");
+            return false;
+        }
+        default: {
+            throw new VolumeServiceError(
+                `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+        }
         }
     }
 

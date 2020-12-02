@@ -11,7 +11,7 @@ log.info("IPCManager loaded !");
 
 ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
     log.info("[IPC_MAIN] native directoy dialog ...");
-    let directory = UIHelper.getDirectoryNatively();
+    const directory = UIHelper.getDirectoryNatively();
     if (directory) {
         event.returnValue = directory[0];
     } else {
@@ -20,48 +20,48 @@ ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
 });
 
 ipcMain.on(constants.IPC_MOUNT_UNMOUNT, (event, arg) => {
-    let source = arg["source"];
+    const source = arg["source"];
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-    let volume = new Volume(source);
+    const volume = new Volume(source);
 
     log.info("IPC mount/umount");
-    let mountApp = new MountVolume(volume);
+    const mountApp = new MountVolume(volume);
     event.returnValue = mountApp.mount();
 });
 
 ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
-    let source = arg["source"];
+    const source = arg["source"];
     log.info(`[IPC_MAIN] isMounted for  "${source}"`);
-    let volume = new Volume(source);
+    const volume = new Volume(source);
 
-    let mountApp = new MountVolume(volume);
+    const mountApp = new MountVolume(volume);
     event.returnValue = mountApp.isMount();
 });
 
 ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
-    let source = arg["source"];
-    let password = arg["password"];
+    const source = arg["source"];
+    const password = arg["password"];
     // TODO validate parameters
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-    let volume = new Volume(source);
+    const volume = new Volume(source);
 
     //TODO trycatch and async
-    let passwordservice = new PasswordService();
+    const passwordservice = new PasswordService();
     await passwordservice.savePassword(password, volume);
 
     event.returnValue = "success";
 });
 
 ipcMain.on(constants.IPC_PASSWORD_EXIST, async (event, arg) => {
-    let source = arg["source"];
+    const source = arg["source"];
     log.info(`[IPC_MAIN] password exists for "${source}"`);
-    let volume = new Volume(source);
+    const volume = new Volume(source);
 
     //TODO trycatch and async
-    let passwordservice = new PasswordService();
-    let passwordExists = await passwordservice.passwordExist(volume);
+    const passwordservice = new PasswordService();
+    const passwordExists = await passwordservice.passwordExist(volume);
     if (!passwordExists) {
         UIHelper.passwordPrompt(volume);
     }
@@ -70,7 +70,7 @@ ipcMain.on(constants.IPC_PASSWORD_EXIST, async (event, arg) => {
 });
 
 ipcMain.on(constants.IPC_NOTIFICATION, (event, arg) => {
-    let message = arg["message"];
+    const message = arg["message"];
     log.info(`[IPC_MAIN] notification "${message}"`);
 
     UIHelper.notify(message);

@@ -6,8 +6,8 @@ import * as querystring from "querystring";
 import { remote } from "electron";
 import log from "../utils/LogUtil";
 
-let query = querystring.parse(location.search);
-let source = query["?source"];
+const query = querystring.parse(location.search);
+const source = query["?source"];
 
 const passwd = <HTMLInputElement>document.getElementById("passwd");
 const passwdLabel = <HTMLLabelElement>document.getElementById("passwdLabel");
@@ -20,7 +20,7 @@ const cancel = <HTMLButtonElement>document.getElementById("cancelBtn");
 passwdLabel.innerHTML = `Password for folder "${source}"`;
 
 function closeWindow() {
-    var window = remote.getCurrentWindow();
+    const window = remote.getCurrentWindow();
     window.close();
 }
 
@@ -29,11 +29,11 @@ cancel.onclick = () => {
 };
 
 function submit_password_form() {
-    var args = {
+    const args = {
         password: passwd.value,
         source: source,
     };
-    var result = ipcRenderer.send(constants.IPC_SAVE_PASSWOD, args);
+    const result = ipcRenderer.send(constants.IPC_SAVE_PASSWOD, args);
     console.log("returned data", result);
 
     // notify("Password saved with success")
@@ -51,7 +51,7 @@ passwwdForm.onsubmit = submit_password_form;
 passwd.onkeypress = () => {
     const resp = zxcvbn(passwd.value);
     // value = "\nscore = " + resp.score;
-    var value = "";
+    let value = "";
     if (resp.feedback.suggestions != "")
         value += "suggestion = " + resp.feedback.suggestions + "\n\n";
     if (resp.feedback.warning != "")
@@ -64,7 +64,7 @@ passwd.onkeypress = () => {
         resp.crack_times_display.offline_fast_hashing_1e10_per_second;
     feedback.innerText = value;
 
-    let static_class = "col-md-5 ";
+    const static_class = "col-md-5 ";
 
     resp.score;
     const badge = defineBadge(resp.score);

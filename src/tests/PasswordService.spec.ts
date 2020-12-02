@@ -25,7 +25,7 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
     });
 
     it("retrieve non-existing password", async () => {
-        let returnedPassword = await passwordService.searchForPassword(volume);
+        const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.null;
     });
 
@@ -35,7 +35,7 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
 
 
     it("retrieve password correclty", async () => {
-        let returnedPassword = await passwordService.searchForPassword(volume);
+        const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.eql(password);
     });
 
@@ -44,7 +44,7 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
     });
 
     it("retrieve password after delete", async () => {
-        let returnedPassword = await passwordService.searchForPassword(volume);
+        const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.null;
     });
 

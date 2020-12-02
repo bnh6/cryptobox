@@ -4,9 +4,9 @@ import log from "../utils/LogUtil";
 
 log.debug("volume-rendered starting ...");
 
-let source = <HTMLInputElement>document.getElementById("source");
-let cloudEncForm = <HTMLFormElement>document.getElementById("cloudEncForm");
-let mountBtn = <HTMLButtonElement>document.getElementById("mountBtn");
+const source = <HTMLInputElement>document.getElementById("source");
+const cloudEncForm = <HTMLFormElement>document.getElementById("cloudEncForm");
+const mountBtn = <HTMLButtonElement>document.getElementById("mountBtn");
 
 source.onclick = () => {
     log.debug(

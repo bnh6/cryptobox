@@ -1,7 +1,7 @@
 {
   "name": "cryptobox",
   "version": "0.0.1",
-  "description": "Presere data privacy, not matter where ...",
+  "description": "Preserve data privacy, not matter where ...",
   "main": "./dist/main.js",
   "dependencies": {
     "bootswatch": "^4.5.3",

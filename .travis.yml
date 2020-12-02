@@ -9,6 +9,8 @@ jobs:
     - os: osx
       env: LABEL=osx
       # osx_image: xcode9.2
+    - os: windows
+      env: LABEL=win
 cache:
   directories:
     - "node_modules"

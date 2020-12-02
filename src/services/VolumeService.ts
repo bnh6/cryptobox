@@ -20,9 +20,10 @@ class VolumeService {
                 log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
                 return;
             }
-            const command = `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+            const command =
+                `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
-            let [code, stdout, stderr] = await shell.execute(command, [], false, 4000)
+            let [code, stdout, stderr] = await shell.execute(command, [], false, 4000);
 
             switch (code) {
                 case 0: {
@@ -30,15 +31,17 @@ class VolumeService {
                     break;
                 }
                 case 11: {
-                    //wrong password
+                    //wrong passwordf
                     return false;
                 }
                 default: {
-                    throw new VolumeServiceError(`Error to determine if CryFS is installed, \n\tcode=${code}, \n\tstdout=${stdout} \n\t=${stderr}`);
+                    throw new VolumeServiceError(
+                        `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
                 }
             }
         } catch (error) {
-            throw new VolumeServiceError(`Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
+            throw new VolumeServiceError(
+                `Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
         }
 
     }
@@ -53,7 +56,7 @@ class VolumeService {
             let [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
             //TODO continue method
-    
+
         } catch (error) {
             throw new VolumeServiceError(`Error to UNmount the volume ${volume.encryptedFolderPath}, ${error}`);
         }
@@ -72,16 +75,18 @@ class VolumeService {
             fs.accessSync(path, fs.constants.W_OK);
             return true;
         } catch (error) {
-            console.debug(`user does not seem to have writing permisison on directory ${path} or it does not exist, resulted => ${error}`);
+            console.debug(
+                "user does not seem to have writing permisison on directory "
+                + `${path} or it does not exist, resulted => ${error}`);
             return false;
         }
     }
 
-    exists(path:string): boolean {
+    exists(path: string): boolean {
         return fs.existsSync(path);
     }
 
-    isDirectory(path:string): boolean {
+    isDirectory(path: string): boolean {
         return fs.lstatSync(path).isDirectory();
     }
     isEmpty(path: string): boolean {
@@ -108,7 +113,8 @@ class VolumeService {
                 return false;
             }
             default: {
-                throw new VolumeServiceError(`Error to determine if CryFS is installed, \n\tcode=${code}, \n\tstdout=${stdout} \n\t=${stderr}`);
+                throw new VolumeServiceError(
+                    `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
             }
         }
     }

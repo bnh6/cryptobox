@@ -29,7 +29,6 @@ jobs:
     if: true
     steps:
       - uses: actions/checkout@v2
-      - name: Linting => ${{ github.ref }}
       - run: |
           csrutil status
           csrutil disable

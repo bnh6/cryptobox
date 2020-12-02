@@ -6,14 +6,14 @@
         "output": "release"
     },
     "mac": {
-        "icon": "static/resources/cloud-enc.icns",
+        "icon": "static/resources/cryptobox.icns",
         "target": ["dmg"],
         "type": "distribution",
         "category":"Utilities",
         "darkModeSupport": "true"
     },
     "linux":{
-        "icon": "static/resources/cloud-enc.icns",
+        "icon": "static/resources/cryptobox.png",
         "category": "Utility",
         "target": ["deb","rpm", "tar.gz"]
     },
@@ -23,6 +23,7 @@
         "icon": "static/resources/cloud-enc.icns"
     },
     "win": {
+        "icon": "static/resources/cryptobox.ico",
         "legalTrademarks": "Cryptobox by BNH6",
         "target": [
             {

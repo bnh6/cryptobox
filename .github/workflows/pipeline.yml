@@ -15,7 +15,7 @@ on:
 jobs:
   Linting:
     runs-on: ubuntu-20.04
-    if: true
+    if: false
     steps:
       - uses: actions/checkout@v2
       - run: set -xeuo pipefail
@@ -26,7 +26,7 @@ jobs:
           npm run lint
   GitHub-Testing:
     if: true
-    runs-on: ubuntu-20.04
+    runs-on: macos-10.15
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -41,18 +41,21 @@ jobs:
         run: |
           npm ci
           npm run build
+          npm run lint
           npm run test
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |
           npm ci
           npm run build
+          npm run lint
           npm run test
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'windows')
         run: |
           npm ci
           npm run build
+          npm run lint
           npm run test
   Travis-Testing:
     runs-on: ubuntu-latest

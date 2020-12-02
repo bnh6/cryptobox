@@ -4,9 +4,9 @@ import log from "../utils/LogUtil";
 import * as UIHelper from "./UIHelper";
 
 import { MountVolume } from "../applications/MountVolume";
-import { PasswordApplication } from "../applications/PasswordApp";
 import { Volume } from "../entities/Volume";
 import { Password } from "../entities/Password";
+import { PasswordService } from "../services/password/PasswordService";
 
 log.info("IPCManager loaded !");
 
@@ -40,16 +40,16 @@ ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
     event.returnValue = mountApp.isMount();
 });
 
-ipcMain.on(constants.IPC_SAVE_PASSWOD, (event, arg) => {
+ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
     let source = arg["source"];
-    let passwordStr = arg["password"];
+    let password = arg["password"];
+    // TODO validate parameters
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
     let volume = new Volume(source);
-    let password = new Password(passwordStr);
-
-    let passwdApp = new PasswordApplication();
-    passwdApp.savePassword(password, volume);
+    //TODO try/catch
+    const passwordservice = new PasswordService();
+    passwordservice.savePassword(password, volume);
 
     event.returnValue = "success";
 });

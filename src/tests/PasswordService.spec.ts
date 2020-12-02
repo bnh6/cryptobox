@@ -4,8 +4,6 @@ import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 import log from "../utils/LogUtil";
 
-log.debug("Executing password tests");
-
 const password = Math.random().toString(36).substr(2, 16);
 const volume = new Volume("~/");
 const passwordService: PasswordService = new PasswordService();

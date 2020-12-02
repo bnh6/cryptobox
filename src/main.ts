@@ -3,8 +3,6 @@ import * as path from "path";
 import log from "./utils/LogUtil";
 import * as store from "./services/ConfigService";
 import * as ShellHelper from "./utils/ShellUtil";
-import { PasswordService } from "./services/PasswordService";
-import { Volume } from "./entities/Volume";
 
 // TODO th proccess env was missing /usr/local/bin, where encfs is...
 process.env.PATH += ":/usr/local/bin";
@@ -64,34 +62,9 @@ function createWindow() {
 }
 
 app.on("ready", () => {
-
-    const p = new PasswordService();
-    // try {
-    //     p.savePassword(null, new Volume("/tmp"));
-    //     console.debug("should not get here");
-    // } catch (err) {
-    //     console.log(err);
-    // }
-
-    // try {
-    //     p.savePassword(null, new Volume("/tmp")).then(() => {
-    //         console.debug("success");
-    //     }).catch(error => {
-    //         console.error("catch the error");
-    //     });
-    // }
-
-    p.savePassword("sdfs", null).then(() => {
-        console.debug("success");
-    }).catch(error => {
-        console.error("catch the error", typeof (error));
-    });
-
-
-
-    // statupPreReq();
-    // loadScripts();
-    // createWindow();
+    statupPreReq();
+    loadScripts();
+    createWindow();
 
     // enabled debug
     // mainWindow.webContents.openDevTools();

@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
 import * as UIHelper from "./UIHelper";
-import { PasswordService } from "../services/PasswordService"
+import PasswordService from "../services/PasswordService"
 
 import { MountVolume } from "../applications/MountVolume";
 import { Volume } from "../entities/Volume";

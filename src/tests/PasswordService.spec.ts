@@ -1,29 +1,25 @@
-import { PasswordService } from "../services/PasswordService";
+import PasswordService from "../services/PasswordService";
 import PasswordServiceError from "../services/PasswordError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
-import log from "../utils/LogUtil";
-
-log.debug("Executing password tests");
 
 const password = Math.random().toString(36).substr(2, 16);
 const volume = new Volume("~/");
 const passwordService: PasswordService = new PasswordService();
 
-log.debug(`generated password = [${password}]`);
-log.debug(`generated volume = [${volume.getVolumeAlias()}]`);
-log.info("testing password service");
+console.log(`generated password = [${password}]`);
+console.log(`generated volume = [${volume.getVolumeAlias()}]`);
 
 
 async function cleanPassword() {
     try {
         await passwordService.deletePassword(volume);
     } catch (error) {
-        log.debug(`deleted a password that does not exist (safe to ignore), ${error}`);
+        console.log(`deleted a password that does not exist (safe to ignore), ${error}`);
     }
 }
 
-describe("password service tests", () => {
+describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
     before(() => {
         cleanPassword();
     });
@@ -58,7 +54,7 @@ describe("password service tests", () => {
         }).not.to.throw(PasswordServiceError);
     });
 
-    it("create password with null", () => {
+    it("create password with null password", () => {
         passwordService.savePassword(null, volume).catch(error => {
             expect(error).to.be.an.instanceOf(PasswordServiceError);
         });

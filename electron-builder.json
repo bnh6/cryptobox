@@ -23,8 +23,6 @@
         "icon": "static/resources/cloud-enc.icns"
     },
     "win": {
-        "target" : "msi",
-        "icon": "static/resources/cloud-enc.icns",
-        "legalTrademarks": "Cryptobox by BNH6"
+        "icon": "static/resources/cloud-enc.icns"
     }
 }

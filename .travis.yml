@@ -37,7 +37,7 @@ before_install:
        sudo apt install  libsecret-1-dev      
     fi
 script:
-- |
+  - |
     npm install
     npm run build
     npm run lint

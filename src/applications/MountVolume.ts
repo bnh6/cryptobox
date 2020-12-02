@@ -1,8 +1,7 @@
 import log from "../utils/LogUtil";
 import { EncryptionService } from "../services/encryption/EncryptionService";
 import { EncryptionServiceFactory } from "../services/encryption/EncryptionServiceFactory";
-
-import { Password } from "../entities/Password";
+import PasswordService from "../services/PasswordService";
 import { Volume } from "../entities/Volume";
 
 // let response_example = {
@@ -14,7 +13,7 @@ import { Volume } from "../entities/Volume";
 
 export class MountVolume {
     encryptionService: EncryptionService;
-    password: Password;
+    password: string;
     volume: Volume;
 
     constructor(volume: Volume) {
@@ -28,13 +27,12 @@ export class MountVolume {
         try {
             response.volume = this.volume;
 
-            // TODO fix it
-            // const passwordApp = new PasswordApplication();
-            // if (!passwordApp.passwordExists(this.volume)) {
-            //     response.status = "error";
-            //     response.message = `try again when there is a password for ${this.volume.encryptedFolderPath}`;
-            //     return response;
-            // }
+            const passwordservice = new PasswordService();
+            if (!passwordservice.passwordExist(this.volume)) {
+                response.status = "error";
+                response.message = `try again when there is a password for ${this.volume.encryptedFolderPath}`;
+                return response;
+            }
 
             const isMounted = this.encryptionService.isMounted(this.volume);
             response.isMounted = isMounted;

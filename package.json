@@ -1,51 +1,51 @@
 {
-  "name": "cryptobox",
-  "version": "0.0.1",
-  "description": "Preserve data privacy, not matter where ...",
-  "main": "./dist/main.js",
-  "dependencies": {
-    "bootswatch": "^4.5.3",
-    "electron-log": "^4.3.0",
-    "electron-store": "^6.0.1",
-    "keytar": "^7.2.0",
-    "zxcvbn": "^4.4.2"
-  },
-  "devDependencies": {
-    "@types/chai": "^4.2.14",
-    "@types/mocha": "^8.0.4",
-    "@types/zxcvbn": "^4.4.0",
-    "@typescript-eslint/eslint-plugin": "^4.9.0",
-    "@typescript-eslint/parser": "^4.9.0",
-    "chai": "^4.2.0",
-    "electron": "^11.0.3",
-    "electron-builder": "^22.9.1",
-    "electron-reload": "^1.5.0",
-    "eslint": "^7.14.0",
-    "mocha": "^8.2.1",
-    "prettier": "^2.2.1",
-    "sucrase": "^3.16.0",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.1.2"
-  },
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "start": "npm run build && electron ./dist/main.js",
-    "test": "npm run build && mocha src/**/*.spec.ts -r ./require-sucrase.js",
-    "lint": "eslint ./src --ext .ts --fix",
-    "make": "npm run build && electron-builder --config ./electron-builder.json --publish never --x64 --ia32"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jrrombaldo/cloud-enc.git"
-  },
-  "author": "Carlos Rombaldo <ju@bnh6.dev>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jrrombaldo/cloud-enc/issues"
-  },
-  "homepage": "https://github.com/jrrombaldo/cloud-enc#readme",
-  "config": {
-    "forge": "./build/forge.config.js"
-  }
+    "name": "cryptobox",
+    "version": "0.0.1",
+    "description": "Preserve data privacy, not matter where ...",
+    "main": "./dist/main.js",
+    "dependencies": {
+        "bootswatch": "^4.5.3",
+        "electron-log": "^4.3.0",
+        "electron-store": "^6.0.1",
+        "keytar": "^7.2.0",
+        "zxcvbn": "^4.4.2"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.14",
+        "@types/mocha": "^8.0.4",
+        "@types/zxcvbn": "^4.4.0",
+        "@typescript-eslint/eslint-plugin": "^4.9.0",
+        "@typescript-eslint/parser": "^4.9.0",
+        "chai": "^4.2.0",
+        "electron": "^11.0.3",
+        "electron-builder": "^22.9.1",
+        "electron-reload": "^1.5.0",
+        "eslint": "^7.14.0",
+        "mocha": "^8.2.1",
+        "prettier": "^2.2.1",
+        "sucrase": "^3.16.0",
+        "ts-node": "^9.0.0",
+        "typescript": "^4.1.2"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "start": "npm run build && electron ./dist/main.js",
+        "test": "npm run build && mocha src/**/*.spec.ts -r ./require-sucrase.js",
+        "lint": "eslint ./src --ext .ts --fix",
+        "make": "npm run build && electron-builder --config ./electron-builder.json --publish never --x64 --ia32"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jrrombaldo/cloud-enc.git"
+    },
+    "author": "Carlos Rombaldo <ju@bnh6.dev>",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jrrombaldo/cloud-enc/issues"
+    },
+    "homepage": "https://github.com/jrrombaldo/cloud-enc#readme",
+    "config": {
+        "forge": "./build/forge.config.js"
+    }
 }

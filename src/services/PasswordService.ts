@@ -1,7 +1,7 @@
 import PasswordServiceError from "./PasswordError";
-import { Volume } from "../../entities/Volume";
-import { constants } from "../../utils/constants";
-import log from "../../utils/LogUtil";
+import { Volume } from "../entities/Volume";
+import { constants } from "../utils/constants";
+import log from "../utils/LogUtil";
 import * as keytar from "keytar";
 
 
@@ -15,7 +15,8 @@ import * as keytar from "keytar";
  *  account -> constant (PASSWORD MANAGER ALIAS) 
  * 
  */
-export class PasswordService {
+
+class PasswordService {
 
 
     /**
@@ -32,11 +33,11 @@ export class PasswordService {
                 constants.PASSWORD_MANAGER_ACCOUNT,
                 encodedPassword);
 
-            log.debug(`password saved for ${volume.getVolumeAlias()}`);
+            // log.debug(`password saved for ${volume.getVolumeAlias()}`);
 
         } catch (error) {
             const msg = `error to save password, ${error}`;
-            log.error(msg);
+            // log.error(msg);
             throw new PasswordServiceError(msg);
         }
     }
@@ -52,10 +53,10 @@ export class PasswordService {
                 volume.getVolumeAlias(),
                 constants.PASSWORD_MANAGER_ACCOUNT
             );
-            log.debug(`password deleted for ${volume.getVolumeAlias()}`);
+            // log.debug(`password deleted for ${volume.getVolumeAlias()}`);
         } catch (error) {
             const msg = `error to delete password, ${error}`;
-            log.error(msg);
+            // log.error(msg);
             throw new PasswordServiceError(msg);
         }
     }
@@ -77,7 +78,7 @@ export class PasswordService {
                 return null; //password not found
             else {
                 const decodedPassword = Buffer.from(encodedPassword, "base64").toString("ascii");
-                log.debug("password found and decoded ...");
+                // log.debug("password found and decoded ...");
                 return decodedPassword;
             }
         } catch (error) {
@@ -87,4 +88,20 @@ export class PasswordService {
         }
     }
 
+    async passwordExist(volume: Volume): Promise<boolean> {
+        try {
+            const pass = await this.searchForPassword(volume);
+            if (pass != null)
+                return true;
+            else
+                return false;
+
+        } catch (error) {
+            const msg = `unknown error when searching if password exists ->${error}`;
+            // log.error(msg);
+            throw new PasswordServiceError(msg);
+        }
+    }
+
 }
+export default PasswordService;

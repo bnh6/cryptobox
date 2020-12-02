@@ -23,6 +23,17 @@
         "icon": "static/resources/cloud-enc.icns"
     },
     "win": {
-        "icon": "static/resources/cloud-enc.icns"
+        "icon": "static/resources/cloud-enc.icns",
+        "legalTrademarks": "Cryptobox by BNH6",
+        "target": [
+            {
+              "target": "portable",
+              "arch": [ "x64", "ia32" ]
+            },
+            {
+                "target": "msi",
+                "arch": [ "x64", "ia32" ]
+            }
+        ]
     }
 }

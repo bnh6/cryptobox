@@ -90,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
       # - run: set -xeuo pipefail
@@ -98,7 +98,9 @@ jobs:
         run: |
           echo "building artefacts"
           uname -a
+          rm -rf ./node_modules/
           npm ci
+          npm run build
           npm run make
       - name: uploading artefacts
         uses: actions/upload-artifact@v2

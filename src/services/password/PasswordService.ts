@@ -82,7 +82,7 @@ export class PasswordService {
             }
         } catch (error) {
             const msg = `unknown error when searching password ->${error}`;
-            log.error(msg);
+            // log.error(msg);
             throw new PasswordServiceError(msg);
         }
     }

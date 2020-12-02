@@ -1,6 +1,6 @@
 dist: trusty
 language: node_js
-node_js: 13
+node_js: 15
 
 jobs:
   include:
@@ -8,7 +8,9 @@ jobs:
       env: LABEL=linux
     - os: osx
       env: LABEL=osx
-      osx_image: xcode9.2
+      # osx_image: xcode9.2
+    - os: windows
+      env: LABEL=win
 cache:
   directories:
     - "node_modules"
@@ -17,24 +19,27 @@ before_install:
     if [ $TRAVIS_OS_NAME = 'osx' ]; then
       echo -e "\n\n\t>>>> running on MAC\t\t"
       csrutil status
-      csrutil disable
       id
       # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       # brew update
       # brew cask install osxfuse --appdir=/tmp
       # brew install encfs
       # sudo security unlock-keychain -u
+      npm run test
     fi
     if [ $TRAVIS_OS_NAME = 'linux' ]; then
       echo -e "\n\n\t>>>> running on LINUX\t\t"
-      sudo apt clean
+      id
+      # sudo apt clean
       sudo apt update
       # sudo apt install encfs -y
       # sudo apt install snapd -y
-       sudo apt install  libsecret-1-dev
-      
+       sudo apt install  libsecret-1-dev      
     fi
-
-# script:
-# - |
-# npm run make
+script:
+- |
+    npm install
+    npm run build
+    npm run lint
+    npm run test
+    npm run make

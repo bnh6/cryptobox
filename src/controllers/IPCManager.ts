@@ -42,6 +42,7 @@ ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
 ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
     let source = arg["source"];
     let password = arg["password"];
+    // TODO validate parameters
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
     let volume = new Volume(source);

@@ -21,7 +21,7 @@ export class MountVolume {
         this.volume = volume;
     }
 
-    public mount(): { [k: string]: any } {
+    public async mount(): Promise<{ [k: string]: any; }> {
         const response: { [k: string]: any } = {};
 
         try {
@@ -38,17 +38,16 @@ export class MountVolume {
             response.isMounted = isMounted;
             log.info(`${this.volume} is already mounted? = ${isMounted}`);
 
-            //TODO fix this, move to async
-            // if (isMounted) {
-            //     this.encryptionService.unmount(this.volume);
-            //     response.message = "volume unmounted!";
-            // } else {
-            //     this.encryptionService.mount(
-            //         this.volume,
-            //         await passwordApp.findPassword(this.volume)
-            //     );
-            //     response.message = "volume mounted!";
-            // }
+            if (isMounted) {
+                this.encryptionService.unmount(this.volume);
+                response.message = "volume unmounted!";
+            } else {
+                this.encryptionService.mount(
+                    this.volume,
+                    await passwordApp.findPassword(this.volume)
+                );
+                response.message = "volume mounted!";
+            }
 
             response.status = "success";
         } catch (error) {

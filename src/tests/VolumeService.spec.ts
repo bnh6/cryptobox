@@ -22,7 +22,7 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
         try {
             await passwordService.savePassword(password, volume);
         } catch (error) {
-            console.error(`Error to create the password, aborting ...`)
+            console.error("Error to create the password, aborting ...");
             throw error;
         }
 
@@ -38,7 +38,7 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
             // TODO enabling the password lookup, causes the execution to carryon and do not wait.
             // need to investigate it.
             // const password = await passwordService.searchForPassword(volume);
-            await volumeService.mount(volume, password)
+            await volumeService.mount(volume, password);
         }).not.to.throw();
     });
 
@@ -49,7 +49,7 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
 
     it("UNmount", () => {
         expect(async () => {
-            volumeService.unmount(volume)
+            volumeService.unmount(volume);
         }).not.to.throw();
     });
 
@@ -78,7 +78,7 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
         try {
             await passwordService.deletePassword(volume);
         } catch (error) {
-            console.error(`Error to delete the password, aborting ...`)
+            console.error("Error to delete the password, aborting ...");
             throw error;
         }
     });

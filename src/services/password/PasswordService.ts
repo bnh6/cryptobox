@@ -68,7 +68,7 @@ class PasswordService implements PasswordServiceInterface {
      * if failed to search, returns PasswordError
      * @param volume uses the volume alias as password reference
      */
-    async searchForPassword(volume: Volume): Promise<string> {
+    public async searchForPassword(volume: Volume): Promise<string> {
         const encodedPassword = await keytar.getPassword(
             volume.getVolumeAlias(),
             constants.PASSWORD_MANAGER_ACCOUNT);

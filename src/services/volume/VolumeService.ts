@@ -15,7 +15,7 @@ class VolumeService implements VolumeServiceInterface {
      * @param volume the paths and parameters used to mount the volume
      * @param password 
      */
-    public async mount(volume: Volume, password: string) {
+    public async mount(volume: Volume, password: string): Promise<void> {
         try {
             const alreadyMonted = await this.isMounted(volume);
             if (alreadyMonted) {
@@ -48,8 +48,8 @@ class VolumeService implements VolumeServiceInterface {
     public async unmount(volume: Volume) {
         try {
             const alreadyMonted = await this.isMounted(volume);
-            if (alreadyMonted) {
-                log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
+            if (!alreadyMonted) {
+                log.debug(`volume ${volume.encryptedFolderPath} already UNmounted...`);
                 return;
             }
             const command = `cryfs-unmount "${volume.decryptedFolderPath}" `; // cryfs expected the decrypted fodler.

@@ -14,9 +14,7 @@ export function execute(
     // log.debug(
     //     `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
     // );
-    console.log(
-        `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
-    );
+
 
 
 
@@ -37,6 +35,10 @@ export function execute(
     }
 
     // log.debug(`command [${command}] returned status [${result.status}]`);
+
+    console.log(
+        `[${result.status}]executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
+    );
 
     return [result.status, result.stdout.toString(), result.stderr.toString()];
 }

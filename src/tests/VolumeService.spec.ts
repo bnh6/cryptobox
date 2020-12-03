@@ -33,15 +33,13 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
         expect(mounted).to.false;
     });
 
-    it("mount", () => {
+    it("mount", async () => {
         expect(async () => {
-            const password = await passwordService.searchForPassword(volume);
+            // TODO enabling the password lookup, causes the execution to carryon and do not wait.
+            // need to investigate it.
+            // const password = await passwordService.searchForPassword(volume);
             await volumeService.mount(volume, password)
         }).not.to.throw();
-    });
-
-    it("sleeping", () => {
-        setTimeout(() => { console.log("sleeping"); }, 20000);
     });
 
     it("mounted, after mount", async () => {
@@ -55,10 +53,10 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
         }).not.to.throw();
     });
 
-    // it("not mounted, after UNmount", async () => {
-    //     const mounted = await volumeService.isMounted(volume);
-    //     expect(mounted).to.false;
-    // });
+    it("not mounted, after UNmount", async () => {
+        const mounted = await volumeService.isMounted(volume);
+        expect(mounted).to.false;
+    });
 
 
     // it("mount without permission on encrypted", () => { });

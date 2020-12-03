@@ -11,9 +11,14 @@ export function execute(
     failOnNonZeroReturn: boolean = true,
     timeout: number = 7000
 ): [number, string, string] {
-    log.debug(
+    // log.debug(
+    //     `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
+    // );
+    console.log(
         `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
     );
+
+
 
     const result = spawnSync(command, args, {
         timeout,
@@ -31,7 +36,7 @@ export function execute(
         throw new Error(`The command returned non-zero code [${result.status}]`);
     }
 
-    log.debug(`command [${command}] returned status [${result.status}]`);
+    // log.debug(`command [${command}] returned status [${result.status}]`);
 
     return [result.status, result.stdout.toString(), result.stderr.toString()];
 }

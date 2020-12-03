@@ -26,7 +26,7 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
 
     it("retrieve non-existing password", async () => {
         const returnedPassword = await passwordService.searchForPassword(volume);
-        expect(returnedPassword).to.null;
+        expect(returnedPassword).to.be.null;
     });
 
     it("create password", async () => {

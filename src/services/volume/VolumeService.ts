@@ -23,30 +23,25 @@ class VolumeService implements VolumeServiceInterface {
                 return;
             }
             const command =
+                `export CRYFS_FRONTEND=noninteractive; ` +
                 `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
-            const [code, stdout, stderr] = await shell.execute(command, [], false, 4000);
+            const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 
-            switch (code) {
-                case 0: {
-                    //success
-                    break;
-                }
-                case 11: {
-                    //wrong passwordf
-                    return false;
-                }
-                default: {
-                    throw new VolumeServiceError(
-                        `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-                }
+            if (code === 0) return;
+            else {
+                const errorLabel = this.treatCryFSError(code);
+                const msg = `Error ${errorLabel} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
+                throw new VolumeServiceError(msg);
             }
         } catch (error) {
-            if (error instanceof PasswordServiceError)
+            if (error instanceof VolumeServiceError)
                 throw error;
-            else
-                throw new VolumeServiceError(
-                    `Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
+            if (error instanceof PasswordServiceError)
+                throw new VolumeServiceError(error.message)
+
+            throw new VolumeServiceError(
+                `Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
         }
 
     }
@@ -57,26 +52,49 @@ class VolumeService implements VolumeServiceInterface {
                 log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
                 return;
             }
-            const command = `cryfs-unmount "${volume.encryptedFolderPath}" `;
+            const command = `cryfs-unmount "${volume.decryptedFolderPath}" `; // cryfs expected the decrypted fodler.
             const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
-            //TODO continue method
-            /**
-             * error codes at: https://github.com/cryfs/cryfs/blob/develop/src/cryfs/impl/ErrorCodes.h
-             */
-
+            if (code === 0) return;
+            else {
+                const errorLabel = this.treatCryFSError(code);
+                const msg = `Error ${errorLabel} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
+                throw new VolumeServiceError(msg);
+            }
         } catch (error) {
-            if (error instanceof PasswordServiceError)
+            if (error instanceof VolumeServiceError)
                 throw error;
-            else
-                throw new VolumeServiceError(
-                    `Error to UNmount the volume ${volume.encryptedFolderPath}, ${error}`);
+
+            throw new VolumeServiceError(
+                `Error to UNmount the volume ${volume.encryptedFolderPath}, ${error}`);
         }
     }
 
     public async isMounted(volume: Volume): Promise<boolean> {
-        return true;
+        try {
+            const command = `mount | grep -qs '${volume.encryptedFolderPath}'`
+
+            const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
+
+            if (code === 0) return true;
+            if (code === 1) return false;
+
+
+            const errorLabel = this.treatCryFSError(code);
+            const msg = `Error ${errorLabel} to check whether ${volume.decryptedFolderPath} is mounted,` +
+                `code = ${code} stdout = ${stdout}, stderr = ${stderr}`;
+            throw new VolumeServiceError(msg);
+
+        } catch (error) {
+            if (error instanceof VolumeServiceError)
+                throw error;
+
+            throw new VolumeServiceError(
+                `Error to to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`)
+        }
     }
+
+
 
     /**
      *  check if exists and the current user has write permission to it
@@ -108,7 +126,7 @@ class VolumeService implements VolumeServiceInterface {
         fs.mkdirSync(path, 0o744);
     }
     public deleteDirectory(path: string) {
-        fs.rmdirSync(path);
+        fs.rmdirSync(path, { maxRetries: 10, recursive: true });
     }
 
 

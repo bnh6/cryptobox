@@ -15,16 +15,19 @@ class VolumeService implements VolumeServiceInterface {
      * @param volume the paths and parameters used to mount the volume
      * @param password 
      */
-    public async mount(volume: Volume, password: string): Promise<void> {
+    public async mount(volume: Volume, password: string, unmountIdle: number = 0): Promise<void> {
         try {
             const alreadyMonted = await this.isMounted(volume);
             if (alreadyMonted) {
                 log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
                 return;
             }
-            const command =
+            var command =
                 "export CRYFS_FRONTEND=noninteractive; " +
                 `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+
+            if (unmountIdle > 0)
+                command = command + ` --unmount-idle ${unmountIdle}`;
 
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 
@@ -133,19 +136,19 @@ class VolumeService implements VolumeServiceInterface {
     public isVolumeOperationsSupported(): boolean {
         const [code, stdout, stderr] = shell.execute("cryfs", [], false);
         switch (code) {
-        case 0: {
-            log.debug("crfs installed...");
-            return true;
-            break;
-        }
-        case 127: {
-            log.debug("cyfs not installed, need to present installatin instruction");
-            return false;
-        }
-        default: {
-            throw new VolumeServiceError(
-                `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-        }
+            case 0: {
+                log.debug("crfs installed...");
+                return true;
+                break;
+            }
+            case 127: {
+                log.debug("cyfs not installed, need to present installatin instruction");
+                return false;
+            }
+            default: {
+                throw new VolumeServiceError(
+                    `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+            }
         }
     }
 

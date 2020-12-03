@@ -59,6 +59,32 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
     });
 
 
+
+    // it("mount with idle=1min", async () => {
+    //     expect(async () => {
+    //         // TODO enabling the password lookup, causes the execution to carryon and do not wait.
+    //         // need to investigate it.
+    //         // const password = await passwordService.searchForPassword(volume);
+    //         await volumeService.mount(volume, password, 1);
+    //     }).not.to.throw();
+    // });
+
+    // it("mounted, after mount with idle=1", async () => {
+    //     const mounted = await volumeService.isMounted(volume);
+    //     expect(mounted).to.true;
+    // });
+
+    // it("wait for 90 seconds=", (done) => {
+    //     setTimeout(function () {
+    //         done();
+    //     }, 90000);
+    // }).timeout(95000);
+
+    // it("should not be mounted given the idle", async () => {
+    //     const mounted = await volumeService.isMounted(volume);
+    //     expect(mounted).to.false;
+    // });
+
     // it("mount without permission on encrypted", () => { });
 
     // it("mount without permission on decrypted", () => { });

@@ -1,6 +1,6 @@
 import { Volume } from "../../entities/Volume";
 import { EncryptionService } from "./EncryptionService";
-import PasswordService from "../PasswordService";
+import PasswordService from "../password/PasswordService";
 
 import log from "../../utils/LogUtil";
 import * as ShellHelper from "../../utils/ShellUtil";

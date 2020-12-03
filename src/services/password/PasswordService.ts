@@ -1,9 +1,9 @@
 import PasswordServiceError from "./PasswordError";
-import { Volume } from "../entities/Volume";
-import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import { Volume } from "../../entities/Volume";
+import { constants } from "../../utils/constants";
+import log from "../../utils/LogUtil";
 import * as keytar from "keytar";
-
+import PasswordServiceInterface from "./PasswordServiceInterface";
 
 /**
  * Password management class is composed by Asynchronous methods that are responsible for
@@ -16,7 +16,7 @@ import * as keytar from "keytar";
  * 
  */
 
-class PasswordService {
+class PasswordService implements PasswordServiceInterface {
 
 
     /**

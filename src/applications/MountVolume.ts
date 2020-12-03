@@ -1,7 +1,7 @@
 import log from "../utils/LogUtil";
 import { EncryptionService } from "../services/encryption/EncryptionService";
 import { EncryptionServiceFactory } from "../services/encryption/EncryptionServiceFactory";
-import PasswordService from "../services/PasswordService";
+import PasswordService from "../services/password/PasswordService";
 import { Volume } from "../entities/Volume";
 
 // let response_example = {

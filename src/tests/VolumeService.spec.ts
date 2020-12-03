@@ -1,5 +1,5 @@
-import VolumeService from "../services/VolumeService";
-import VolumeServiceError from "../services/VolumeServiceError";
+import VolumeService from "../services/volume/VolumeService";
+import VolumeServiceError from "../services/volume/VolumeServiceError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 
@@ -16,8 +16,8 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
     });
 
     it("isMounted -> NOT mounted", () => { });
-    it("mount", () => {   });
-    it("isMounted ->  mounted", () => {   });
+    it("mount", () => { });
+    it("isMounted ->  mounted", () => { });
     it("UNmount", () => { });
     it("isMounted -> NOT mounted", () => { });
 
@@ -28,8 +28,8 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
     it("mount when encrypted does exist", () => { });
     it("mount when decrypted does exist", () => { }); //to create and succeed
 
-    it("mount with wrong password", () => { }); 
-    it("mount without", () => { }); 
+    it("mount with wrong password", () => { });
+    it("mount without", () => { });
 
     after(() => {
         volumeService.deleteDirectory(volume.decryptedFolderPath);

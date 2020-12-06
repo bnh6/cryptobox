@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
           path: ${{ steps.npm-cache.outputs.dir }}
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{  matrix.os }}-node-${{ matrix.node }}
       - name: Install Dependencies
         run: npm install
       - name: Build
@@ -63,13 +63,13 @@ jobs:
           id
   GitHub-Testing:
     if: true
-    runs-on: ${{matrix.os}}
+    runs-on: macos-latest
     needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [16.x]
     steps:
       - uses: actions/checkout@v1
@@ -109,12 +109,12 @@ jobs:
           python3 travis.py
   Building-Artefacts:
     if: true
-    runs-on: ${{matrix.os}}
+    runs-on: macos-latest
     needs: [PrepareEnvironment]
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v1
       - run: |

@@ -54,7 +54,7 @@ jobs:
           npm run lint
   GitHub-Testing:
     if: true
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
@@ -110,7 +110,7 @@ jobs:
           python3 travis.py
   Building-Artefacts:
     if: true
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     needs: [PrepareEnvironment]
     strategy:
       fail-fast: false # let the other continue if one fails
@@ -123,7 +123,7 @@ jobs:
           npm ci
           npm build
           npm run make
-          ls -lRh
+          ls -lRh ./release
       - name: uploading artefacts
         uses: actions/upload-artifact@v2
         with:

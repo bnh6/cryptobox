@@ -1,12 +1,11 @@
 import { Volume } from "../../entities/Volume";
-import VolumeServiceError from "./VolumeServiceError";
 import log from "../../utils/LogUtil";
 import * as shell from "../../utils/ShellUtil";
 import * as fs from "fs";
-import PasswordServiceError from "../password/PasswordError";
 import VolumeServiceInterface from "./VolumeInterface";
+import{ ServiceError, ErrorType }  from "../ServiceError";
 
-class VolumeService implements VolumeServiceInterface {
+export default class VolumeService implements VolumeServiceInterface {
 
     /**
      * check if mounted,
@@ -22,7 +21,7 @@ class VolumeService implements VolumeServiceInterface {
                 log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
                 return;
             }
-            var command =
+            let command =
                 "export CRYFS_FRONTEND=noninteractive; " +
                 `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
@@ -33,18 +32,14 @@ class VolumeService implements VolumeServiceInterface {
 
             if (code === 0) return;
             else {
-                const errorLabel = this.treatCryFSError(code);
-                const msg = `Error ${errorLabel} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
-                throw new VolumeServiceError(msg);
+                const error = ServiceError.errorFromCryFS(code);
+                log.error(`Error ${error} to UNmount volume, code=${code} stdout=${stdout}, stderr=${stderr}`);
+                throw error;
             }
         } catch (error) {
-            if (error instanceof VolumeServiceError)
-                throw error;
-            if (error instanceof PasswordServiceError)
-                throw new VolumeServiceError(error.message);
-
-            throw new VolumeServiceError(
-                `Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
+            if (error instanceof ServiceError) throw error;
+            log.error(`Error to mount the ${volume.encryptedFolderPath}" -> "${volume.decryptedFolderPath}", ${error}`);
+            throw new ServiceError(ErrorType.UnexpectedError);
         }
 
     }
@@ -60,16 +55,14 @@ class VolumeService implements VolumeServiceInterface {
 
             if (code === 0) return;
             else {
-                const errorLabel = this.treatCryFSError(code);
-                const msg = `Error ${errorLabel} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
-                throw new VolumeServiceError(msg);
+                const error = ServiceError.errorFromCryFS(code);
+                const msg = `Error ${error} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
+                throw error;
             }
         } catch (error) {
-            if (error instanceof VolumeServiceError)
-                throw error;
-
-            throw new VolumeServiceError(
-                `Error to UNmount the volume ${volume.encryptedFolderPath}, ${error}`);
+            if (error instanceof ServiceError) throw error;
+            log.error(`Error to UNmount the volume ${volume.encryptedFolderPath}, ${error}`);
+            throw new ServiceError(ErrorType.UnexpectedError);
         }
     }
 
@@ -83,17 +76,15 @@ class VolumeService implements VolumeServiceInterface {
             if (code === 1) return false;
 
 
-            const errorLabel = this.treatCryFSError(code);
-            const msg = `Error ${errorLabel} to check whether ${volume.decryptedFolderPath} is mounted,` +
+            const error = ServiceError.errorFromCryFS(code);
+            const msg = `Error ${error} to check whether ${volume.decryptedFolderPath} is mounted,` +
                 `code = ${code} stdout = ${stdout}, stderr = ${stderr}`;
-            throw new VolumeServiceError(msg);
+            throw error;
 
         } catch (error) {
-            if (error instanceof VolumeServiceError)
-                throw error;
-
-            throw new VolumeServiceError(
-                `Error to to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
+            if (error instanceof ServiceError) throw error;
+            log.error(`Error to to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
+            throw new ServiceError(ErrorType.UnexpectedError);
         }
     }
 
@@ -108,7 +99,7 @@ class VolumeService implements VolumeServiceInterface {
             fs.accessSync(path, fs.constants.W_OK);
             return true;
         } catch (error) {
-            console.debug(
+            log.debug(
                 "user does not seem to have writing permisison on directory "
                 + `${path} or it does not exist, resulted => ${error}`);
             return false;
@@ -146,65 +137,9 @@ class VolumeService implements VolumeServiceInterface {
                 return false;
             }
             default: {
-                throw new VolumeServiceError(
-                    `Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+                log.error(`Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+                throw new ServiceError(ErrorType.ErrorToDetermineVolumeEncryptionSupport);
             }
         }
-    }
-
-    private treatCryFSError(code: number): string {
-        const errorMap = new Map([
-            // An error happened that doesn't have an error code associated with it
-            [1, "UnspecifiedError"],
-            // The command line arguments are invalid.
-            [10, "InvalidArguments"],
-            // Couldn't load config file. Probably the password is wrong
-            [11, "WrongPassword"],
-            // Password cannot be empty
-            [12, "EmptyPassword"],
-            // The file system format is too new for this CryFS version. Please update your CryFS version.
-            [13, "TooNewFilesystemFormat"],
-            // The file system format is too old for this CryFS version. 
-            // Run with --allow - filesystem - upgrade to upgrade it.
-            [14, "TooOldFilesystemFormat"],
-            // The file system uses a different cipher than the one specified on the command line
-            // using the--cipher argument.
-            [13, "WrongCipher"],
-            // Base directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-            [16, "InaccessibleBaseDir"],
-            // Mount directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-            [17, "InaccessibleMountDir"],
-            // Base directory can't be a subdirectory of the mount directory
-            [18, "BaseDirInsideMountDir"],
-            // Something's wrong with the file system.
-            [19, "InvalidFilesystem"],
-            // The filesystem id in the config file is different to the last time we loaded 
-            // a filesystem from this basedir. 
-            // This could mean an attacker replaced the file system with a different one.
-            // You can pass the--allow - replaced - filesystem option to allow this.
-            [20, "FilesystemIdChanged"],
-            // The filesystem encryption key differs from the last time we loaded this filesystem. 
-            // This could mean an attacker replaced the file system with a different one.
-            // You can pass the--allow - replaced - filesystem option to allow this.
-            [21, "EncryptionKeyChanged"],
-            // The command line options and the file system disagree on whether missing blocks 
-            // should be treated as integrity violations.
-            [22, "FilesystemHasDifferentIntegritySetup"],
-            // File system is in single-client mode and can only be used from the client that created it.
-            [23, "SingleClientFileSystem"],
-            // A previous run of the file system detected an integrity violation. 
-            // Preventing access to make sure the user notices.
-            // The file system will be accessible again after the user deletes the integrity state file.
-            [24, "IntegrityViolationOnPreviousRun"],
-            // An integrity violation was detected and the file system unmounted to make sure the user notices.
-            [25, "IntegrityViolation"]
-        ]);
-
-        if (!errorMap.has(code))
-            return errorMap.get(1);//unknown error code
-        else
-            return errorMap.get(code);
-    }
+    }    
 }
-
-export default VolumeService;

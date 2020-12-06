@@ -1,7 +1,6 @@
 import VolumeService from "../services/volume/VolumeService";
-import VolumeServiceError from "../services/volume/VolumeServiceError";
+import { ServiceError } from "../services/ServiceError";
 import PasswordService from "../services/password/PasswordService";
-import PasswordServiceError from "../services/password/PasswordError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 

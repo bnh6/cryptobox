@@ -1,5 +1,5 @@
 import PasswordService from "../services/password/PasswordService";
-import PasswordServiceError from "../services/password/PasswordError";
+import { ServiceError } from "../services/ServiceError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 
@@ -9,6 +9,11 @@ const passwordService: PasswordService = new PasswordService();
 
 console.log(`generated password = [${password}]`);
 console.log(`generated volume = [${volume.getVolumeAlias()}]`);
+
+// disbaling logs for cleaner stdout (is this a good thing???)
+import log from "../utils/LogUtil";
+log.transports.file.level = false;
+log.transports.console.level = false;
 
 
 async function cleanPassword() {
@@ -51,18 +56,18 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
     it("delete non-existing password", async () => {
         expect(async () => {
             await passwordService.deletePassword(volume);
-        }).not.to.throw(PasswordServiceError);
+        }).not.to.throw(ServiceError);
     });
 
     it("create password with null password", () => {
         passwordService.savePassword(null, volume).catch(error => {
-            expect(error).to.be.an.instanceOf(PasswordServiceError);
+            expect(error).to.be.an.instanceOf(ServiceError);
         });
     });
 
     it("create password with null volume", () => {
         passwordService.savePassword(password, null).catch(error => {
-            expect(error).to.be.an.instanceOf(PasswordServiceError);
+            expect(error).to.be.an.instanceOf(ServiceError);
         });
     });
 

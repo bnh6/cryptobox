@@ -1,7 +1,6 @@
-import PasswordServiceError from "./PasswordError";
 import { Volume } from "../../entities/Volume";
 
-interface PasswordService {
+export default interface PasswordService {
 
     savePassword(password: string, volume: Volume): void;
     deletePassword(volume: Volume): void;
@@ -9,4 +8,3 @@ interface PasswordService {
     passwordExist(volume: Volume): Promise<boolean>;
 
 }
-export default PasswordService;

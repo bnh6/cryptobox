@@ -1,4 +1,4 @@
-import PasswordServiceError from "./PasswordError";
+import{ ServiceError, ErrorType }  from "../ServiceError";
 import { Volume } from "../../entities/Volume";
 import { constants } from "../../utils/constants";
 import log from "../../utils/LogUtil";
@@ -16,9 +16,7 @@ import PasswordServiceInterface from "./PasswordServiceInterface";
  * 
  */
 
-class PasswordService implements PasswordServiceInterface {
-
-
+export default class PasswordService implements PasswordServiceInterface {
     /**
      * if succeed return void, if failed throws PasswordError
      * @param password represents the password value 
@@ -36,9 +34,8 @@ class PasswordService implements PasswordServiceInterface {
             // log.debug(`password saved for ${volume.getVolumeAlias()}`);
 
         } catch (error) {
-            const msg = `error to save password, ${error}`;
-            // log.error(msg);
-            throw new PasswordServiceError(msg);
+            log.error(`error to save password, ${error}`);
+            throw new ServiceError(ErrorType.ErrorSavingPassword);
         }
     }
 
@@ -55,9 +52,8 @@ class PasswordService implements PasswordServiceInterface {
             );
             // log.debug(`password deleted for ${volume.getVolumeAlias()}`);
         } catch (error) {
-            const msg = `error to delete password, ${error}`;
-            // log.error(msg);
-            throw new PasswordServiceError(msg);
+            log.error(`error to delete password, ${error}`);
+            throw new ServiceError(ErrorType.ErrorDeletingPassword);
         }
     }
 
@@ -82,9 +78,8 @@ class PasswordService implements PasswordServiceInterface {
                 return decodedPassword;
             }
         } catch (error) {
-            const msg = `unknown error when searching password ->${error}`;
-            // log.error(msg);
-            throw new PasswordServiceError(msg);
+            log.error(`unknown error when searching password ->${error}`);
+            throw new ServiceError(ErrorType.ErrorSearchingPassword);
         }
     }
 
@@ -98,10 +93,7 @@ class PasswordService implements PasswordServiceInterface {
 
         } catch (error) {
             const msg = `unknown error when searching if password exists ->${error}`;
-            // log.error(msg);
-            throw new PasswordServiceError(msg);
+            throw error;
         }
     }
-
 }
-export default PasswordService;

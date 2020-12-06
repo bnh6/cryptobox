@@ -133,7 +133,11 @@ export default class VolumeService implements VolumeServiceInterface {
             break;
         }
         case 127: {
-            log.debug("cyfs not installed, need to present installatin instruction");
+            log.debug("[127] CryFS not installed, need to present installatin instruction");
+            return false;
+            }
+        case 7: {
+            log.debug("[127] CryFS not installed, need to present installatin instruction");
             return false;
         }
         default: {

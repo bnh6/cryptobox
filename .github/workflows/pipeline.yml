@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         node-version: [14.x, s 16.x]
     steps:
       - uses: actions/checkout@v2
@@ -70,7 +70,7 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         node-version: [14.x, s 16.x]
     steps:
       - uses: actions/cache@v2
@@ -119,7 +119,7 @@ jobs:
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     steps:
       - uses: actions/cache@v2
         with:

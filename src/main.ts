@@ -57,12 +57,12 @@ function createWindow() {
     });
 
     mainWindow.on("unresponsive", function () {
-        log.info("unresponsive, response to be implemented ...");
+        log.error("unresponsive, response to be implemented ...");
     });
 }
 
 app.on("ready", () => {
-    statupPreReq();
+    startupPreReq();
     loadScripts();
     createWindow();
 
@@ -82,7 +82,6 @@ process.on("uncaughtException", function (error) {
     log.error("UNCATCH EXCEPTION FOUND ");
     log.error(error);
     app.quit();
-    // console.error(error)
 });
 
 function loadScripts() {
@@ -96,7 +95,7 @@ function loadScripts() {
     //   });
 }
 
-function statupPreReq() {
+function startupPreReq() {
     ShellHelper.checkOSSupport();
     if (!ShellHelper.checkRequirements()) {
         log.error("environment does not meet requirements ...");

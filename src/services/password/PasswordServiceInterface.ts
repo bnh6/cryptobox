@@ -7,4 +7,5 @@ export default interface PasswordService {
     searchForPassword(volume: Volume): Promise<string>;
     passwordExist(volume: Volume): Promise<boolean>;
 
+// eslint-disable-next-line semi
 }

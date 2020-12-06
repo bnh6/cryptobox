@@ -2,7 +2,7 @@ import { Volume } from "../../entities/Volume";
 import log from "../../utils/LogUtil";
 import * as shell from "../../utils/ShellUtil";
 import * as fs from "fs";
-import VolumeServiceInterface from "./VolumeInterface";
+import VolumeServiceInterface from "./VolumeServiceInterface";
 import{ ServiceError, ErrorType }  from "../ServiceError";
 
 export default class VolumeService implements VolumeServiceInterface {
@@ -127,19 +127,19 @@ export default class VolumeService implements VolumeServiceInterface {
     public isVolumeOperationsSupported(): boolean {
         const [code, stdout, stderr] = shell.execute("cryfs", [], false);
         switch (code) {
-            case 0: {
-                log.debug("crfs installed...");
-                return true;
-                break;
-            }
-            case 127: {
-                log.debug("cyfs not installed, need to present installatin instruction");
-                return false;
-            }
-            default: {
-                log.error(`Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-                throw new ServiceError(ErrorType.ErrorToDetermineVolumeEncryptionSupport);
-            }
+        case 0: {
+            log.debug("crfs installed...");
+            return true;
+            break;
+        }
+        case 127: {
+            log.debug("cyfs not installed, need to present installatin instruction");
+            return false;
+        }
+        default: {
+            log.error(`Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
+            throw new ServiceError(ErrorType.ErrorToDetermineVolumeEncryptionSupport);
+        }
         }
     }    
 }

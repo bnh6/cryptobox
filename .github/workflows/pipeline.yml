@@ -20,22 +20,23 @@ jobs:
       max-parallel: 10
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node-version: [14.x, s 16.x]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v2
       - name: Setup node for ${{ matrix.target }}
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node }}
-      # - name: Get npm cache directory
-      #   id: npm-cache
-      #   run: |
-      #     echo "::set-output name=dir::$(npm config get cache)"
+      - name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
       - uses: actions/cache@v2
         with:
-          # path: ${{ steps.npm-cache.outputs.dir }}
-          path: ./
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: 
+            - ${{ steps.npm-cache.outputs.dir }}
+            - ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
@@ -71,17 +72,13 @@ jobs:
       max-parallel: 10
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node-version: [14.x, s 16.x]
+        node-version: [16.x]
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ./
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      # - uses: actions/checkout@v1
-      - run: ls -1 && pwd
-      - run: set -xeuo pipefail
+      - uses: actions/checkout@v1
+      - run: |
+          set -xeuo pipefail
+          npm ci
+          npm build
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
@@ -121,18 +118,12 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ./
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      # - uses: actions/checkout@v2
-      # - run: set -xeuo pipefail
-      - name: Building artefacts => ${{ github.ref }}
-        run: |
+      - uses: actions/checkout@v1
+      - run: |
+          set -xeuo pipefail
+          npm ci
+          npm build
           npm run make
-          ls -lRh
       - name: uploading artefacts
         uses: actions/upload-artifact@v2
         with:

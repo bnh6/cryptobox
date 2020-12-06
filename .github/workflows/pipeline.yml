@@ -129,6 +129,7 @@ jobs:
           # path: release/**/[Cc]rypto[Bb]ox.*
           # path: release/cryptobox*.*(dmg|app|deb|rpm|tar.gz)
           path: release/cryptobox*
+      - run: ls -lRh
   Create-Release:
     if: false
     runs-on: ubuntu-latest

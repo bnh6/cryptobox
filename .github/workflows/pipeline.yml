@@ -67,10 +67,12 @@ jobs:
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          # sudo apt install cryfs
+          set -xeuo pipefail
+          sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |
+          set -xeuo pipefail
           csrutil status
           id
           if (csrutil status | grep -isq " enabled"); 
@@ -85,8 +87,8 @@ jobs:
       #   if: startsWith(matrix.os, 'windows')
       #   run: |
       #     dir
+      - name: Run tests
       - run: |
-          set -xeuo pipefail
           npm ci
           npm build
           npm run test

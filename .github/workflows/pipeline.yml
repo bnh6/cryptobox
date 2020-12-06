@@ -13,7 +13,7 @@ on:
       - "feature-*"
 
 jobs:
-  PreparingEnvinronment:
+  PrepareEnvironment:
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
@@ -62,7 +62,8 @@ jobs:
           id
   GitHub-Testing:
     if: true
-    runs-on: macos-latest
+    runs-on: ${{matrix.os}}
+    needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -103,8 +104,9 @@ jobs:
           pip install -r requirements.txt
           python3 travis.py
   Building-Artefacts:
-    runs-on: ${{matrix.os}}
     if: true
+    runs-on: ${{matrix.os}}
+    needs: [PrepareEnvironment]
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
@@ -114,11 +116,8 @@ jobs:
       # - run: set -xeuo pipefail
       - name: Building artefacts => ${{ github.ref }}
         run: |
-          echo "building artefacts"
-          uname -a
-          npm ci
-          npm run build
           npm run make
+          ls -lRh
       - name: uploading artefacts
         uses: actions/upload-artifact@v2
         with:

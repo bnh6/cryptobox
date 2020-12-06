@@ -153,6 +153,6 @@ export default class VolumeService implements VolumeServiceInterface {
         //     log.error(`Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
         //     throw new ServiceError(ErrorType.ErrorToDetermineVolumeEncryptionSupport);
         // }
-        }
+        // }
     }    
 }

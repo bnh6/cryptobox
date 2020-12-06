@@ -73,8 +73,14 @@ jobs:
         run: |
           csrutil status
           id
-          brew install --cask osxfuse
-          brew install cryfs
+          if (csrutil status | grep -isq " enabled"); 
+          then 
+            echo "SIP is enabled, not installing CryFS nor EncFS"; 
+          else 
+             echo "SIP is disabled :)"; 
+             brew install --cask osxfuse
+            brew install cryfs
+          fi
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'windows')
         run: |

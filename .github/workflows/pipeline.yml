@@ -42,6 +42,7 @@ jobs:
         run: npm install
       - name: Build
         run: npm build
+      - run: ls -1 && pwd
 
   Linting:
     runs-on: macos-latest
@@ -79,6 +80,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       # - uses: actions/checkout@v1
+      - run: ls -1 && pwd
       - run: set -xeuo pipefail
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')

@@ -26,7 +26,7 @@ jobs:
       - name: Setup node for ${{ matrix.target }}
         uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
       - name: Get npm cache directory
         id: npm-cache
         run: |
@@ -34,14 +34,13 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node }}
+          key: ${{ runner.os }}_${{ matrix.node-version }}_${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{  matrix.os }}-node-${{ matrix.node }}
+            ${{  matrix.os }}_${{ matrix.node-version }}
       - name: Install Dependencies
         run: npm install
       - name: Build
         run: npm build
-      - run: ls -1 && pwd
 
   Linting:
     runs-on: macos-latest

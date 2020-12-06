@@ -121,7 +121,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: |
-          set -xeuo pipefail
           npm ci
           npm build
           npm run make

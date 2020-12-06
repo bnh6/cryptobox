@@ -14,8 +14,10 @@ const volumeService = new VolumeService();
 // could use the pasword variable, but would be more realistic to use the passwordservice
 const passwordService = new PasswordService();
 
+const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();
+console.log(`VOLUME ENCRYPTION SUPPORT ${volumeEncryptionSupport}`);
 
-describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
+(volumeEncryptionSupport ? describe : describe.skip)("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
     before(async () => {
         volumeService.createDirectory(volume.decryptedFolderPath);
         volumeService.createDirectory(volume.encryptedFolderPath);
@@ -26,6 +28,11 @@ describe("  >>>>  EXECUTING VOLUME SERVICE  TESTS  <<<<  ", () => {
             throw error;
         }
 
+    });
+
+    it("does it support volume encryption?", () => {
+        const support = volumeService.isVolumeOperationsSupported();
+        expect(support).to.true; 
     });
 
     it("not mounted before mounting", async () => {

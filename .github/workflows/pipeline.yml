@@ -27,13 +27,14 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node }}
-      - name: Get npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+      # - name: Get npm cache directory
+      #   id: npm-cache
+      #   run: |
+      #     echo "::set-output name=dir::$(npm config get cache)"
       - uses: actions/cache@v2
         with:
-          path: ${{ steps.npm-cache.outputs.dir }}
+          # path: ${{ steps.npm-cache.outputs.dir }}
+          path: ./
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node }}
           restore-keys: |
             ${{ runner.os }}-node-
@@ -71,8 +72,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [14.x, s 16.x]
     steps:
-      - uses: actions/checkout@v1
-      # - run: set -xeuo pipefail
+      # - uses: actions/checkout@v1
+      - run: set -xeuo pipefail
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'ubuntu')
         run: |
@@ -112,7 +113,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
       # - run: set -xeuo pipefail
       - name: Building artefacts => ${{ github.ref }}
         run: |

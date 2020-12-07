@@ -69,7 +69,7 @@ jobs:
         run: |
           set -xeuo pipefail
           sudo apt remove golang-docker-credential-helpers
-          sudo apt install cryfs pass gnupg2
+          sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |

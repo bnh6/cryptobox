@@ -143,8 +143,8 @@ jobs:
       
   Create-Release:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["master", "dev"]'), github.ref)
-    needs: [Linting, Travis-Testing, Building-Artefacts]
+    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success'
+    needs: [GitHub-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:

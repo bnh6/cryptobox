@@ -71,11 +71,11 @@ jobs:
           id
           # export DISPLAY=:0.0
           # xhost +
-          sudo apt install pass
-          gpg2  --batch  --gen-key # get generated key
-          gpg --list-keys
-          pass init -p /tmp # testing random folder
-          sudo apt install cryfs
+          # sudo apt install pass
+          # gpg2  --batch  --gen-key # get generated key
+          # gpg --list-keys
+          # pass init -p /tmp # testing random folder
+          # sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |

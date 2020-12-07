@@ -28,6 +28,8 @@ export enum ErrorType {
 
     ErrorToDetermineVolumeEncryptionSupport,
 
+    UnsupportedOS,
+
 
 }
 

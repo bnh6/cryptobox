@@ -3,9 +3,18 @@ import log from "../../utils/LogUtil";
 import * as shell from "../../utils/ShellUtil";
 import * as fs from "fs";
 import VolumeServiceInterface from "./VolumeServiceInterface";
-import{ ServiceError, ErrorType }  from "../ServiceError";
+import { ServiceError, ErrorType } from "../ServiceError";
+import VolumeServiceWrapperInterface from "./wrappers/VolumeServiceWrapperInterface";
+import { VolumeServiceWrapperFactory, VolumeEncryptionImpl } from "./wrappers/VolumeServiceWrapperFactory";
+
 
 export default class VolumeService implements VolumeServiceInterface {
+
+    private wrapper: VolumeServiceWrapperInterface;
+
+    constructor(whichImpl: VolumeEncryptionImpl = VolumeEncryptionImpl.CryFS) {
+        this.wrapper = VolumeServiceWrapperFactory.create(whichImpl);
+    }
 
     /**
      * check if mounted,
@@ -21,13 +30,8 @@ export default class VolumeService implements VolumeServiceInterface {
                 log.debug(`volume ${volume.encryptedFolderPath} already mounted, no need to mount again.`);
                 return;
             }
-            let command =
-                "export CRYFS_FRONTEND=noninteractive; " +
-                `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
-            if (unmountIdle > 0)
-                command = command + ` --unmount-idle ${unmountIdle}`;
-
+            const command = this.wrapper.getMountCommand(volume, password, unmountIdle);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 
             if (code === 0) return;
@@ -50,7 +54,7 @@ export default class VolumeService implements VolumeServiceInterface {
                 log.debug(`volume ${volume.encryptedFolderPath} already UNmounted...`);
                 return;
             }
-            const command = `cryfs-unmount "${volume.decryptedFolderPath}" `; // cryfs expected the decrypted fodler.
+            const command = this.wrapper.getUNmountCommand(volume);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
             if (code === 0) return;
@@ -68,7 +72,7 @@ export default class VolumeService implements VolumeServiceInterface {
 
     public async isMounted(volume: Volume): Promise<boolean> {
         try {
-            const command = `mount | grep -qs '${volume.encryptedFolderPath}'`;
+            const command = this.wrapper.getIsMountedCommand(volume);
 
             const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
@@ -125,14 +129,15 @@ export default class VolumeService implements VolumeServiceInterface {
 
 
     public isVolumeOperationsSupported(): boolean {
-        const [code, stdout, stderr] = shell.execute("cryfs", [], false);
+        const command = this.wrapper.getIsVolumeOperationsSupportedCommand();
+        const [code, stdout, stderr] = shell.execute(command, [], false);
 
         if (code === 0) {
             log.debug("crfs installed...");
             return true;
         } else {
             log.debug(`CryFS does not seem to be installed, returned code=${code}, stdout=${stdout}, stderr=${stderr}`);
-                return false;
+            return false;
         }
             
         // switch (code) {

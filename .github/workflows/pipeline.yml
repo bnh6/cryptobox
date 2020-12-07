@@ -143,7 +143,7 @@ jobs:
       
   Create-Release:
     runs-on: ubuntu-latest
-    if: ${{ contains(['master', 'dev'], github.ref}} # generate release for PR only
+    if: contains(['master', 'dev'], github.ref)
     needs: [Linting, Travis-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

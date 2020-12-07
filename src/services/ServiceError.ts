@@ -33,54 +33,68 @@ export enum ErrorType {
 
 }
 
-
-
-function parseCryFSErrors(code: number): string {
-    const CryFSErrorMap = new Map([
+function parseCryFSErrors(code: number): ErrorType {
+    const CryFSErrorMap:Map<number, ErrorType> = new Map([
         // An error happened that doesn't have an error code associated with it
-        [1, "UnspecifiedError"],
+        [1, ErrorType.UnexpectedError], //"UnspecifiedError" ],
+        
         // The command line arguments are invalid.
-        [10, "InvalidArguments"],
-        // Couldn't load config file. Probably the password is wrong
-        [11, "WrongPassword"],
-        // Password cannot be empty
-        [12, "EmptyPassword"],
+        [10, ErrorType.UnexpectedError], //"InvalidArguments"],
+
+        // // Couldn't load config file. Probably the password is wrong
+        [11, ErrorType.WrongPassword], //"WrongPassword"],
+
+        // // Password cannot be empty
+        [12, ErrorType.WrongPassword], //"EmptyPassword"],
+
         // The file system format is too new for this CryFS version. Please update your CryFS version.
-        [13, "TooNewFilesystemFormat"],
+        [13, ErrorType.UnexpectedError], //"TooNewFilesystemFormat"],
+
         // The file system format is too old for this CryFS version. 
         // Run with --allow - filesystem - upgrade to upgrade it.
-        [14, "TooOldFilesystemFormat"],
+        [14, ErrorType.UnexpectedError], //"TooOldFilesystemFormat"],
+
         // The file system uses a different cipher than the one specified on the command line
         // using the--cipher argument.
-        [13, "WrongCipher"],
+        [13, ErrorType.UnexpectedError], //"WrongCipher"],
+
         // Base directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-        [16, "InaccessibleBaseDir"],
+        [16, ErrorType.UnexpectedError], //"InaccessibleBaseDir"],
+
         // Mount directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-        [17, "InaccessibleMountDir"],
+        [17, ErrorType.UnexpectedError], //"InaccessibleMountDir"],
+
         // Base directory can't be a subdirectory of the mount directory
-        [18, "BaseDirInsideMountDir"],
+        [18, ErrorType.UnexpectedError], //"BaseDirInsideMountDir"],
+
         // Something's wrong with the file system.
-        [19, "InvalidFilesystem"],
+        [19, ErrorType.UnexpectedError], //"InvalidFilesystem"],
+
         // The filesystem id in the config file is different to the last time we loaded 
         // a filesystem from this basedir. 
         // This could mean an attacker replaced the file system with a different one.
         // You can pass the--allow - replaced - filesystem option to allow this.
-        [20, "FilesystemIdChanged"],
+        [20, ErrorType.UnexpectedError], //"FilesystemIdChanged"],
+
         // The filesystem encryption key differs from the last time we loaded this filesystem. 
         // This could mean an attacker replaced the file system with a different one.
         // You can pass the--allow - replaced - filesystem option to allow this.
-        [21, "EncryptionKeyChanged"],
+        [21, ErrorType.UnexpectedError], //"EncryptionKeyChanged"],
+
         // The command line options and the file system disagree on whether missing blocks 
         // should be treated as integrity violations.
-        [22, "FilesystemHasDifferentIntegritySetup"],
+        [22, ErrorType.UnexpectedError], //"FilesystemHasDifferentIntegritySetup"],
+
         // File system is in single-client mode and can only be used from the client that created it.
-        [23, "SingleClientFileSystem"],
+        [23, ErrorType.UnexpectedError], //"SingleClientFileSystem"],
+
         // A previous run of the file system detected an integrity violation. 
         // Preventing access to make sure the user notices.
         // The file system will be accessible again after the user deletes the integrity state file.
-        [24, "IntegrityViolationOnPreviousRun"],
+        [24, ErrorType.UnexpectedError], //"IntegrityViolationOnPreviousRun"],
+
         // An integrity violation was detected and the file system unmounted to make sure the user notices.
-        [25, "IntegrityViolation"]
+        [25, ErrorType.UnexpectedError], //"IntegrityViolation"]
     ]);
 
     if (!CryFSErrorMap.has(code))

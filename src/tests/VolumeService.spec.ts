@@ -1,5 +1,5 @@
 import VolumeService from "../services/volume/VolumeService";
-import { ServiceError } from "../services/ServiceError";
+import { ErrorType, ServiceError } from "../services/ServiceError";
 import PasswordService from "../services/password/PasswordService";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
@@ -61,8 +61,13 @@ volumeEncryptionImplementations.forEach(e => {
                 expect(async () => {
                     // TODO enabling the password lookup, causes the execution to carryon and do not wait.
                     // need to investigate it.
-                    // const password = await passwordService.searchForPassword(volume);
+                    // const _password = await passwordService.searchForPassword(volume);
+                    // console.log(_password, password, password === _password);
                     await volumeService.mount(volume, password);
+                    // also does not work :(
+                    // passwordService.searchForPassword(volume).then(async () => {
+                    //     await volumeService.mount(volume, password);
+                    // });
                 }).not.to.throw();
             });
 
@@ -82,7 +87,17 @@ volumeEncryptionImplementations.forEach(e => {
                 expect(mounted).to.false;
             });
 
+            it(`[${implementationName}] trying to mount with wrong password`, async () => {
+                volumeService.mount(volume, "ThisShouldNotWork").catch(error => {
+                    // expect(error).to.be.an.instanceOf(ServiceError);
+                    console.log(error.message);
+                    console.log(ErrorType.WrongPassword.toString());
+                    expect(error.message).to.eq(ErrorType.WrongPassword.toString());
+                });
+            });
 
+
+            // TODO unmount when idle does not work :()
 
             // it(`[${implementationName}] mount with idle=1min`, async () => {
             //     expect(async () => {

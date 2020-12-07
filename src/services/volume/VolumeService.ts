@@ -131,31 +131,11 @@ export default class VolumeService implements VolumeServiceInterface {
         const [code, stdout, stderr] = shell.execute(command, [], false);
 
         if (code === 0) {
-            log.debug("crfs installed...");
+            log.debug("Volume Encryption not installed...");
             return true;
         } else {
             log.debug(`CryFS does not seem to be installed, returned code=${code}, stdout=${stdout}, stderr=${stderr}`);
             return false;
         }
-            
-        // switch (code) {
-        // case 0: {
-        //     log.debug("crfs installed...");
-        //     return true;
-        //     break;
-        // }
-        // case 127: {
-        //     log.debug("[127] CryFS not installed, need to present installatin instruction");
-        //     return false;
-        //     }
-        // case 7: {
-        //     log.debug("[127] CryFS not installed, need to present installatin instruction");
-        //     return false;
-        // }
-        // default: {
-        //     log.error(`Error to determine if CryFS is installed, code=${code}, stdout=${stdout} stderr=${stderr}`);
-        //     throw new ServiceError(ErrorType.ErrorToDetermineVolumeEncryptionSupport);
-        // }
-        // }
     }    
 }

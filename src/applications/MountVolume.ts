@@ -1,6 +1,6 @@
 import log from "../utils/LogUtil";
-import { EncryptionService } from "../services/encryption/EncryptionService";
-import { EncryptionServiceFactory } from "../services/encryption/EncryptionServiceFactory";
+import { EncryptionService } from "../services/encryption_deprecated/EncryptionService";
+import { EncryptionServiceFactory } from "../services/encryption_deprecated/EncryptionServiceFactory";
 import PasswordService from "../services/password/PasswordService";
 import { Volume } from "../entities/Volume";
 

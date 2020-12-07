@@ -68,7 +68,10 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           set -xeuo pipefail
-          sudo apt remove golang-docker-credential-helpers
+          id
+          sudo apt install pass
+          gpg2 --gen-key # get generated key
+          pass init $gpg_id
           sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')

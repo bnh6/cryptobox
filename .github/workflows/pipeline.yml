@@ -171,7 +171,7 @@ jobs:
             Head (PR)   = ${{ github.head_ref }}
             Base (PR)   = ${{ github.base_ref }}
   Upload-Release:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     needs: [Create-Release]
     env:

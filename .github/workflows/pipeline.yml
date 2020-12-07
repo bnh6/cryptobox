@@ -74,7 +74,7 @@ jobs:
           sudo apt install pass
           gpg2  --batch  --gen-key # get generated key
           gpg --list-keys
-          pass init 
+          pass init -p /tmp # testing random folder
           sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')

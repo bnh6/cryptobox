@@ -2,7 +2,7 @@ import VolumeService from "../services/volume/VolumeService";
 import { ErrorType, ServiceError } from "../services/ServiceError";
 import PasswordService from "../services/password/PasswordService";
 import { Volume } from "../entities/Volume";
-import { expect } from "chai";
+import { expect, should } from "chai";
 import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceWrapperFactory";
 
 
@@ -89,10 +89,19 @@ volumeEncryptionImplementations.forEach(e => {
 
             it(`[${implementationName}] trying to mount with wrong password`, async () => {
                 volumeService.mount(volume, "ThisShouldNotWork").catch(error => {
+                    // TODO, this is not working
+                    expect(error).to.be.instanceOf(ServiceError).
+                        with.property("message", ErrorType.WrongPassword.toString());
+                    
+                    // https://github.com/chaijs/chai/issues/930
+                    // should.exist(error).and.be.an.instanceOf(ServiceError).
+                    //     with.property("message", ErrorType.WrongPassword.toString());
+
+                
                     // expect(error).to.be.an.instanceOf(ServiceError);
-                    console.log(error.message);
-                    console.log(ErrorType.WrongPassword.toString());
-                    expect(error.message).to.eq(ErrorType.WrongPassword.toString());
+                    // console.log(error.message);
+                    // console.log(ErrorType.WrongPassword.toString());
+                    // expect(error.message).to.eq(ErrorType.WrongPassword.toString());
                 });
             });
 

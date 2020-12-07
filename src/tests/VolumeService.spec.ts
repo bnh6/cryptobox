@@ -6,28 +6,36 @@ import { expect } from "chai";
 import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceWrapperFactory";
 
 
+// disbaling logs for cleaner stdout (is this a good thing???)
+import log from "../utils/LogUtil";
+log.transports.file.level = false;
+log.transports.console.level = false;
 
 
+// iterating over implementations
+const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k =>  !isNaN(Number(k)) === false);
+volumeEncryptionImplementations.forEach(e => {
 
-const VolEncImplList = Object.keys(VolumeEncryptionImpl).filter(k =>  !isNaN(Number(k)) === false);
+    //recover implementation id and name (should be a better way of doing it)
+    const volumeImplementationEnum: VolumeEncryptionImpl = (<any>VolumeEncryptionImpl)[e];
+    const implementationName = VolumeEncryptionImpl[volumeImplementationEnum];
 
-VolEncImplList.forEach(e => {
-
-    const volEncImpl: VolumeEncryptionImpl = (<any>VolumeEncryptionImpl)[e];
-    const volumeService = new VolumeService(volEncImpl);
-    const impl = VolumeEncryptionImpl[volEncImpl];
-
-    const password = Math.random().toString(36).substr(2, 16);
-    const volume = new Volume("/tmp/cryptobox-enc" + Math.random().toString(12).substr(2, 10));
-    volume.decryptedFolderPath = "/tmp/cryptobox-dec" + Math.random().toString(12).substr(2, 10);
-    // could use the pasword variable, but would be more realistic to use the passwordservice
     const passwordService = new PasswordService();
+    const volumeService = new VolumeService(volumeImplementationEnum);
 
+
+    // creating directories and passwords ...
+    const password = Math.random().toString(36).substr(2, 16);
+    const volume = new Volume("/tmp/cryptobox-enc-" + Math.random().toString(12).substr(2, 10));
+    volume.decryptedFolderPath = "/tmp/cryptobox-dec-" + Math.random().toString(12).substr(2, 10);
+    
+
+    // if volumeEncryptionImplementation is not supported, skiping tests ...
     const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();
-    console.log(`VOLUME ENCRYPTION SUPPORT ${volumeEncryptionSupport}`);
+    console.log(`[${implementationName}] volume encryption support = ${volumeEncryptionSupport}`);
 
     (volumeEncryptionSupport ? describe : describe.skip)(
-        `  >>>>  EXECUTING VOLUME SERVICE TESTS [${impl}]  <<<<  `, () => {
+        `  >>>>  EXECUTING VOLUME SERVICE TESTS [${implementationName}]  <<<<  `, () => {
             before(async () => {
                 volumeService.createDirectory(volume.decryptedFolderPath);
                 volumeService.createDirectory(volume.encryptedFolderPath);
@@ -39,17 +47,17 @@ VolEncImplList.forEach(e => {
                 }
             });
 
-            it(`[${impl}] does it support volume encryption?`, () => {
+            it(`[${implementationName}] is the impmementation method supported`, () => {
                 const support = volumeService.isVolumeOperationsSupported();
                 expect(support).to.true;
             });
 
-            it(`[${impl}] not mounted before mounting`, async () => {
+            it(`[${implementationName}] should not be mounted, before mounting`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.false;
             });
 
-            it(`[${impl}] mount`, async () => {
+            it(`[${implementationName}] mounting with success`, async () => {
                 expect(async () => {
                     // TODO enabling the password lookup, causes the execution to carryon and do not wait.
                     // need to investigate it.
@@ -58,25 +66,25 @@ VolEncImplList.forEach(e => {
                 }).not.to.throw();
             });
 
-            it(`[${impl}] mounted, after mount`, async () => {
+            it(`[${implementationName}] should be mounted (after mounting)`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.true;
             });
 
-            it(`[${impl}] UNmount`, async () => {
+            it(`[${implementationName}] unmounting with success`, async () => {
                 expect(async () => {
                     await volumeService.unmount(volume);
                 }).not.to.throw();
             });
 
-            it(`[${impl}] not mounted, after UNmount`, async () => {
+            it(`[${implementationName}] shuould not be mounted (after unmounting)`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.false;
             });
 
 
 
-            // it(`[${impl}] mount with idle=1min`, async () => {
+            // it(`[${implementationName}] mount with idle=1min`, async () => {
             //     expect(async () => {
             //         // TODO enabling the password lookup, causes the execution to carryon and do not wait.
             //         // need to investigate it.
@@ -85,34 +93,34 @@ VolEncImplList.forEach(e => {
             //     }).not.to.throw();
             // });
 
-            // it(`[${impl}] mounted, after mount with idle=1`, async () => {
+            // it(`[${implementationName}] mounted, after mount with idle=1`, async () => {
             //     const mounted = await volumeService.isMounted(volume);
             //     expect(mounted).to.true;
             // });
 
-            // it(`[${impl}] wait for 90 seconds=`, (done) => {
+            // it(`[${implementationName}] wait for 90 seconds=`, (done) => {
             //     setTimeout(function () {
             //         done();
             //     }, 90000);
             // }).timeout(95000);
 
-            // it(`[${impl}] should not be mounted given the idle`, async () => {
+            // it(`[${implementationName}] should not be mounted given the idle`, async () => {
             //     const mounted = await volumeService.isMounted(volume);
             //     expect(mounted).to.false;
             // });
 
-            // it(`[${impl}] mount without permission on encrypted`, () => { });
+            // it(`[${implementationName}] mount without permission on encrypted`, () => { });
 
-            // it(`[${impl}] mount without permission on decrypted`, () => { });
+            // it(`[${implementationName}] mount without permission on decrypted`, () => { });
 
 
-            // it(`[${impl}] mount when encrypted does exist`, () => { });
+            // it(`[${implementationName}] mount when encrypted does exist`, () => { });
 
-            // it(`[${impl}] mount when decrypted does exist`, () => { }); //to create and succeed
+            // it(`[${implementationName}] mount when decrypted does exist`, () => { }); //to create and succeed
 
-            // it(`[${impl}] mount with wrong password`, () => { });
+            // it(`[${implementationName}] mount with wrong password`, () => { });
 
-            // it(`[${impl}] mount without`, () => { });
+            // it(`[${implementationName}] mount without`, () => { });
 
             after(async () => {
                 volumeService.deleteDirectory(volume.decryptedFolderPath);

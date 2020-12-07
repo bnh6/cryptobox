@@ -29,43 +29,43 @@ describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
         cleanPassword();
     });
 
-    it("retrieve non-existing password", async () => {
+    it("retrieving a non-existing password (should return null)", async () => {
         const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.be.null;
     });
 
-    it("create password", async () => {
+    it("creating a password with success", async () => {
         await passwordService.savePassword(password, volume);
     });
 
 
-    it("retrieve password correclty", async () => {
+    it("retrieving password correclty", async () => {
         const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.eql(password);
     });
 
-    it("delete password", async () => {
+    it("deleting password with success", async () => {
         await passwordService.deletePassword(volume);
     });
 
-    it("retrieve password after delete", async () => {
+    it("retrieving non-existing password (after delete)", async () => {
         const returnedPassword = await passwordService.searchForPassword(volume);
         expect(returnedPassword).to.null;
     });
 
-    it("delete non-existing password", async () => {
+    it("deleting non-existing password", async () => {
         expect(async () => {
             await passwordService.deletePassword(volume);
         }).not.to.throw(ServiceError);
     });
 
-    it("create password with null password", () => {
+    it("creating password with null value", () => {
         passwordService.savePassword(null, volume).catch(error => {
             expect(error).to.be.an.instanceOf(ServiceError);
         });
     });
 
-    it("create password with null volume", () => {
+    it("creating password with null volume", () => {
         passwordService.savePassword(password, null).catch(error => {
             expect(error).to.be.an.instanceOf(ServiceError);
         });

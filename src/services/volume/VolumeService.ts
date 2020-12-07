@@ -73,12 +73,10 @@ export default class VolumeService implements VolumeServiceInterface {
     public async isMounted(volume: Volume): Promise<boolean> {
         try {
             const command = this.wrapper.getIsMountedCommand(volume);
-
             const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 
             if (code === 0) return true;
             if (code === 1) return false;
-
 
             const error = ServiceError.errorFromCryFS(code);
             const msg = `Error ${error} to check whether ${volume.decryptedFolderPath} is mounted,` +

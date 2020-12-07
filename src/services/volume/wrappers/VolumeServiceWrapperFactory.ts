@@ -11,7 +11,6 @@ export enum VolumeEncryptionImpl{
 
 export class VolumeServiceWrapperFactory {
     public static create(implementation: VolumeEncryptionImpl): VolumeWrapperInterface {
-        console.log("implementation="+ typeof implementation);
         switch (implementation) {
         case VolumeEncryptionImpl.CryFS: return new VolumeServiceWrapperCryFS();
         case VolumeEncryptionImpl.EncFS: return new VolumeWrapperServiceEncFS();

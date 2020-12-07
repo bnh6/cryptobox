@@ -196,6 +196,7 @@ jobs:
           name: release
       - run: echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
       - run: echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+      - run: ls -larthR ./release
       - name: Upload ${{ matrix.flavour }}
         uses: actions/upload-release-asset@v1
         with:

@@ -72,7 +72,7 @@ jobs:
           # export DISPLAY=:0.0
           # xhost +
           sudo apt install pass
-          gpg2  --no-tty  --gen-key # get generated key
+          gpg2  --batch  --gen-key # get generated key
           pass init $gpg_id
           sudo apt install cryfs
       - name: Test on ${{ matrix.target }}

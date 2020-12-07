@@ -2,7 +2,7 @@ export class ServiceError extends Error {
     // TODO ensure only the error from Enum will be raised
     constructor(m: ErrorType) {
         super(m.toString());
-        this.name = "VolumeServiceError";
+        this.name = "ServiceError";
     }
 
     public static errorFromCryFS(code: number): ServiceError{

@@ -69,8 +69,8 @@ jobs:
         run: |
           set -xeuo pipefail
           id
-          export DISPLAY=:0.0
-          xhost +
+          # export DISPLAY=:0.0
+          # xhost +
           sudo apt install pass
           gpg2  --no-tty  --gen-key # get generated key
           pass init $gpg_id

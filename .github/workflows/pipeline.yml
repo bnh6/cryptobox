@@ -142,9 +142,8 @@ jobs:
           path: release/cryptobox*
       
   Create-Release:
-    if: github.base_ref == "refs/heads/master" ||  github.base_ref == "refs/heads/dev"
     runs-on: ubuntu-latest
-    # if: ${{ contains(['master', 'dev'], github.ref}} # generate release for PR only
+    if: ${{ contains(['master', 'dev'], github.ref}} # generate release for PR only
     needs: [Linting, Travis-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

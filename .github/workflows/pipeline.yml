@@ -68,7 +68,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           set -xeuo pipefail
-          sudo apt install cryfs
+          sudo apt install cryfs pass gnupg2
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')
         run: |

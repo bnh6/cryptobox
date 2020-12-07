@@ -69,9 +69,11 @@ jobs:
         run: |
           set -xeuo pipefail
           id
-          sudo apt install pass
-          gpg2 --gen-key # get generated key
-          pass init $gpg_id
+          export DISPLAY=:0.0
+          xhost +
+          # sudo apt install pass
+          # gpg2 --gen-key # get generated key
+          # pass init $gpg_id
           sudo apt install cryfs
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'macos')

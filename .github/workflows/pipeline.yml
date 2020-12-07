@@ -156,7 +156,7 @@ jobs:
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
-          draft: ${{ github.base_ref != "refs/heads/master" }}
+          draft: (github.base_ref != "refs/heads/master")
           prerelease: true
           body: |
             Workflow    = ${{ github.workflow }}

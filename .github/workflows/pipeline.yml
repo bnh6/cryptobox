@@ -124,7 +124,7 @@ jobs:
           npm ci
           npm build
           npm run make
-          ls -lRh ./release
+          # ls -lRh ./release
       - name: uploading artefacts
         uses: actions/upload-artifact@v2
         with:

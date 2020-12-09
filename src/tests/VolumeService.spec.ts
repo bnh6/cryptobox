@@ -13,7 +13,7 @@ log.transports.console.level = false;
 
 
 // iterating over implementations
-const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k =>  !isNaN(Number(k)) === false);
+const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k => !isNaN(Number(k)) === false);
 volumeEncryptionImplementations.forEach(e => {
 
     //recover implementation id and name (should be a better way of doing it)
@@ -23,12 +23,13 @@ volumeEncryptionImplementations.forEach(e => {
     const passwordService = new PasswordService();
     const volumeService = new VolumeService(volumeImplementationEnum);
 
+    const iddle_umount_time = 2; // time in minutes to unmount device on inactivity
 
     // creating directories and passwords ...
     const password = Math.random().toString(36).substr(2, 16);
     const volume = new Volume("/tmp/cryptobox-enc-" + Math.random().toString(12).substr(2, 10));
     volume.decryptedFolderPath = "/tmp/cryptobox-dec-" + Math.random().toString(12).substr(2, 10);
-    
+
 
     // if volumeEncryptionImplementation is not supported, skiping tests ...
     const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();
@@ -92,12 +93,12 @@ volumeEncryptionImplementations.forEach(e => {
                     // TODO, this is not working
                     expect(error).to.be.instanceOf(ServiceError).
                         with.property("message", ErrorType.WrongPassword.toString());
-                    
+
                     // https://github.com/chaijs/chai/issues/930
                     // should.exist(error).and.be.an.instanceOf(ServiceError).
                     //     with.property("message", ErrorType.WrongPassword.toString());
 
-                
+
                     // expect(error).to.be.an.instanceOf(ServiceError);
                     // console.log(error.message);
                     // console.log(ErrorType.WrongPassword.toString());
@@ -107,31 +108,28 @@ volumeEncryptionImplementations.forEach(e => {
 
 
             // TODO unmount when idle does not work :()
+            it(`[${implementationName}] mount with iddle= ${iddle_umount_time} min`, async () => {
+                expect(async () => {
+                    volume.ttl = iddle_umount_time;  // setting the idle unmount
+                    await volumeService.mount(volume, password);
+                }).not.to.throw();
+            });
 
-            // it(`[${implementationName}] mount with idle=1min`, async () => {
-            //     expect(async () => {
-            //         // TODO enabling the password lookup, causes the execution to carryon and do not wait.
-            //         // need to investigate it.
-            //         // const password = await passwordService.searchForPassword(volume);
-            //         await volumeService.mount(volume, password, 1);
-            //     }).not.to.throw();
-            // });
+            it(`[${implementationName}] mounted, after mount with iddle flag`, async () => {
+                const mounted = await volumeService.isMounted(volume);
+                expect(mounted).to.true;
+            }).skip(); // TODO unmount not working...
 
-            // it(`[${implementationName}] mounted, after mount with idle=1`, async () => {
-            //     const mounted = await volumeService.isMounted(volume);
-            //     expect(mounted).to.true;
-            // });
+            it(`[${implementationName}] wait for ${iddle_umount_time + 1} minutes`, (done) => {
+                setTimeout(function () {
+                    done();
+                }, iddle_umount_time + 1 * 60 * 1000); // add 1 minute to wait
+            }).timeout(iddle_umount_time + 2 * 60 * 1000).skip();; // add 2 minutes for timeout
 
-            // it(`[${implementationName}] wait for 90 seconds=`, (done) => {
-            //     setTimeout(function () {
-            //         done();
-            //     }, 90000);
-            // }).timeout(95000);
-
-            // it(`[${implementationName}] should not be mounted given the idle`, async () => {
-            //     const mounted = await volumeService.isMounted(volume);
-            //     expect(mounted).to.false;
-            // });
+            it(`[${implementationName}] should not be mounted given the iddle`, async () => {
+                const mounted = await volumeService.isMounted(volume);
+                expect(mounted).to.false;
+            }).skip();;
 
             // it(`[${implementationName}] mount without permission on encrypted`, () => { });
 
@@ -144,7 +142,7 @@ volumeEncryptionImplementations.forEach(e => {
 
             // it(`[${implementationName}] mount with wrong password`, () => { });
 
-            // it(`[${implementationName}] mount without`, () => { });
+            // it(`[${implementationName}] ecncrypted and non encrypted folder are the same`, () => { });
 
             after(async () => {
                 volumeService.deleteDirectory(volume.decryptedFolderPath);

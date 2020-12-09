@@ -124,7 +124,7 @@ volumeEncryptionImplementations.forEach(e => {
                 setTimeout(function () {
                     done();
                 }, iddle_umount_time + 1 * 60 * 1000); // add 1 minute to wait
-            }).timeout(iddle_umount_time + 2 * 60 * 1000).skip();; // add 2 minutes for timeout
+            }).timeout(iddle_umount_time + 2 * 60 * 1000); // add 2 minutes for timeout
 
             it(`[${implementationName}] should not be mounted given the iddle`, async () => {
                 const mounted = await volumeService.isMounted(volume);

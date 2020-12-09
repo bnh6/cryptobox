@@ -9,23 +9,23 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     getIsVolumeOperationsSupportedCommand(): string {
         return "cryfs --version";
     }
-    
-    public getUNmountCommand(volume: Volume): string{
+
+    public getUNmountCommand(volume: Volume): string {
         //cryfs expects the decrypted folder, and give an error on the encrypted one.
-        return `cryfs-unmount "${volume.decryptedFolderPath}" `; 
+        return `cryfs-unmount "${volume.decryptedFolderPath}" `;
     }
 
-    public getMountCommand(volume: Volume, password: String, unmountIdle: number = 0): string {
+    public getMountCommand(volume: Volume, password: String): string {
         let command = "export CRYFS_FRONTEND=noninteractive; " +
             `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-        
-        if (unmountIdle > 0)
-            command = command + ` --unmount-idle ${unmountIdle}`;
-        
+
+        if (volume.ttl > 0)
+            command = command + ` --unmount-idle ${volume.ttl}`;
+
         return command;
     }
 
-    public getIsMountedCommand(volume: Volume): string{
+    public getIsMountedCommand(volume: Volume): string {
         return `mount | grep -qs '${volume.encryptedFolderPath}'`;
     }
 }

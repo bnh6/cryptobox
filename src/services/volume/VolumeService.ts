@@ -23,7 +23,7 @@ export default class VolumeService implements VolumeServiceInterface {
      * @param volume the paths and parameters used to mount the volume
      * @param password 
      */
-    public async mount(volume: Volume, password: string, unmountIdle: number = 0): Promise<void> {
+    public async mount(volume: Volume, password: string): Promise<void> {
         try {
             const alreadyMonted = await this.isMounted(volume);
             if (alreadyMonted) {
@@ -31,7 +31,7 @@ export default class VolumeService implements VolumeServiceInterface {
                 return;
             }
 
-            const command = this.wrapper.getMountCommand(volume, password, unmountIdle);
+            const command = this.wrapper.getMountCommand(volume, password);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 
             if (code === 0) return;

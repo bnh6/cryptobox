@@ -118,7 +118,7 @@ volumeEncryptionImplementations.forEach(e => {
             it(`[${implementationName}] mounted, after mount with iddle flag`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.true;
-            }).skip(); // TODO unmount not working...
+            }); // TODO unmount not working...
 
             it(`[${implementationName}] wait for ${iddle_umount_time + 1} minutes`, (done) => {
                 setTimeout(function () {
@@ -129,7 +129,7 @@ volumeEncryptionImplementations.forEach(e => {
             it(`[${implementationName}] should not be mounted given the iddle`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.false;
-            }).skip();;
+            });
 
             // it(`[${implementationName}] mount without permission on encrypted`, () => { });
 

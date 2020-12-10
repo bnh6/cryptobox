@@ -1,8 +1,8 @@
-import{ ServiceError, ErrorType }  from "../ServiceError";
+import { ServiceError, ErrorType } from "../ServiceError";
 import { Volume } from "../../entities/Volume";
 import { constants } from "../../utils/constants";
 import log from "../../utils/LogUtil";
-import * as keytar from "keytar";
+// import * as keytar from "keytar";
 import PasswordServiceInterface from "./PasswordServiceInterface";
 
 /**
@@ -16,7 +16,58 @@ import PasswordServiceInterface from "./PasswordServiceInterface";
  * 
  */
 
+
+
+import { exec } from "child_process";
+const keytar = require("keytar-pass");
+
+
+
 export default class PasswordService implements PasswordServiceInterface {
+    constructor() {
+        if (process.platform != "win32" && process.platform != "darwin") {
+            log.info(`Detected current OS: ${process.platform}.  Initializing pass library for password storage.`);
+            exec("pass", (err, stdout, stderr) => {
+                if (stdout.startsWith("Password Store")) {
+                    log.info("Pass library already initialized.");
+                } else if (stdout.includes("Error: password store is empty. Try \"pass init\".")) {
+                    // initialize pass
+                    exec(`cat >keygenInfo <<EOF
+                    %echo Generating a basic OpenPGP key
+                    %no-protection
+                    Key-Type: DSA
+                    Key-Length: 1024
+                    Subkey-Type: ELG-E
+                    Subkey-Length: 1024
+                    Name-Real: YOUR NAME HERE
+                    Name-Comment: Coolness 123
+                    Name-Email: you@domain.com
+                    Expire-Date: 0
+                    # Do a commit here, so that we can later print "done" :-)
+                    %commit
+                    %echo done
+                EOF`);
+                    exec("gpg --batch --generate-key keygenInfo");
+                    exec("pass init you@domain.com", (error, stdout, stderr) => {
+                        if (error) {
+                            log.error(`Error initializing pass: ${error.message}`);
+                        }
+                        if (stderr) {
+                            log.error(`Error output (stderr) while initializing pass: ${stderr}`);
+                        }
+                        log.info(`pass init: output: ${stdout}`);
+                    });
+
+                } else if (stdout.includes("No such file or directory")) {
+                    log.error("Using a linux system, but the pass library does not appear to be installed. \
+                    Try running \"sudo apt install pass\".");
+                }
+            });
+        }
+    }
+
+
+
     /**
      * if succeed return void, if failed throws PasswordError
      * @param password represents the password value 
@@ -74,7 +125,6 @@ export default class PasswordService implements PasswordServiceInterface {
                 return null; //password not found
             else {
                 const decodedPassword = Buffer.from(encodedPassword, "base64").toString("ascii");
-                // log.debug("password found and decoded ...");
                 return decodedPassword;
             }
         } catch (error) {

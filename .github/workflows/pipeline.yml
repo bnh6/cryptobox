@@ -69,7 +69,7 @@ jobs:
         run: |
           set -xeuo pipefail
           id
-          sudo apt install pass
+          sudo apt install -y pass  libsecret-1-dev 
           # export DISPLAY=:0.0
           # xhost +
           # sudo apt install pass

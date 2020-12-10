@@ -59,16 +59,16 @@
 //             });
 
 //             it(`[${implementationName}] mounting with success`, async () => {
-//                 expect(() => {
+//                 expect(async () => {
 //                     // TODO enabling the password lookup, causes the execution to carryon and do not wait.
 //                     // need to investigate it.
-//                     // const _password = passwordService.searchForPassword(volume);
+//                     // const _password = await passwordService.searchForPassword(volume);
 //                     // console.log(_password, password, password === _password);
-//                     // await volumeService.mount(volume, password);
+//                     await volumeService.mount(volume, password);
 //                     // also does not work :(
-//                     passwordService.searchForPassword(volume).then(async (_password) => {
-//                         await volumeService.mount(volume, _password);
-//                     });
+//                     // passwordService.searchForPassword(volume).then(async () => {
+//                     //     await volumeService.mount(volume, password);
+//                     // });
 //                 }).not.to.throw();
 //             });
 
@@ -92,7 +92,7 @@
 //                 volumeService.mount(volume, "ThisShouldNotWork").catch(error => {
 //                     // TODO, this is not working
 //                     expect(error).to.be.instanceOf(ServiceError).
-//                         with.property("message", ErrorType.WrongPassword.toString()); //TODO does not work :()
+//                         with.property("message", ErrorType.WrongPassword.toString());
 
 //                     // https://github.com/chaijs/chai/issues/930
 //                     // should.exist(error).and.be.an.instanceOf(ServiceError).
@@ -107,29 +107,29 @@
 //             });
 
 
-//             // // TODO unmount when idle does not work :()
-//             // it(`[${implementationName}] mount with iddle= ${iddle_umount_time} min`, async () => {
-//             //     expect(async () => {
-//             //         volume.ttl = iddle_umount_time;  // setting the idle unmount
-//             //         await volumeService.mount(volume, password);
-//             //     }).not.to.throw();
-//             // });
+//             // TODO unmount when idle does not work :()
+//             it(`[${implementationName}] mount with iddle= ${iddle_umount_time} min`, async () => {
+//                 expect(async () => {
+//                     volume.ttl = iddle_umount_time;  // setting the idle unmount
+//                     await volumeService.mount(volume, password);
+//                 }).not.to.throw();
+//             });
 
-//             // it(`[${implementationName}] mounted, after mount with iddle flag`, async () => {
-//             //     const mounted = await volumeService.isMounted(volume);
-//             //     expect(mounted).to.true;
-//             // }); // TODO unmount not working...
+//             it(`[${implementationName}] mounted, after mount with iddle flag`, async () => {
+//                 const mounted = await volumeService.isMounted(volume);
+//                 expect(mounted).to.true;
+//             }); // TODO unmount not working...
 
-//             // it(`[${implementationName}] wait for ${iddle_umount_time + 1} minutes`, (done) => {
-//             //     setTimeout(function () {
-//             //         done();
-//             //     }, iddle_umount_time + 1 * 60 * 1000); // add 1 minute to wait
-//             // }).timeout(iddle_umount_time + 2 * 60 * 1000).skip();; // add 2 minutes for timeout
+//             it(`[${implementationName}] wait for ${iddle_umount_time + 1} minutes`, (done) => {
+//                 setTimeout(function () {
+//                     done();
+//                 }, iddle_umount_time + 1 * 60 * 1000); // add 1 minute to wait
+//             }).timeout(iddle_umount_time + 2 * 60 * 1000); // add 2 minutes for timeout
 
-//             // it(`[${implementationName}] should not be mounted given the iddle`, async () => {
-//             //     const mounted = await volumeService.isMounted(volume);
-//             //     expect(mounted).to.false;
-//             // });
+//             it(`[${implementationName}] should not be mounted given the iddle`, async () => {
+//                 const mounted = await volumeService.isMounted(volume);
+//                 expect(mounted).to.false;
+//             });
 
 //             // it(`[${implementationName}] mount without permission on encrypted`, () => { });
 

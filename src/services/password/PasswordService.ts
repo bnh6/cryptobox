@@ -19,7 +19,7 @@ import PasswordServiceInterface from "./PasswordServiceInterface";
 
 
 import { exec } from "child_process";
-const keytar = require("keytar-pass");
+import * as keytar from "keytar-pass";
 
 
 

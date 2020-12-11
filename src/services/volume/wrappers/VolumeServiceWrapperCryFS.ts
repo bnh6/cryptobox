@@ -24,7 +24,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         let setvarLiteral: string = "";
         if (os.platform() === "win32")
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
-            setvarLiteral = "$Env:CRYFS_FRONTEND=noninteractive";
+            setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
 
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive";

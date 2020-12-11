@@ -113,16 +113,16 @@ jobs:
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
         run: |
-          @echo on
-          choco install -y vcredist2017
-          choco install -y dokany
-          curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-          msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
-          type cryfs.log
-          dir "C:\Program Files\"
-          dir "C:\Program Files\CryFS"
-          set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
-          cryfs --version
+          echo "::echo::on"
+           choco install -y vcredist2017
+           choco install -y dokany
+           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
+           msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+           type cryfs.log
+           dir "C:\Program Files\"
+           dir "C:\Program Files\CryFS"
+           set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
+           cryfs --version
 
       - name: Perform tests
         run: |

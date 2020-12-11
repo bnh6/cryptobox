@@ -70,11 +70,12 @@ jobs:
         run: |
           set -xeuo pipefail
           id
-          sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
-          export DISPLAY=:99.0;
-          NO_AT_BRIDGE=1;
-          eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
-          eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
+          sudo apt install -y libsecret-1-dev
+          # sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
+          # export DISPLAY=:99.0;
+          # NO_AT_BRIDGE=1;
+          # eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
+          # eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
           # /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
           # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
           # export DISPLAY=:.0
@@ -90,6 +91,7 @@ jobs:
           set -xeuo pipefail
           csrutil status
           id
+          #  sudo xcode-select --reset
           if (csrutil status | grep -isq " enabled"); 
           then 
             echo "SIP is enabled, not installing CryFS nor EncFS"; 

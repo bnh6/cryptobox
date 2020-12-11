@@ -104,14 +104,14 @@ jobs:
       - name: Test on ${{ matrix.target }}
         if: startsWith(matrix.os, 'windows')
         run: |
-          curl.exe --help
-          curl.exe --output dokan64.msi https://github.com/dokan-dev/dokany/releases/download/latest/Dokan_x64.msi
-          curl.exe --output vc_redist.x64.exe --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-          curl.exe --output cryfs64.msi --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
+          # curl.exe --help
+          curl.exe  https://github.com/dokan-dev/dokany/releases/download/latest/Dokan_x64.msi
+          curl.exe  https://aka.ms/vs/16/release/vc_redist.x64.exe
+          curl.exe  https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
           dir
-          msiexec /i ./dokan64.msi /quiet /qn /norestart
-          msiexec /i ./cryfs64.msi /quiet /qn /norestart
-          vc_redist.x64.exe /?
+          msiexec /i ./Dokan_x64.msi /quiet /qn /norestart
+          msiexec /i ./cryfs-0.10.2-win64.msi /quiet /qn /norestart
+          msiexec /i vc_redist.x64.exe /quiet /qn /norestart
 
       - name: Run tests
         run: |

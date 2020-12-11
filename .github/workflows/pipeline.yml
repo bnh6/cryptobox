@@ -119,9 +119,10 @@ jobs:
           echo "::endgroup::"
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
           msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+          type cryfs.log
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
-      - name: test_path 
+      - name: test_path
         run: C:\Program/ Files\CryFS\0.10.2\bin\cryfs.exe --version
       - name: Perform tests
         run: |

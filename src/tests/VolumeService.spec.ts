@@ -30,7 +30,9 @@ volumeEncryptionImplementations.forEach(e => {
     const password = Math.random().toString(36).substr(2, 16);
     const volume = new Volume(os.homedir() + path.sep + "cryptobox-enc-" + Math.random().toString(12).substr(2, 10));
     volume.decryptedFolderPath = os.homedir() + path.sep + "cryptobox-dec-" + Math.random().toString(12).substr(2, 10);
-
+    console.log(`encrypted folder = ${volume.encryptedFolderPath}`);
+    console.log(`decrypted folder = ${volume.decryptedFolderPath}`);
+    console.log(`volume alias = ${volume.getVolumeAlias()}`);
 
     // if volumeEncryptionImplementation is not supported, skiping tests ...
     const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();

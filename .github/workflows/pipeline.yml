@@ -115,6 +115,9 @@ jobs:
           type *.log
           echo "::endgroup::"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
+          C:\Program` Files\CryFS\0.10.2\bin\cryfs.exe --version
+          copy C:\Program` Files\CryFS\0.10.2\bin\ C:\Windows\system32\
+          cryfs --version
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
       - name: test_path
         run: cryfs.exe --version

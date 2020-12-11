@@ -72,6 +72,7 @@ jobs:
           set -xeuo pipefail
           id
           sudo apt install -y libsecret-1-dev
+          sudo apt install -y cryfs encfs
           # sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
           # export DISPLAY=:99.0;
           # NO_AT_BRIDGE=1;

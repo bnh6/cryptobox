@@ -112,7 +112,7 @@ jobs:
           # type dokan.log
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
-        run: |
+        - run: |
           choco install -y vcredist2017
           echo "::group::Installing Dokany"
           choco install -y dokany
@@ -121,6 +121,7 @@ jobs:
           msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
+        - run: C:\Program/ Files\CryFS\0.10.2\bin\cryfs.exe --version
       - name: Perform tests
         run: |
           cryfs.exe --version

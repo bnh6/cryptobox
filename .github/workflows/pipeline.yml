@@ -108,9 +108,9 @@ jobs:
           curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
           dir
-          msiexec /i vc_redist.x64.exe /quiet /qn /norestart  /Lie "vc.log"
-          msiexec /i dokan64.msi /quiet /qn /norestart  /Lie "dokan.log"
-          msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+          start /wait msiexec /i vc_redist.x64.exe /quiet /qn /norestart  /Lie "vc.log"
+          start /wait msiexec /i dokan64.msi /quiet /qn /norestart  /Lie "dokan.log"
+          start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
            dir
           type cryfs.log
           type dokan.log

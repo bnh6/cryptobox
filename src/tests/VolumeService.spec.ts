@@ -7,10 +7,10 @@ import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceW
 import * as os from "os";
 import * as path from "path";
 
-// disbaling logs for cleaner stdout (is this a good thing???)
-import log from "../utils/LogUtil";
-log.transports.file.level = false;
-log.transports.console.level = false;
+// // disbaling logs for cleaner stdout (is this a good thing???)
+// import log from "../utils/LogUtil";
+// log.transports.file.level = false;
+// log.transports.console.level = false;
 
 
 // iterating over implementations

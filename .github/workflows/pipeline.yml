@@ -14,7 +14,7 @@ on:
 
 jobs:
   PrepareEnvironment:
-    if: false
+    if: true
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
@@ -56,13 +56,13 @@ jobs:
   GitHub-Testing:
     if: true
     runs-on: ${{ matrix.os }}
-    # needs: [PrepareEnvironment]
+    needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
       max-parallel: 12
       matrix:
-        # os: [ubuntu-latest, macos-latest, windows-latest]
-        os: [windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        # os: [windows-latest]
         node-version: [14.x, 15.x, 16.x]
     steps:
       - uses: actions/checkout@v1
@@ -114,17 +114,11 @@ jobs:
           echo "::group::Printing logs"
           type *.log
           echo "::endgroup::"
-          dir "C:\Program Files\CryFS\0.10.2\bin\"
-          C:\Program` Files\CryFS\0.10.2\bin\cryfs.exe --version
           copy 'C:\Program Files\CryFS\0.10.2\bin\*' 'C:\Windows' 
-          cryfs.exe --version
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
           cryfs.exe --version
-      - name: test_path
-        run: cryfs.exe --version
-      - name: Perform tests
+      - name: Executing tests
         run: |
-          cryfs.exe --version
           npm ci
           npm build
           npm run test
@@ -147,7 +141,7 @@ jobs:
           pip install -r requirements.txt
           python3 travis.py
   Building-Artefacts:
-    if: false
+    if: true
     runs-on: ${{ matrix.os }}
     needs: [PrepareEnvironment]
     strategy:

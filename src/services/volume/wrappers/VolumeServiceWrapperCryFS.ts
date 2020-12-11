@@ -2,6 +2,7 @@ import { ServiceError } from "../../ServiceError";
 import { Volume } from "../../../entities/Volume";
 import VolumeServiceWrapperInterface from "./VolumeServiceWrapperInterface";
 import * as os from "os";
+import * as shell from "../../../utils/ShellUtil";
 
 
 /**
@@ -19,13 +20,17 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
 
     public getMountCommand(volume: Volume, password: String): string {
         // using export or set or powershell
-        // $Env:<variable-name> = "<new-value>"
+        // $Env:<variable-name> = "<new-value>"]
+
+        const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
+        console.log("RESULTADO==", code1, stdout1, stderr1);
+
+
 
         let setvarLiteral: string = "";
         if (os.platform() === "win32")
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
             setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
-
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive";
 

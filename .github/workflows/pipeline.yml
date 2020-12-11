@@ -111,7 +111,7 @@ jobs:
           dir
           msiexec /i ./dokan64.msi /quiet /qn /norestart
           msiexec /i ./cryfs64.msi /quiet /qn /norestart
-          # vc_redist.x64.exe /install /quiet /norestart
+          vc_redist.x64.exe /?
 
       - name: Run tests
         run: |

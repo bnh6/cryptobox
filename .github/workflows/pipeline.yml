@@ -102,19 +102,9 @@ jobs:
             brew install cryfs
           fi
       - name: Setup Windows environment
-        if:
-          startsWith(matrix.os, 'windows')
-          # curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-          # start /wait msiexec /i vc_redist.x64.exe /quiet /qn /norestart  /Lie "vc.log"
-          # type vc.log
-          # curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
-          # start /wait msiexec /i dokan64.msi /quiet /qn /norestart  /Lie "dokan.log"
-          # type dokan.log
-          # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
-          # choco install vcredist2017
-          # Start-Process msiexec.exe -Wait -ArgumentList '/I C:\installers\SQLIO.msi /quiet'
-
+        if: startsWith(matrix.os, 'windows')
         run: |
+          $ErrorActionPreference='Stop'
           curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
           Start-Process msiexec.exe -Wait -ArgumentList '/I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”’
           curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi

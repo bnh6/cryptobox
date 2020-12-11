@@ -114,7 +114,8 @@ jobs:
           choco install -y dokany --version 1.2.1.2000 --installargs INSTALLDEVFILES=1
           choco install vcredist2017
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-          start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+          REM start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+          msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           type cryfs.log
 
       - name: Perform tests

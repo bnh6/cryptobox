@@ -61,7 +61,8 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest]
         node-version: [14.x, 15.x, 16.x]
     steps:
       - uses: actions/checkout@v1
@@ -100,10 +101,10 @@ jobs:
              brew install --cask osxfuse
             brew install cryfs
           fi
-      # - name: Test on ${{ matrix.target }}
-      #   if: startsWith(matrix.os, 'windows')
-      #   run: |
-      #     dir
+      - name: Test on ${{ matrix.target }}
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          curl.exe
       - name: Run tests
         run: |
           npm ci

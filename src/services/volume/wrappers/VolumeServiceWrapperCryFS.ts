@@ -1,6 +1,7 @@
 import { ServiceError } from "../../ServiceError";
 import { Volume } from "../../../entities/Volume";
 import VolumeServiceWrapperInterface from "./VolumeServiceWrapperInterface";
+import * as os from "os";
 
 
 /**
@@ -17,7 +18,16 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     }
 
     public getMountCommand(volume: Volume, password: String): string {
-        let command = "export CRYFS_FRONTEND=noninteractive; " +
+        // using export or set or powershell
+        // $Env:<variable-name> = "<new-value>"
+
+        let setvarLiteral: string = "";
+        if (os.platform() === "win32")
+            setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
+        else
+            setvarLiteral = "export CRYFS_FRONTEND=noninteractive";
+
+        let command = `${setvarLiteral} ; ` +
             `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
         if (volume.ttl > 0)
@@ -30,7 +40,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         return `mount | grep -qs '${volume.encryptedFolderPath}'`;
     }
 
-    proccessErrorCode(code: number): ServiceError{
+    proccessErrorCode(code: number): ServiceError {
         return new ServiceError(0);
     }
 }

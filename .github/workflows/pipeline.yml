@@ -66,7 +66,7 @@ jobs:
         node-version: [14.x, 15.x, 16.x]
     steps:
       - uses: actions/checkout@v1
-      - name: Prepare ${{ matrix.target }}
+      - name: Prepare Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           set -xeuo pipefail
@@ -86,7 +86,7 @@ jobs:
           # gpg --list-keys
           # pass init -p /tmp # testing random folder
           # sudo apt install cryfs
-      - name: Test on ${{ matrix.target }}
+      - name: Test on MAC
         if: startsWith(matrix.os, 'macos')
         run: |
           set -xeuo pipefail
@@ -101,7 +101,7 @@ jobs:
              brew install --cask osxfuse
             brew install cryfs
           fi
-      - name: Prepare ${{ matrix.target }}
+      - name: Prepare Windows
         if:
           startsWith(matrix.os, 'windows')
           # curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
@@ -113,16 +113,17 @@ jobs:
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
         run: |
-          echo "::echo::on"
-           choco install -y vcredist2017
-           choco install -y dokany
-           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-           msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
-           type cryfs.log
-           dir "C:\Program Files\"
-           dir "C:\Program Files\CryFS"
-           set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
-           cryfs --version
+          choco install -y vcredist2017
+          choco install -y dokany
+          curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
+          msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
+          type cryfs.log
+          dir "C:\Program Files\"
+          dir "C:\Program Files\CryFS"
+          dir "C:\Program Files\CryFS\0.10.2\bin\"
+          set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
+          echo "%PATH%""
+          cryfs --version
 
       - name: Perform tests
         run: |

@@ -102,19 +102,19 @@ jobs:
             brew install cryfs
           fi
       - name: Prepare ${{ matrix.target }}
-        if: startsWith(matrix.os, 'windows')
-
+        if:
+          startsWith(matrix.os, 'windows')
+          # curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
+          # tart /wait msiexec /i dokan64.msi /quiet /qn /norestart  /Lie "dokan.log"
+          # type dokan.log
+          # curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
+          # start /wait msiexec /i vc_redist.x64.exe /quiet /qn /norestart  /Lie "vc.log"
+          # type vc.log
+          # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
         run: |
-          REM curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
-          REM tart /wait msiexec /i dokan64.msi /quiet /qn /norestart  /Lie "dokan.log"
-          REM type dokan.log
-          REM curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-          REM start /wait msiexec /i vc_redist.x64.exe /quiet /qn /norestart  /Lie "vc.log"
-          REM type vc.log
           choco install -y dokany --version 1.2.1.2000 --installargs INSTALLDEVFILES=1
           choco install vcredist2017
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-          REM start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           type cryfs.log
 

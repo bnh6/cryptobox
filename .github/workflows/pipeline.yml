@@ -114,6 +114,7 @@ jobs:
           # choco install vcredist2017
         run: |
           choco install -y vcredist2017
+          choco install -y dokany
 
       - name: Perform tests
         run: |

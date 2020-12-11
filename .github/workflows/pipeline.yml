@@ -116,9 +116,10 @@ jobs:
           echo "::endgroup::"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           C:\Program` Files\CryFS\0.10.2\bin\cryfs.exe --version
-          copy C:\Program` Files\CryFS\0.10.2\bin\ C:\Windows\system32\
-          cryfs --version
+          copy 'C:\Program Files\CryFS\0.10.2\bin\*' 'C:\Windows' 
+          cryfs.exe --version
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
+          cryfs.exe --version
       - name: test_path
         run: cryfs.exe --version
       - name: Perform tests

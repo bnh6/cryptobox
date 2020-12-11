@@ -112,6 +112,7 @@ jobs:
           # type dokan.log
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
+          set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
         run: |
           choco install -y vcredist2017
           choco install -y dokany
@@ -121,9 +122,9 @@ jobs:
           dir "C:\Program Files\"
           dir "C:\Program Files\CryFS"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
-          set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
+          $env:Path += ";C:\Program Files\CryFS\0.10.2\bin"
           echo %PATH%
-          "C:\Program Files\CryFS\0.10.2\bin\cryfs.exe --version"
+          C:\Program/ Files\CryFS\0.10.2\bin\cryfs.exe --version
           cryfs.exe --version
 
       - name: Perform tests

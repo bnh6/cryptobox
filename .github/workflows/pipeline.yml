@@ -126,7 +126,7 @@ jobs:
           pip install -r requirements.txt
           python3 travis.py
   Building-Artefacts:
-    if: true
+    if: false
     runs-on: ${{ matrix.os }}
     needs: [PrepareEnvironment]
     strategy:

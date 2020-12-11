@@ -29,7 +29,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive";
 
-        let command = `${setvarLiteral} ; ` +
+        let command = `${setvarLiteral}  && ` +
             `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
         if (volume.ttl > 0)

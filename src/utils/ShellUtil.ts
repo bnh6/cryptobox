@@ -15,9 +15,6 @@ export function execute(
     //     `executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
     // );
 
-
-
-
     const result = spawnSync(command, args, {
         timeout,
         shell: true,
@@ -36,9 +33,10 @@ export function execute(
 
     // log.debug(`command [${command}] returned status [${result.status}]`);
 
-    // console.log(
-    //     `[${result.status}]executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}`
-    // );
+    console.log(
+        `  => [${result.status}] -- executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}, \
+        stdout ${result.stdout.toString()}, stderr=[${result.stderr.toString()}]`
+    );
 
     return [result.status, result.stdout.toString(), result.stderr.toString()];
 }

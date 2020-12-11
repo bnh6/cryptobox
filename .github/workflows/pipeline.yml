@@ -113,6 +113,7 @@ jobs:
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
         run: |
+          @echo on
           choco install -y vcredist2017
           choco install -y dokany
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi

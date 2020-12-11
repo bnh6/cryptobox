@@ -124,7 +124,6 @@ jobs:
           set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
           echo "%PATH%"
           cryfs --version
-
       - name: Perform tests
         run: |
           npm ci

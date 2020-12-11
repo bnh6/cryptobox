@@ -125,7 +125,7 @@ jobs:
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
       - name: test_path
-        run: C:\Program/ Files\CryFS\0.10.2\bin\cryfs.exe --version
+        run: cryfs.exe --version
       - name: Perform tests
         run: |
           cryfs.exe --version

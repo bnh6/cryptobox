@@ -119,7 +119,10 @@ export default class VolumeService implements VolumeServiceInterface {
         return !fs.readdirSync(path).length;
     }
     public createDirectory(path: string) {
-        fs.mkdirSync(path, 0o744);
+        fs.mkdirSync(path, {
+            mode: 0o744,
+            recursive: true,
+        });
     }
     public deleteDirectory(path: string) {
         fs.rmdirSync(path, { maxRetries: 10, recursive: true });
@@ -137,5 +140,5 @@ export default class VolumeService implements VolumeServiceInterface {
             log.debug(`CryFS does not seem to be installed, returned code=${code}, stdout=${stdout}, stderr=${stderr}`);
             return false;
         }
-    }    
+    }
 }

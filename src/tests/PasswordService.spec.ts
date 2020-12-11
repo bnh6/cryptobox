@@ -2,9 +2,10 @@ import PasswordService from "../services/password/PasswordService";
 import { ServiceError } from "../services/ServiceError";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
+import * as os from "os";
 
 const password = Math.random().toString(36).substr(2, 16);
-const volume = new Volume("~/");
+const volume = new Volume(os.homedir());
 const passwordService: PasswordService = new PasswordService();
 
 console.log(`generated password = [${password}]`);

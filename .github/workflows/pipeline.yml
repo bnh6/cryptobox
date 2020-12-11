@@ -107,6 +107,8 @@ jobs:
           curl.exe --output dokan64.msi https://github.com/dokan-dev/dokany/releases/download/latest/Dokan_x64.msi
           curl.exe --output vc_redist.x64.exe --url https://aka.ms/vs/16/release/vc_redist.x64.exe
           curl.exe --output cryfs64.msi --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
+          vc_redist.x64.exe /install /quiet /norestart
+
       - name: Run tests
         run: |
           npm ci

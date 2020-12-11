@@ -112,7 +112,6 @@ jobs:
           # type dokan.log
           # start /wait msiexec /i cryfs64.msi /quiet /qn /norestart /Lie "cryfs.log"
           # choco install vcredist2017
-          set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
         run: |
           choco install -y vcredist2017
           choco install -y dokany

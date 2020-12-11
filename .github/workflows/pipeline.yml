@@ -122,7 +122,7 @@ jobs:
           dir "C:\Program Files\CryFS"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           set PATH="%PATH%;C:\Program Files\CryFS\0.10.2\bin"
-          echo "%PATH%""
+          echo "%PATH%"
           $env:Path = [​System.Environment]::GetEnvironmentVariable("Path","Machine")
           cryfs --version
 

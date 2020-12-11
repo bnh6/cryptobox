@@ -71,7 +71,7 @@ jobs:
           set -xeuo pipefail
           id
           sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
-          # export DISPLAY=:99.0;
+          export DISPLAY=:99.0;
           NO_AT_BRIDGE=1;
           eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
           eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);

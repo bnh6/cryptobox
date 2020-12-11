@@ -111,7 +111,9 @@ jobs:
           Start-Process msiexec.exe -Wait -ArgumentList '/I dokan64.msi /quiet /qn /norestart /L*V "dokan.log"'
           curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
           Start-Process msiexec.exe -Wait -ArgumentList '/I cryfs64.msi /quiet /qn /norestart /L*V "cryfs.log"'
+          echo "::group::Printing logs"
           type *.log
+          echo "::endgroup::"
           dir "C:\Program Files\CryFS\0.10.2\bin\"
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
       - name: test_path

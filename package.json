@@ -7,7 +7,7 @@
         "bootswatch": "^4.5.3",
         "electron-log": "^4.3.0",
         "electron-store": "^6.0.1",
-        "keytar4": "^5.0.0",
+        "keytar": "^7.2.0",
         "zxcvbn": "^4.4.2"
     },
     "devDependencies": {

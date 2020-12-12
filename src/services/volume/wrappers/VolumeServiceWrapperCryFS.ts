@@ -30,7 +30,8 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
             // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
             // setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
-            setvarLiteral = " set \"CRYFS_FRONTEND=noninteractive\" && ";
+            // setvarLiteral = " set \"CRYFS_FRONTEND=noninteractive\" && "; // worked
+            setvarLiteral = " setx /M CRYFS_FRONTEND \"noninteractive\" && "; // worked
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
 

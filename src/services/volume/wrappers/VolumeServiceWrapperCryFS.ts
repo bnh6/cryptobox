@@ -30,12 +30,14 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
             // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
             // setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
-            setvarLiteral = " set CRYFS_FRONTEND='noninteractive' && ";
+            setvarLiteral = " set \"CRYFS_FRONTEND=noninteractive\" && ";
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
 
-        let command = `${setvarLiteral}   ` +
-            `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+        // let command = `${setvarLiteral}   ` +
+        //     `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+
+        return "echo  'hello world'";
 
         if (volume.ttl > 0)
             command = command + ` --unmount-idle ${volume.ttl}`;

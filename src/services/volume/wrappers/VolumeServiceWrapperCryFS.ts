@@ -24,22 +24,20 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
 
         // const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
         // const c = "$Env:CRYFS_FRONTEND=\"noninteractive\" && $Env:CRYFS_FRONTEND";
-        const c = "set CRYFS_FRONTEND 'noninteractive' && echo %CRYFS_FRONTEND%";
-        const [code1, stdout1, stderr1] = shell.execute(c, [], false);
-        console.log("RESULTADO==", code1, stdout1, stderr1);
+        // const c = "set CRYFS_FRONTEND 'noninteractive' && echo %CRYFS_FRONTEND%";
+        // const [code1, stdout1, stderr1] = shell.execute(c, [], false);
+        // console.log("RESULTADO==", code1, stdout1, stderr1);
 
         let setvarLiteral: string = "";
         if (os.platform() === "win32")
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
             // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
-            setvarLiteral = " ";
+            setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
 
-        // let command = `${setvarLiteral}   ` +
-        //     `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-
-        return "echo 'hello'";
+        let command = `${setvarLiteral}   ` +
+            `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
         if (volume.ttl > 0)
             command = command + ` --unmount-idle ${volume.ttl}`;

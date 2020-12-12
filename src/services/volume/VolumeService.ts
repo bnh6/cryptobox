@@ -11,9 +11,11 @@ import { VolumeServiceWrapperFactory, VolumeEncryptionImpl } from "./wrappers/Vo
 export default class VolumeService implements VolumeServiceInterface {
 
     private wrapper: VolumeServiceWrapperInterface;
+    private volEncImpl: VolumeEncryptionImpl;
 
     constructor(whichImpl: VolumeEncryptionImpl = VolumeEncryptionImpl.CryFS) {
         this.wrapper = VolumeServiceWrapperFactory.create(whichImpl);
+        this.volEncImpl = whichImpl;
     }
 
     /**
@@ -37,7 +39,7 @@ export default class VolumeService implements VolumeServiceInterface {
             if (code === 0) return;
             else {
                 const error = ServiceError.errorFromCryFS(code);
-                log.error(`Error ${error} to UNmount volume, code=${code} stdout=${stdout}, stderr=${stderr}`);
+                log.error(`Error ${error} to Mount volume, code=${code} stdout=${stdout}, stderr=${stderr}`);
                 throw error;
             }
         } catch (error) {
@@ -137,7 +139,8 @@ export default class VolumeService implements VolumeServiceInterface {
             log.debug("Volume Encryption not installed...");
             return true;
         } else {
-            log.debug(`CryFS does not seem to be installed, returned code=${code}, stdout=${stdout}, stderr=${stderr}`);
+            log.debug(`${this.volEncImpl.toString()} Encryption does not seem to be installed,\
+             returned code = ${code}, stdout = ${stdout}, stderr = ${stderr}`);
             return false;
         }
     }

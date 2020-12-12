@@ -29,7 +29,8 @@ volumeEncryptionImplementations.forEach(e => {
     // creating directories and passwords ...
     const password = Math.random().toString(36).substr(2, 16);
     const volume = new Volume(os.homedir() + path.sep + "ENC" + Math.random().toString(12).substr(2, 10));
-    volume.decryptedFolderPath = os.homedir() + path.sep + "DEC" + Math.random().toString(12).substr(2, 10);
+    // volume.decryptedFolderPath = os.homedir() + path.sep + "DEC" + Math.random().toString(12).substr(2, 10);
+    volume.decryptedFolderPath = os.tmpdir() + path.sep + "DEC" + Math.random().toString(12).substr(2, 10);
     console.log(`encrypted folder = ${volume.encryptedFolderPath}`);
     console.log(`decrypted folder = ${volume.decryptedFolderPath}`);
     console.log(`volume alias = ${volume.getVolumeAlias()}`);

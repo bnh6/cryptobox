@@ -19,9 +19,6 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     }
 
     public getMountCommand(volume: Volume, password: String): string {
-        // using export or set or powershell
-        // $Env:<variable-name> = "<new-value>"]
-
         // const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
         // const c = "$Env:CRYFS_FRONTEND=\"noninteractive\" && $Env:CRYFS_FRONTEND";
         // const c = "set CRYFS_FRONTEND 'noninteractive' && echo %CRYFS_FRONTEND%";
@@ -32,7 +29,8 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         if (os.platform() === "win32")
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
             // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
-            setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
+            // setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
+            setvarLiteral = " set CRYFS_FRONTEND='noninteractive' && ";
         else
             setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
 

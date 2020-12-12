@@ -57,7 +57,7 @@ export default class VolumeService implements VolumeServiceInterface {
                 return;
             }
             const command = this.wrapper.getUNmountCommand(volume);
-            const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
+            const [code, stdout, stderr] = await shell.execute(command, [], false, 20000);
 
             if (code === 0) return;
             else {

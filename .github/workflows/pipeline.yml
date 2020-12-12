@@ -74,7 +74,7 @@ jobs:
           id
           sudo apt install -y libsecret-1-dev
           sudo apt install -y cryfs encfs
-          # sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
+          sudo apt install -y gnome-keyring
           # export DISPLAY=:99.0;
           # export DISPLAY=:0.0
           # sudo apt install gnupg2 pass

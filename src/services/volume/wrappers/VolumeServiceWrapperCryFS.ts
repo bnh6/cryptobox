@@ -23,8 +23,9 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         // $Env:<variable-name> = "<new-value>"]
 
         // const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
-        const [code1, stdout1, stderr1] = shell.execute(
-            "$Env:CRYFS_FRONTEND=\"noninteractive\" && $Env:CRYFS_FRONTEND", [], false);
+        // const c = "$Env:CRYFS_FRONTEND=\"noninteractive\" && $Env:CRYFS_FRONTEND";
+        const c = "setx CRYFS_FRONTEND=noninteractive && echo %CRYFS_FRONTEND%";
+        const [code1, stdout1, stderr1] = shell.execute(c, [], false);
         console.log("RESULTADO==", code1, stdout1, stderr1);
 
         let setvarLiteral: string = "";

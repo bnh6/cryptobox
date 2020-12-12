@@ -40,7 +40,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     }
 
     public getIsMountedCommand(volume: Volume): string {
-        return `mount | grep - qs '${volume.encryptedFolderPath}'`;
+        return `mount | grep -qs '${volume.encryptedFolderPath}'`;
     }
 
     proccessErrorCode(code: number): ServiceError {

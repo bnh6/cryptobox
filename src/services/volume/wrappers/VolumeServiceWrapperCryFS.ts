@@ -19,23 +19,18 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     }
 
     public getMountCommand(volume: Volume, password: String): string {
-        // const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
-        // const c = "$Env:CRYFS_FRONTEND=\"noninteractive\" && $Env:CRYFS_FRONTEND";
-        // const c = "set CRYFS_FRONTEND 'noninteractive' && echo %CRYFS_FRONTEND%";
-        // const [code1, stdout1, stderr1] = shell.execute(c, [], false);
-        // console.log("RESULTADO==", code1, stdout1, stderr1);
         let command: string = "";
 
-        if (os.platform() === "win32")
+        if (os.platform() === "win32") {
             // pipe on powershell instantiate a new cmd.exe, hence CRYFS_FRONTEND must be global
-            command = "SETX /M CRYFS_FRONTEND \"noninteractive\" && " + 
-            // `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-            ` ECHO '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-        else
+            command = "setx /M CRYFS_FRONTEND noninteractive && " +
+                // `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+                ` ECHO '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+        }
+        else {
             command = "export CRYFS_FRONTEND=noninteractive && " +
-            `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-
-        // return `${setvarLiteral} echo  'hello world' && echo %CRYFS_FRONTEND% && $env:CRYFS_FRONTEND`;
+                `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+        }
 
         if (volume.ttl > 0)
             command = command + ` --unmount-idle ${volume.ttl}`;

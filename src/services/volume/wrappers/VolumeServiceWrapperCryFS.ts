@@ -37,7 +37,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         // let command = `${setvarLiteral}   ` +
         //     `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
-        return "echo  'hello world'";
+        return `${setvarLiteral} echo  'hello world'`;
 
         if (volume.ttl > 0)
             command = command + ` --unmount-idle ${volume.ttl}`;

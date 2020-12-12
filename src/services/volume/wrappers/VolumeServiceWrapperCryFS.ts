@@ -24,7 +24,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         if (os.platform() === "win32") {
             // pipe on powershell instantiate a new cmd.exe, hence CRYFS_FRONTEND must be global
             command =
-                ` setx /M CRYFS_FRONTEND noninteractive ; \
+                ` set "CRYFS_FRONTEND=noninteractive" && \
                 echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
         }
         else {

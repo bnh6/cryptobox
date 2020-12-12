@@ -27,9 +27,9 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         let command: string = "";
 
         if (os.platform() === "win32")
-            command = "set \"CRYFS_FRONTEND=noninteractive\" && " +
+            command = "SETX /M CRYFS_FRONTEND \"noninteractive\" & " +
             // `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
-            ` cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}" < echo '${password}'`;
+            ` ECHO '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
         else
             command = "export CRYFS_FRONTEND=noninteractive && " +
             `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;

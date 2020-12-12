@@ -24,7 +24,10 @@ export function execute(
     // TODO handle error better
     if (result && result.error) {
         log.error(`command [${command}] failed with error = [${result.error}] ...`);
-        log.error(result);
+        // log.error(result);
+        log.error(`code=${result.status}`);
+        log.error(`stdout=${result.stdout.subarray(0, 256)}`);
+        log.error(`stderr=${result.stderr.subarray(0, 256)}`);
         throw result.error;
     }
 

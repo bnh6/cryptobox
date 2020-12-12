@@ -22,19 +22,18 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         // using export or set or powershell
         // $Env:<variable-name> = "<new-value>"]
 
-        const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
-        console.log("RESULTADO==", code1, stdout1, stderr1);
-
-
+        // const [code1, stdout1, stderr1] = shell.execute(`dir ${os.homedir()} `, [], false);
+        // console.log("RESULTADO==", code1, stdout1, stderr1);
 
         let setvarLiteral: string = "";
         if (os.platform() === "win32")
             // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
-            setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
+            // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
+            setvarLiteral = " ";
         else
-            setvarLiteral = "export CRYFS_FRONTEND=noninteractive";
+            setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
 
-        let command = `${setvarLiteral}  && ` +
+        let command = `${setvarLiteral}   ` +
             `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
         if (volume.ttl > 0)

@@ -24,19 +24,15 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         // const c = "set CRYFS_FRONTEND 'noninteractive' && echo %CRYFS_FRONTEND%";
         // const [code1, stdout1, stderr1] = shell.execute(c, [], false);
         // console.log("RESULTADO==", code1, stdout1, stderr1);
+        let command: string = "";
 
-        let setvarLiteral: string = "";
         if (os.platform() === "win32")
-            // setvarLiteral = "set CRYFS_FRONTEND=noninteractive";
-            // setvarLiteral = "$Env:CRYFS_FRONTEND=\"noninteractive\"";
-            // setvarLiteral = " setx CRYFS_FRONTEND 'noninteractive' && ";
-            setvarLiteral = " set \"CRYFS_FRONTEND=noninteractive\" && "; //worked
-            // setvarLiteral = " setx /M CRYFS_FRONTEND \"noninteractive\" && "; //worked
+            command = "set \"CRYFS_FRONTEND=noninteractive\" && " +
+            // `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+            ` cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}" < echo '${password}'`;
         else
-            setvarLiteral = "export CRYFS_FRONTEND=noninteractive && ";
-
-        let command = `${setvarLiteral}   ` +
-            `echo ${password} | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
+            command = "export CRYFS_FRONTEND=noninteractive && " +
+            `echo '${password}' | cryfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}"`;
 
         // return `${setvarLiteral} echo  'hello world' && echo %CRYFS_FRONTEND% && $env:CRYFS_FRONTEND`;
 

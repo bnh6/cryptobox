@@ -21,6 +21,7 @@ export function execute(
         windowsHide: true,
     });
 
+    // TODO handle error better
     if (result && result.error) {
         log.error(`command [${command}] failed with error = [${result.error}] ...`);
         log.error(result);

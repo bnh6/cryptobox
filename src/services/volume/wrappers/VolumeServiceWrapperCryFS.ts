@@ -34,7 +34,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         }
 
         if (volume.ttl > 0)
-            command = command + ` --unmount - idle ${volume.ttl} `;
+            command = command + ` --unmount-idle ${volume.ttl} `;
 
         return command;
     }

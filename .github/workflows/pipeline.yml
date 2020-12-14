@@ -6,6 +6,7 @@ on:
       - "dev"
       - "master"
       - "feature-*"
+      - "fix-*"
   pull_request:
     branches:
       - "dev"
@@ -73,12 +74,16 @@ jobs:
           id
           sudo apt install -y libsecret-1-dev
           sudo apt install -y cryfs encfs
-          # sudo apt install -y  libsecret-1-dev dbus-x11 gnome-keyring
+          sudo apt install -y gnome-keyring
           # export DISPLAY=:99.0;
-          # NO_AT_BRIDGE=1;
-          # eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
-          # eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
-          # /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
+          # export DISPLAY=:0.0
+          # sudo apt install gnupg2 pass
+          sudo apt install dbus-x11
+          NO_AT_BRIDGE=1;
+          eval $(dbus-launch --sh-syntax);
+          eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
+          eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
+          /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
           # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
           # export DISPLAY=:.0
           # xhost +

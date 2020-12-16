@@ -14,7 +14,12 @@ NO_AT_BRIDGE=1;
 eval $(dbus-launch --sh-syntax);
 eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
 eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
-/usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
+# /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
+pip3 install keyring
+python3
+import keyring
+keyring.get_keyring()
+keyring.set_password("login","","")
 # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
 # export DISPLAY=:.0
 # xhost +

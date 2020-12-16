@@ -18,7 +18,6 @@ eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
 pip3 install keyring
 dbus-run-session -- sh
 gnome-keyring-daemon --unlock
-1234
 EOF
 python3
 import keyring

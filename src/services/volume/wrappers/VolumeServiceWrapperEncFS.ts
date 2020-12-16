@@ -37,9 +37,10 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
         let command: string;
         switch (os.platform()) {
             case "win32":
-                command = `encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+                // echo does not seem to need escape and must have no space before and after the string
+                command = `echo ${password}|encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
                 --standard \
-                --stdinpass='${password}' \
+                --stdinpass\
                 --nocache \
                 --require-macs`;
                 break;

@@ -13,6 +13,9 @@ on:
       - "master"
       - "feature-*"
 
+env:
+  SCRIPTS: ./build-scripts
+
 jobs:
   PrepareEnvironment:
     if: false
@@ -95,19 +98,7 @@ jobs:
           # sudo apt install cryfs
       - name: Setup MAC environment
         if: startsWith(matrix.os, 'macos')
-        run: |
-          set -xeuo pipefail
-          csrutil status
-          id
-          #  sudo xcode-select --reset
-          if (csrutil status | grep -isq " enabled"); 
-          then 
-            echo "SIP is enabled, not installing CryFS nor EncFS"; 
-          else 
-             echo "SIP is disabled :)"; 
-             brew install --cask osxfuse
-            brew install cryfs
-          fi
+        run: chmod +x ${SCRIPTS}/mac-setup.sh && ${SCRIPTS}/mac-setup.sh
       - name: Setup Windows environment
         if: startsWith(matrix.os, 'windows')
         run: |
@@ -131,7 +122,7 @@ jobs:
           choco install encfs4win --pre
           dir 'C:\Program Files (x86)\encfs'
           echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
-          #copy 'C:\Program Files (x86)\encfs\*'' 'C:\Windows'
+          copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
       - name: Executing tests
         run: |
           npm ci

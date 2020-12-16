@@ -5,7 +5,7 @@ id
 sudo apt install -y libsecret-1-dev
 sudo apt install -y cryfs encfs
 sudo apt install -y gnome-keyring
-sudo apt install -y python-gnomekeyring # trying to install gnomekeyring python module 
+# sudo apt install -y python-gnomekeyring # trying to install gnomekeyring python module 
 # export DISPLAY=:99.0;
 # export DISPLAY=:0.0
 # sudo apt install gnupg2 pass

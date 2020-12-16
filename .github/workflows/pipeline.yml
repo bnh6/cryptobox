@@ -103,7 +103,7 @@ jobs:
           choco install encfs4win --pre
           echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
           copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
-          encfs.exe --help
+          encfs.exe -H
           dir "C:\Program Files\dokan"
 
       - name: Executing tests

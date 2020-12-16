@@ -105,8 +105,7 @@ jobs:
           echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
           copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
           encfs.exe --help
-          dir "C:\Program Files\"
-          dir "C:\Program Files (x86)\"
+          dir "C:\Program Files\dokan"
 
       - name: Executing tests
         run: |

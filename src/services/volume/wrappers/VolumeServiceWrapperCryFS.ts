@@ -46,7 +46,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         let command: string;
         switch (os.platform()) {
             case "win32":
-                command = `if not exist "${volume.decryptedFolderPath}" (exit /b 1) else (exit /b 1).`;
+                command = `if not exist "${volume.decryptedFolderPath}" (exit /b 1) else (exit /b 1)`;
                 break;
 
             case "linux":

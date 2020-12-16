@@ -117,6 +117,11 @@ volumeEncryptionImplementations.forEach(e => {
                 });
             });
 
+            it(`[${implementationName}] shuould not be mounted (after wrong password)`, async () => {
+                const mounted = await volumeService.isMounted(volume);
+                expect(mounted).to.false;
+            });
+
 
             // // TODO unmount when idle does not work :()
             // it(`[${implementationName}] mount with iddle= ${iddle_umount_time} min`, async () => {

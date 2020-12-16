@@ -30,9 +30,10 @@ volumeEncryptionImplementations.forEach(e => {
     // creating directories and passwords ...
     const password = Math.random().toString(36).substr(2, 16);
     const volume = new Volume(os.homedir() + path.sep + "CRYPTOBOX_ENC" + Math.random().toString(12).substr(2, 10));
-    // volume.decryptedFolderPath = os.homedir() + path.sep + "CRYPTOBOX_DEC" + Math.random().toString(12).substr(2, 10);
+    // volume.decryptedFolderPath = os.homedir() + path.sep +\
+    // "CRYPTOBOX_DEC" + Math.random().toString(12).substr(2, 10);
     if (os.platform() === "win32")
-        volume.decryptedFolderPath = "x:"; // testing driver letters on windows
+        volume.decryptedFolderPath = "K:"; // testing driver letters on windows
     else
         volume.decryptedFolderPath = os.tmpdir() + path.sep + "DEC" + Math.random().toString(12).substr(2, 10);
 

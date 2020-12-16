@@ -16,7 +16,7 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
         let command: string;
         switch (os.platform()) {
             case "win32":
-                command = "I dont know this one yet ...";
+                command = `encfs.exe --umount "${volume.decryptedFolderPath}"`;
                 break;
 
             case "linux":

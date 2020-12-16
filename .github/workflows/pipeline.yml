@@ -125,6 +125,7 @@ jobs:
           echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
           cryfs.exe --version
           setx /M CRYFS_FRONTEND "noninteractive"
+          choco install encfs4win --pre
       - name: Executing tests
         run: |
           npm ci

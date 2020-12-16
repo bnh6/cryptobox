@@ -38,7 +38,8 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
         switch (os.platform()) {
             case "win32":
                 // echo does not seem to need escape and must have no space before and after the string
-                command = `echo ${password}|encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+                // has to be double quote instead of single
+                command = `echo ${password}|encfs "${volume.encryptedFolderPath}" "${volume.decryptedFolderPath}" \
                 --standard \
                 --stdinpass\
                 --nocache \

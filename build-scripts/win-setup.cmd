@@ -1,3 +1,4 @@
+echo "CMD"
 $ErrorActionPreference='Stop'
 choco feature disable -n=showDownloadProgress
 curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
@@ -21,4 +22,3 @@ choco install encfs4win --pre
 echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
 copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
 encfs.exe --help
-encfs.exe --unmount

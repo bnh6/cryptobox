@@ -18,10 +18,6 @@ eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
 pip3 install keyring
 dbus-run-session -- sh
 gnome-keyring-daemon --unlock
-python3
-import keyring
-keyring.get_keyring()
-keyring.set_password("login","","1234")
 # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
 # export DISPLAY=:.0
 # xhost +

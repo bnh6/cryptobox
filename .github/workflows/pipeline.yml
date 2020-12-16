@@ -126,6 +126,7 @@ jobs:
           cryfs.exe --version
           setx /M CRYFS_FRONTEND "noninteractive"
           choco install encfs4win --pre
+          dir C:\Program Files` (x86)\encfs
       - name: Executing tests
         run: |
           npm ci

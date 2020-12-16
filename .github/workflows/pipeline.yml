@@ -70,59 +70,19 @@ jobs:
         node-version: [14.x, 15.x, 16.x]
     steps:
       - uses: actions/checkout@v1
+
       - name: Setup Linux environment
         if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          set -xeuo pipefail
-          id
-          sudo apt install -y libsecret-1-dev
-          sudo apt install -y cryfs encfs
-          sudo apt install -y gnome-keyring
-          sudo apt install -y python-gnomekeyring # trying to install gnomekeyring python module 
-          # export DISPLAY=:99.0;
-          # export DISPLAY=:0.0
-          # sudo apt install gnupg2 pass
-          sudo apt install dbus-x11
-          NO_AT_BRIDGE=1;
-          eval $(dbus-launch --sh-syntax);
-          eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
-          eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
-          /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
-          # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
-          # export DISPLAY=:.0
-          # xhost +
-          # sudo apt install pass
-          # gpg2  --batch  --gen-key # get generated key
-          # gpg --list-keys
-          # pass init -p /tmp # testing random folder
-          # sudo apt install cryfs
+        run: chmod +x ${SCRIPTS}/linux-setup.sh && ${SCRIPTS}/linux-setup.sh
+
       - name: Setup MAC environment
         if: startsWith(matrix.os, 'macos')
         run: chmod +x ${SCRIPTS}/mac-setup.sh && ${SCRIPTS}/mac-setup.sh
+
       - name: Setup Windows environment
         if: startsWith(matrix.os, 'windows')
-        run: |
-          $ErrorActionPreference='Stop'
-          choco feature disable -n=showDownloadProgress
-          curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-          Start-Process msiexec.exe -Wait -ArgumentList '/I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”’
-          curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I dokan64.msi /quiet /qn /norestart /L*V "dokan.log"'
-          curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I cryfs64.msi /quiet /qn /norestart /L*V "cryfs.log"'
-          echo "::group::Printing logs"
-          type *.log
-          echo "::endgroup::"
-          copy 'C:\Program Files\CryFS\0.10.2\bin\*' 'C:\Windows' 
-          echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
-          cryfs.exe --version
-          setx /M CRYFS_FRONTEND "noninteractive"
-          echo "::group::installing encfs4win"
-          echo "::endgroup::"
-          choco install encfs4win --pre
-          dir 'C:\Program Files (x86)\encfs'
-          echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
-          copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
+        run: .\build-scripts\win-setup.cmd
+
       - name: Executing tests
         run: |
           npm ci

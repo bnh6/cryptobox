@@ -88,7 +88,7 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
         let command: string;
         switch (os.platform()) {
             case "win32":
-                command = `if not exist "${volume.decryptedFolderPath}" (exit /b 1) else (exit /b 1)`;
+                command = `if exist "${volume.decryptedFolderPath}" (exit /b 0) else (exit /b 1)`;
                 break;
 
             case "linux":

@@ -12,6 +12,8 @@ echo "::endgroup::"
 copy 'C:\Program Files\CryFS\0.10.2\bin\*' 'C:\Windows' 
 echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
 cryfs.exe --version
+cryfs.exe --help
+
 setx /M CRYFS_FRONTEND "noninteractive"
 echo "::group::installing encfs4win"
 echo "::endgroup::"
@@ -19,3 +21,6 @@ choco install encfs4win --pre
 #dir 'C:\Program Files (x86)\encfs'
 echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
 copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
+
+encfs.exe --help
+encfs.exe --unmount

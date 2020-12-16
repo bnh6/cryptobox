@@ -15,19 +15,19 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
     public getUNmountCommand(volume: Volume): string {
         let command: string;
         switch (os.platform()) {
-        case "win32":
-            command = "I dont know this one yet ...";
-            break;
+            case "win32":
+                command = "I dont know this one yet ...";
+                break;
 
-        case "linux":
-            command = `fusermount -u "${volume.decryptedFolderPath}"`;
-            break;
+            case "linux":
+                command = `fusermount -u "${volume.decryptedFolderPath}"`;
+                break;
 
-        case "darwin":
-            command = `umount "${volume.decryptedFolderPath}"`;
-            break;
+            case "darwin":
+                command = `umount "${volume.decryptedFolderPath}"`;
+                break;
 
-        default: throw new ServiceError(ErrorType.UnsupportedOS);
+            default: throw new ServiceError(ErrorType.UnsupportedOS);
         }
 
         return command;
@@ -36,27 +36,33 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
     public getMountCommand(volume: Volume, password: String): string {
         let command: string;
         switch (os.platform()) {
-        case "win32":
-            command = "I dont know this one yet ...";
-            break;
-
-        case "linux":
-            command = `encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+            case "win32":
+                command = `encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
                 --standard \
                 --stdinpass='${password}' \
+                --nocache \
+                --require-macs`;
+                break;
+
+            case "linux":
+                command = `encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+                --standard \
+                --stdinpass='${password}' \
+                --nocache \
                 --require-macs \
                 -ohard_remove`;
 
-            if (volume.ttl > 0)
-                command = command + ` --idle ${volume.ttl}`;
+                if (volume.ttl > 0)
+                    command = command + ` --idle ${volume.ttl}`;
 
-            break;
+                break;
 
-        case "darwin":
-            command = `echo '${password}' | \
+            case "darwin":
+                command = `echo '${password}' | \
                 encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
                 --stdinpass \
                 --standard \
+                --nocache \
                 --require-macs \
                 -ovolname="${volume.name}" \
                 -oallow_root \
@@ -65,12 +71,12 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
                 -oauto_xattr 
                 -onolocalcaches`;
 
-            if (volume.ttl > 0)
-                command = command + ` --idle ${volume.ttl}`;
+                if (volume.ttl > 0)
+                    command = command + ` --idle ${volume.ttl}`;
 
-            break;
+                break;
 
-        default: throw new ServiceError(ErrorType.UnsupportedOS);
+            default: throw new ServiceError(ErrorType.UnsupportedOS);
         }
 
         return command;
@@ -79,24 +85,24 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
     public getIsMountedCommand(volume: Volume): string {
         let command: string;
         switch (os.platform()) {
-        case "win32":
-            command = "I dont know this one yet ...";
-            break;
+            case "win32":
+                command = "I dont know this one yet ...";
+                break;
 
-        case "linux":
-            command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
-            break;
+            case "linux":
+                command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
+                break;
 
-        case "darwin":
-            command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
-            break;
+            case "darwin":
+                command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
+                break;
 
-        default: throw new ServiceError(ErrorType.UnsupportedOS);
+            default: throw new ServiceError(ErrorType.UnsupportedOS);
         }
         return command;
     }
 
-    proccessErrorCode(code: number): ServiceError{
+    proccessErrorCode(code: number): ServiceError {
         return new ServiceError(0);
     }
 }

@@ -48,8 +48,9 @@ volumeEncryptionImplementations.forEach(e => {
     (volumeEncryptionSupport ? describe : describe.skip)(
         `  >>>>  EXECUTING VOLUME SERVICE TESTS [${implementationName}]  <<<<  `, () => {
             before(async () => {
-                volumeService.createDirectory(volume.decryptedFolderPath);
                 volumeService.createDirectory(volume.encryptedFolderPath);
+                if (os.platform() !== "win32")
+                    volumeService.createDirectory(volume.decryptedFolderPath);
                 try {
                     await passwordService.savePassword(password, volume);
                 } catch (error) {

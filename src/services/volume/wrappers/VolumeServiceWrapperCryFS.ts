@@ -1,6 +1,6 @@
-import { ServiceError } from "../../ServiceError";
 import { Volume } from "../../../entities/Volume";
 import VolumeServiceWrapperInterface from "./VolumeServiceWrapperInterface";
+import { ServiceError, ErrorType } from "../../ServiceError";
 import * as os from "os";
 import * as shell from "../../../utils/ShellUtil";
 
@@ -39,9 +39,29 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
         return command;
     }
 
+    // public getIsMountedCommand(volume: Volume): string {
+    //     return `mount | grep -qs '${volume.encryptedFolderPath}'`;
+    // }
     public getIsMountedCommand(volume: Volume): string {
-        return `mount | grep -qs '${volume.encryptedFolderPath}'`;
+        let command: string;
+        switch (os.platform()) {
+            case "win32":
+                command = `if not exist "${volume.decryptedFolderPath}" (exit /b 1) else (exit /b 1).`;
+                break;
+
+            case "linux":
+                command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
+                break;
+
+            case "darwin":
+                command = `mount | grep -qs '${volume.decryptedFolderPath}'`;
+                break;
+
+            default: throw new ServiceError(ErrorType.UnsupportedOS);
+        }
+        return command;
     }
+
 
     proccessErrorCode(code: number): ServiceError {
         return new ServiceError(0);

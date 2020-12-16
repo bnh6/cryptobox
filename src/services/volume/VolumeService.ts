@@ -74,7 +74,6 @@ export default class VolumeService implements VolumeServiceInterface {
 
     public async isMounted(volume: Volume): Promise<boolean> {
         try {
-            return false;
             const command = this.wrapper.getIsMountedCommand(volume);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 7000);
 

@@ -81,7 +81,7 @@ jobs:
 
       - name: Setup Windows environment
         if: startsWith(matrix.os, 'windows')
-        run: .\%SCRIPTS%\win-setup.cmd
+        run: .\build-scripts\win-setup.cmd
 
       - name: Executing tests
         run: |

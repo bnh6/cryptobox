@@ -12,7 +12,7 @@ sudo apt install libsecret-tools
 # sudo apt install gnupg2 pass
 sudo apt install dbus-x11
 NO_AT_BRIDGE=1;
-secret-tool store --label username username service system
+secret-tool store --label SystemCredential username username service system
 eval $(dbus-launch --sh-syntax);
 eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
 eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);

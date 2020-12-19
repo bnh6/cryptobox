@@ -5,14 +5,12 @@ id
 sudo apt install -y libsecret-1-dev
 sudo apt install -y cryfs encfs
 sudo apt install -y gnome-keyring
-sudo apt install libsecret-tools
 # sudo apt install -y python-gnomekeyring # trying to install gnomekeyring python module 
 # export DISPLAY=:99.0;
 # export DISPLAY=:0.0
 # sudo apt install gnupg2 pass
 sudo apt install dbus-x11
 NO_AT_BRIDGE=1;
-secret-tool store --label SystemCredential username username service system
 eval $(dbus-launch --sh-syntax);
 eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
 eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
@@ -20,7 +18,8 @@ eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
 pip3 install keyring
 dbus-run-session -- sh
 gnome-keyring-daemon --unlock
-sudo apt install python3-venv libdbus-glib-1-dev
+sudo apt install python3-venv libdbus-glib-1-dev libsecret-tools
+secret-tool store --label SystemCredential username username service system
 cd /tmp
 pyvenv py3
 source py3/bin/activate

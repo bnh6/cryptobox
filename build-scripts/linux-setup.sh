@@ -13,20 +13,21 @@ sudo apt install dbus-x11
 NO_AT_BRIDGE=1;
 eval $(dbus-launch --sh-syntax);
 eval $(echo -n "" | /usr/bin/gnome-keyring-daemon --login);
-eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
+eval $(/usr/bin/gnome-keyring-daemon --foreground --components=secrets --start);
 # /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
 pip3 install keyring
 dbus-run-session -- sh
 gnome-keyring-daemon --unlock
 sudo apt install python3-venv libdbus-glib-1-dev libsecret-tools
 secret-tool store --label SystemCredential username username service system
+secret-tool lookup username username service system
 cd /tmp
 pyvenv py3
 source py3/bin/activate
 pip install -U pip
 pip install secretstorage dbus-python
 pip install keyring
-python -c "import keyring; keyring.get_keyring(); keyring.set_password('system', 'username', 'password');"
+python -c "import keyring; keyring.get_keyring(); keyring.set_password('system', 'username', '');"
 # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
 # export DISPLAY=:.0
 # xhost +

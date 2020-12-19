@@ -25,10 +25,7 @@ source py3/bin/activate
 pip install -U pip
 pip install secretstorage dbus-python
 pip install keyring
-python
-import keyring
-keyring.get_keyring()
-keyring.set_password("login", "", "")
+python -c "import keyring keyring.get_keyring() keyring.set_password('login', '', '')"
 # https://github.com/vladimiry/ElectronMail/blob/aefc6654181f5ec47429fdaa889468fa2edb0645/.travis.yml#L60-L66
 # export DISPLAY=:.0
 # xhost +

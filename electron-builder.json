@@ -21,6 +21,9 @@
     "linux":{
         "icon": "static/resources/cryptobox.png",
         "category": "Utility",
+        "executableName": "${productName}-LINUX-${version}",
+        "synopsis": "bla bla",
+        "description": "bla bla bla bla bla bla",
         "target": [
             {
                 "target": "deb",

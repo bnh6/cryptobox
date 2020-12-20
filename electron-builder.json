@@ -5,6 +5,8 @@
     "directories": {
         "output": "release"
     },
+    "artifactName":"${productName}-${version}-${os}(${arch}).${ext}",
+
     "mac": {
         "icon": "static/resources/cryptobox.icns",
         "target": ["dmg"],
@@ -15,13 +17,11 @@
     "dmg": {
         "backgroundColor": "#3f4247",
         "title": "${productName} ${version}",
-        "artifactName": "${productName}-OSX-${version}",
         "icon": "static/resources/cryptobox.icns"
     },
     "linux":{
         "icon": "static/resources/cryptobox.png",
         "category": "Utility",
-        "executableName": "${productName}-LINUX-${version}",
         "synopsis": "bla bla",
         "description": "bla bla bla bla bla bla",
         "target": [
@@ -47,12 +47,10 @@
             {
               "target": "portable",
               "arch": [ "x64", "ia32" ],
-              "artifactName": "${productName}-WIN_Portable-${version}"
             },
             {
                 "target": "msi",
                 "arch": [ "x64", "ia32" ],
-                "artifactName": "${productName}-WIN-${version}"
             }
         ]
     }

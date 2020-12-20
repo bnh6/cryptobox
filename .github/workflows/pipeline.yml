@@ -18,7 +18,7 @@ env:
 
 jobs:
   PrepareEnvironment:
-    if: true
+    if: false
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
@@ -60,7 +60,7 @@ jobs:
   GitHub-Testing:
     if: true
     runs-on: ${{ matrix.os }}
-    needs: [PrepareEnvironment]
+    # needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
       max-parallel: 12
@@ -138,7 +138,7 @@ jobs:
   Building-Artefacts:
     if: true
     runs-on: ${{ matrix.os }}
-    needs: [PrepareEnvironment]
+    # needs: [PrepareEnvironment]
     strategy:
       fail-fast: false # let the other continue if one fails
       matrix:
@@ -178,8 +178,10 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           # if not master, the release is a draft
-          draft: (github.base_ref != "refs/heads/master")
-          prerelease: (github.base_ref != "refs/heads/master")
+          # draft: (github.base_ref != "refs/heads/master")
+          # prerelease: (github.base_ref != "refs/heads/master")
+          draft: false
+          prerelease: true
           body: |
             Workflow    = ${{ github.workflow }}
             JobId       = ${{ github.job }}
@@ -193,42 +195,45 @@ jobs:
             Base (PR)   = ${{ github.base_ref }}
   
   
-#   Upload-Release:
-#     if: true
-#     runs-on: ubuntu-latest
-#     needs: [Create-Release]
-#     env:
-#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     strategy:
-#       fail-fast: false # upload files independently
-#       max-parallel: 10
-#       matrix:
-#         flavour:
-#           [
-#             "cryptobox-0.0.1.dmg",
-#             "cryptobox-0.0.1.tar.gz",
-#             "cryptobox-0.0.1-ia32.tar.gz",
-#             "cryptobox_0.0.1_i386.deb",
-#             "cryptobox_0.0.1_amd64.deb",
-#             "cryptobox-0.0.1.i686.rpm",
-#             "cryptobox-0.0.1.x86_64.rpm",
-#           ]
-#     steps:
-#       - name: download ${{ matrix.flavour }}
-#         uses: actions/download-artifact@v1
-#         with:
-#           name: release
+  Upload-Release:
+    if: true
+    runs-on: ubuntu-latest
+    needs: [Create-Release]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      fail-fast: false # upload files independently
+      max-parallel: 10
+      # matrix:
+      #   flavour:
+      #     [
+      #       "cryptobox-0.0.1.dmg",
+      #       "cryptobox-0.0.1.tar.gz",
+      #       "cryptobox-0.0.1-ia32.tar.gz",
+      #       "cryptobox_0.0.1_i386.deb",
+      #       "cryptobox_0.0.1_amd64.deb",
+      #       "cryptobox-0.0.1.i686.rpm",
+      #       "cryptobox-0.0.1.x86_64.rpm",
+      #     ]
+    steps:
+      # - name: download ${{ matrix.flavour }}
+      - name: download distributions
+        uses: actions/download-artifact@v1
+        with:
+          name: release
       
-#       - name: setting name and version variables
-#         run: |
-#           echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
-#           echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
-#           ls -larthR ./release
+      - name: setting name and version variables
+        run: |
+          echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
+          echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+          ls -larthR ./release
 
-#       - name: uploding ${{ matrix.flavour }}
-#         uses: actions/upload-release-asset@v1
-#         with:
-#           upload_url: ${{ needs.Create-Release.outputs.release_url }}
-#           asset_path: release/${{ matrix.flavour }}
-#           asset_name: ${{ matrix.flavour }}
-#           asset_content_type: application/zip
+      # - name: uploding ${{ matrix.flavour }}
+      - name: upload distributions to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.Create-Release.outputs.release_url }}
+          # asset_path: release/${{ matrix.flavour }}
+          asset_path: release
+          # asset_name: ${{ matrix.flavour }}
+          asset_content_type: application/zip

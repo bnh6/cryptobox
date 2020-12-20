@@ -164,7 +164,8 @@ jobs:
 
   Create-Release:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["master", "dev", "feature-pipeline"]'), github.ref) && needs.GitHub-Testing.result == 'success' && needs.Building-Artefacts.result == 'success'
+    if: true
+    # if: contains(fromJson('["master", "dev", "feature-pipeline"]'), github.ref) && needs.GitHub-Testing.result == 'success' && needs.Building-Artefacts.result == 'success'
     needs: [GitHub-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -178,9 +179,9 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           # if not master, the release is a draft
-          # draft: (github.base_ref != "refs/heads/master")
+          draft: (github.base_ref != "refs/heads/master")
           # prerelease: (github.base_ref != "refs/heads/master")
-          draft: false
+          # draft: false
           prerelease: true
           body: |
             Workflow    = ${{ github.workflow }}

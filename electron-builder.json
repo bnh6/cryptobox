@@ -20,8 +20,7 @@
     "linux":{
         "icon": "static/resources/cryptobox.png",
         "category": "Utility",
-        "target": ["deb","rpm", "tar.gz"],
-        "executableName": "${productName}-LINUX-${version}"
+        "target": ["deb","rpm", "tar.gz"]
     },
     "win": {
         "icon": "static/resources/cryptobox.ico",

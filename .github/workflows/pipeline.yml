@@ -158,7 +158,7 @@ jobs:
 
   Create-Release:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success' &&  && needs.Building-Artefacts.result == 'success'
+    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success' && needs.Building-Artefacts.result == 'success'
     needs: [GitHub-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

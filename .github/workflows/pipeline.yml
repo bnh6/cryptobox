@@ -133,7 +133,7 @@ jobs:
           pip install -r requirements.txt
           python3 travis.py
   Building-Artefacts:
-    if: false
+    if: true
     runs-on: ${{ matrix.os }}
     needs: [PrepareEnvironment]
     strategy:
@@ -158,7 +158,7 @@ jobs:
 
   Create-Release:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success'
+    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success' &&  && needs.Building-Artefacts.result == 'success'
     needs: [GitHub-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -171,8 +171,9 @@ jobs:
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
+          # if not master, the release is a draft
           draft: (github.base_ref != "refs/heads/master")
-          prerelease: true
+          prerelease: (github.base_ref != "refs/heads/master")
           body: |
             Workflow    = ${{ github.workflow }}
             JobId       = ${{ github.job }}

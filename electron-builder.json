@@ -21,7 +21,20 @@
     "linux":{
         "icon": "static/resources/cryptobox.png",
         "category": "Utility",
-        "target": ["deb","rpm", "tar.gz"]
+        "target": [
+            {
+                "target": "deb",
+                "arch": [ "x64", "ia32" ],
+            },
+            {
+                "target": "rpm",
+                "arch": [ "x64", "ia32" ],
+            },
+            {
+                "target": "tar.gz",
+                "arch": [ "x64", "ia32" ]
+            }
+        ]
     },
     "win": {
         "icon": "static/resources/cryptobox.ico",

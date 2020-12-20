@@ -18,7 +18,7 @@ env:
 
 jobs:
   PrepareEnvironment:
-    if: false
+    if: true
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false

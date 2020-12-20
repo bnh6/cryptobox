@@ -238,5 +238,5 @@ jobs:
           # asset_path: release/${{ matrix.flavour }}
           asset_path: release
           # asset_name: ${{ matrix.flavour }}
-          asset_name: ${{ PRODUCT_NAME }}-*
+          asset_name: cryptobox*
           asset_content_type: application/zip

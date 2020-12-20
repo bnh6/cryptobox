@@ -147,7 +147,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: insttalling deps and building code
+      - name: installing deps and building code
         run: npm ci && npm build
 
       - name: building distributions

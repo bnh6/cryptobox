@@ -17,13 +17,6 @@ console.log(`generated volume = [${volume.getVolumeAlias()}]`);
 // log.transports.console.level = false;
 
 
-// TODO workaround while Keytar does not work on linux.
-let skipWhenLinux = false;
-if (os.platform() == "linux")  skipWhenLinux = true;
-
-
-
-
 async function cleanPassword() {
     try {
         await passwordService.deletePassword(volume);
@@ -32,7 +25,7 @@ async function cleanPassword() {
     }
 }
 
-(skipWhenLinux ? describe : describe.skip)("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
+describe("  >>>>  EXECUTING PASSWORD SERVICE  TESTS  <<<<  ", () => {
     before(() => {
         cleanPassword();
     });

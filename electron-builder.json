@@ -30,11 +30,13 @@
         "target": [
             {
               "target": "portable",
-              "arch": [ "x64", "ia32" ]
+              "arch": [ "x64", "ia32" ],
+              "artifactName": "${productName}-WIN_Portable-${version}"
             },
             {
                 "target": "msi",
-                "arch": [ "x64", "ia32" ]
+                "arch": [ "x64", "ia32" ],
+                "artifactName": "${productName}-WIN-${version}"
             }
         ]
     }

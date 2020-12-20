@@ -12,7 +12,8 @@
         "target": ["dmg"],
         "type": "distribution",
         "category":"Utilities",
-        "darkModeSupport": "true"
+        "darkModeSupport": "true",
+        "artifactName":"${productName}-${version}-${os}.${ext}",
     },
     "dmg": {
         "backgroundColor": "#3f4247",

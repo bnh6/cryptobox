@@ -14,7 +14,8 @@
     },
     "dmg": {
         "backgroundColor": "#3f4247",
-        "title": "${productName}-OSX-${version}",
+        "title": "${productName} ${version}",
+        "artifactName": "${productName}-OSX-${version}",
         "icon": "static/resources/cryptobox.icns"
     },
     "linux":{

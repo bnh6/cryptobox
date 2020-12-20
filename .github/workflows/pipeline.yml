@@ -236,6 +236,6 @@ jobs:
         with:
           upload_url: ${{ needs.Create-Release.outputs.release_url }}
           # asset_path: release/${{ matrix.flavour }}
-          asset_path: release
+          assets_path: release
           # asset_name: ${{ matrix.flavour }}
           asset_content_type: application/zip

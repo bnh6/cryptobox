@@ -32,21 +32,21 @@ jobs:
       #   uses: actions/setup-node@v2-beta
       #   with:
       #     node-version: ${{ matrix.node-version }}
-      - name: Get npm cache directory
+      - name: getting npm cache directory
         id: npm-cache
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
+      
       - uses: actions/cache@v2
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
           key: ${{ runner.os }}_${{ matrix.node-version }}_${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{  matrix.os }}_${{ matrix.node-version }}
-      - name: Install Dependencies
+      
+      - name: installing dependencies
         run: npm install
-      - name: Build
-        run: npm build
-
+      
   # CodeQualiy:
   #   runs-on: macos-latest
   #   if: false
@@ -71,15 +71,15 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Setup Linux environment
+      - name: setup Linux environment
         if: startsWith(matrix.os, 'ubuntu')
         run: chmod +x ${SCRIPTS}/linux-setup.sh && ${SCRIPTS}/linux-setup.sh
 
-      - name: Setup MAC environment
+      - name: setup MAC environment
         if: startsWith(matrix.os, 'macos')
         run: chmod +x ${SCRIPTS}/mac-setup.sh && ${SCRIPTS}/mac-setup.sh
 
-      - name: Setup Windows environment
+      - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
         run: |
           $ErrorActionPreference='Stop'
@@ -109,11 +109,13 @@ jobs:
           cryfs.exe --version
           dir "C:\Program Files\dokan"
 
-      - name: Executing tests
-        run: |
-          npm ci
-          npm build
-          npm run test
+      - name: installing deps and build code
+        run: npm ci && npm build
+
+      - name: executing tests
+        run: npm run test
+
+
   Travis-Testing:
     runs-on: ubuntu-latest
     if: false
@@ -132,6 +134,8 @@ jobs:
           cd ./build
           pip install -r requirements.txt
           python3 travis.py
+  
+  
   Building-Artefacts:
     if: true
     runs-on: ${{ matrix.os }}
@@ -142,10 +146,13 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v1
-      - run: |
-          npm ci
-          npm build
-          npm run make
+
+      - name: insttalling deps and building code
+        run: npm ci && npm build
+
+      - name: building distributions
+        run: npm run make
+
       - name: uploading artefacts
         uses: actions/upload-artifact@v2
         with:
@@ -155,9 +162,10 @@ jobs:
           # path: release/cryptobox*.*(dmg|app|deb|rpm|tar.gz)
           path: release/cryptobox*
 
+
   Create-Release:
     runs-on: ubuntu-latest
-    if: contains(fromJson('["master", "dev"]'), github.ref) && needs.GitHub-Testing.result == 'success' && needs.Building-Artefacts.result == 'success'
+    if: contains(fromJson('["master", "dev", "features-pipeline"]'), github.ref) && needs.GitHub-Testing.result == 'success' && needs.Building-Artefacts.result == 'success'
     needs: [GitHub-Testing, Building-Artefacts]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -184,6 +192,8 @@ jobs:
             If Pull Request:
             Head (PR)   = ${{ github.head_ref }}
             Base (PR)   = ${{ github.base_ref }}
+  
+  
   Upload-Release:
     if: true
     runs-on: ubuntu-latest
@@ -194,6 +204,7 @@ jobs:
       fail-fast: false # upload files independently
       max-parallel: 10
       matrix:
+      # todo, there must be a better way ....
         flavour:
           [
             "cryptobox-0.0.1.dmg",
@@ -209,10 +220,14 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: release
-      - run: echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
-      - run: echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
-      - run: ls -larthR ./release
-      - name: Upload ${{ matrix.flavour }}
+      
+      - name: setting name and version variables
+      - run: |
+          echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
+          echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+          ls -larthR ./release
+
+      - name: uploding ${{ matrix.flavour }}
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ needs.Create-Release.outputs.release_url }}

@@ -65,7 +65,8 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        os: [macos-latest, macos-11.0, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest]
+        os: [macos-latest, macos-11.0, windows-latest]
+        # os: [macos-latest, macos-11.0, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest]
         # based on : https://nodejs.org/en/about/releases/
         node-version: [14.x, 15.x, 16.x]
     steps:

@@ -39,6 +39,6 @@
 # # sudo apt install cryfs
 
 
-
-apt install cryfs -y
-apt install encfs -y
+id 
+sudo apt install cryfs -y
+sudo apt install encfs -y

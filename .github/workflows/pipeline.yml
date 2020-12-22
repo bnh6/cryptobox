@@ -244,6 +244,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ needs.Create-Release.outputs.release_url }}
-          asset_path: release/${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
+          asset_path: release/${{ PRODUCT_NAME }}-${{ PRODUCT_VERSION }}-${{ matrix.flavour }}
           asset_name: ${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
           asset_content_type: application/zip

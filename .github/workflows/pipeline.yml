@@ -36,17 +36,17 @@ jobs:
         id: npm-cache
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
-
+      
       - uses: actions/cache@v2
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
           key: ${{ runner.os }}_${{ matrix.node-version }}_${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{  matrix.os }}_${{ matrix.node-version }}
-
+      
       - name: installing dependencies
         run: npm install
-
+      
   # CodeQualiy:
   #   runs-on: macos-latest
   #   if: false
@@ -66,15 +66,8 @@ jobs:
       max-parallel: 12
       matrix:
         # os: [macos-latest, macos-11.0, windows-latest]
-        os:
-          [
-            macos-latest,
-            macos-11.0,
-            ubuntu-latest,
-            ubuntu-20.04,
-            ubuntu-16.04,
-            windows-latest,
-          ]
+        os: [macos-latest, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest] # macos-11.0 does not seem to work on github :(
+        # os: [macos-latest, macos-11.0, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest]
         # based on : https://nodejs.org/en/about/releases/
         node-version: [14.x, 15.x, 16.x]
     steps:
@@ -124,6 +117,7 @@ jobs:
       - name: executing tests
         run: npm run test
 
+
   Travis-Testing:
     runs-on: ubuntu-latest
     if: false
@@ -142,7 +136,8 @@ jobs:
           cd ./build
           pip install -r requirements.txt
           python3 travis.py
-
+  
+  
   Building-Artefacts:
     if: true
     runs-on: ${{ matrix.os }}
@@ -168,6 +163,7 @@ jobs:
           # path: release/**/[Cc]rypto[Bb]ox.*
           # path: release/cryptobox*.*(dmg|app|deb|rpm|tar.gz)
           path: release/cryptobox*
+
 
   Create-Release:
     runs-on: ubuntu-latest
@@ -201,7 +197,8 @@ jobs:
             If Pull Request:
             Head (PR)   = ${{ github.head_ref }}
             Base (PR)   = ${{ github.base_ref }}
-
+  
+  
   Upload-Release:
     if: true
     runs-on: ubuntu-latest
@@ -228,7 +225,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: release
-
+      
       - name: setting name and version variables
         run: |
           echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")

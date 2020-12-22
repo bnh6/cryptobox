@@ -211,16 +211,16 @@ jobs:
       matrix:
         flavour:
           [
-            "cryptobox-0.0.1-linux-amd64.deb",
-            "cryptobox-0.0.1-linux-i386.deb",
-            "cryptobox-0.0.1-linux-i686.rpm",
-            "cryptobox-0.0.1-linux-ia32.tar.gz",
-            "cryptobox-0.0.1-linux-x64.tar.gz",
-            "cryptobox-0.0.1-linux-x86_64.rpm",
-            "cryptobox-0.0.1-mac.dmg",
-            "cryptobox-0.0.1-win-ia32.msi",
-            "cryptobox-0.0.1-win-x64.msi",
-            "cryptobox-0.0.1-win.exe"
+            "linux-amd64.deb",
+            "linux-i386.deb",
+            "linux-i686.rpm",
+            "linux-x86_64.rpm",
+            "linux-ia32.tar.gz",
+            "linux-x64.tar.gz",
+            "mac.dmg",
+            "win-ia32.msi",
+            "win-x64.msi",
+            "win.exe"
           ]
     steps:
       # - name: download ${{ matrix.flavour }}
@@ -233,6 +233,7 @@ jobs:
         run: |
           echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
           echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+          # echo ::set-env ARTEFACT=$(${PRODUCT_NAME}-${PRODUCT_VERSION})
           ls -larthR ./release
 
       # - name: uploding ${{ matrix.flavour }}
@@ -240,6 +241,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ needs.Create-Release.outputs.release_url }}
-          asset_path: release/${{ matrix.flavour }}
+          asset_path: release/${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
           asset_name: ${{ matrix.flavour }}
           asset_content_type: application/zip

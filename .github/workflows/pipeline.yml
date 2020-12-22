@@ -205,6 +205,8 @@ jobs:
     needs: [Create-Release]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PRODUCT_NAME: "not-set"
+      PRODUCT_VERSION: "not-set"
     strategy:
       fail-fast: false # upload files independently
       max-parallel: 10

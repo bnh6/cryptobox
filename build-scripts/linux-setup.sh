@@ -37,3 +37,8 @@
 # # gpg --list-keys
 # # pass init -p /tmp # testing random folder
 # # sudo apt install cryfs
+
+
+
+apt install cryfs -y
+apt install encfs -y

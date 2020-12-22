@@ -48,6 +48,7 @@
             {
               "target": "portable",
               "arch": [ "x64", "ia32" ],
+              "artifactName": "${productName}-${version}-${os}.${ext}",
             },
             {
                 "target": "msi",

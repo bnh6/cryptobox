@@ -15,7 +15,13 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
 
     public getUNmountCommand(volume: Volume): string {
         //cryfs expects the decrypted folder, and give an error on the encrypted one.
-        return `cryfs-unmount "${volume.decryptedFolderPath}" `;
+        let command = `cryfs-unmount "${volume.decryptedFolderPath}" `;
+
+        if (os.platform() === "linux") { // TODO, investigate why ubuntu is returning "cryfs-unmount: not found"
+            command = `fusermount -u "${volume.decryptedFolderPath}"`;
+        }
+
+        return command;
     }
 
     public getMountCommand(volume: Volume, password: String): string {

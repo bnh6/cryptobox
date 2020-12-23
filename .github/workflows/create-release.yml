@@ -1,0 +1,27 @@
+# https://levelup.gitconnected.com/how-to-manually-trigger-a-github-actions-workflow-4712542f1960
+
+name: Build Release for a commit
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: commit hash
+        required: true
+      draft:
+        description: is it a draft?
+        default: true
+        required: true
+      pre-release:
+        description: is it pre-release
+        default: true
+        required: true
+jobs:
+  testing-input:
+    name: printing the inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: printing inputs
+        run: |
+          echo " commit ${{ github.event.inputs.commit }} "
+          echo " draft ${{ github.event.inputs.draft }} "
+          echo " pre-release ${{ github.event.inputs.pre-release }} "

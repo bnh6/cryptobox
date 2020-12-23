@@ -11,20 +11,20 @@ on:
         description: is it a draft?
         default: "true"
         required: true
-      pre-release:
-        description: is it pre-release
-        default: "false"
-        required: true
+#       pre-release:
+#         description: is it pre-release
+#         default: "false"
+#         required: true
 jobs:
-  echoing-input:
-    name: printing the inputs
-    runs-on: ubuntu-latest
-    steps:
-      - name: printing inputs
-        run: |
-          echo " commit ${{ github.event.inputs.ref }} "
-          echo " draft ${{ github.event.inputs.draft }} "
-          echo " pre-release ${{ github.event.inputs.pre-release }} "
+#   echoing-input:
+#     name: printing the inputs
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: printing inputs
+#         run: |
+#           echo " commit ${{ github.event.inputs.ref }} "
+#           echo " draft ${{ github.event.inputs.draft }} "
+#           echo " pre-release ${{ github.event.inputs.pre-release }} "
 
   Building-Artefacts:
     runs-on: ${{ matrix.os }}

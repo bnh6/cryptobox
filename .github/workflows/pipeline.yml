@@ -11,10 +11,10 @@ on:
         description: is it a draft?
         default: "true"
         required: true
-#       pre-release:
-#         description: is it pre-release
-#         default: "false"
-#         required: true
+      release-name:
+        description: Release Name
+        default: "${{ github.run_number }}"
+        required: true
 jobs:
 #   echoing-input:
 #     name: printing the inputs
@@ -88,6 +88,10 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
+      
       - name: download distributions
         uses: actions/download-artifact@v1
         with:

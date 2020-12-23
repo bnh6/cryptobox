@@ -240,7 +240,7 @@ jobs:
           #   assets+=("--attach" "$asset")
           # done
           # hub release edit -m "" "${assets[@]}"" "${GITHUB_REF##*/}"
-           hub release edit -m "" --include ./release/* "${GITHUB_REF##*/}"
+           hub release edit -m "" --include release/* "${GITHUB_REF##*/}"
 
       # - name: setting name and version variables
       #   run: |

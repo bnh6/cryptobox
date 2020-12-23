@@ -67,7 +67,7 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           draft: ${{ github.event.inputs.draft }}
-          prerelease: ${{ github.event.inputs.pre-release }}
+#           prerelease: ${{ github.event.inputs.pre-release }}
           body: |
             Workflow    = ${{ github.workflow }}
             JobId       = ${{ github.job }}

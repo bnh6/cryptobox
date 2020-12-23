@@ -25,13 +25,6 @@ jobs:
           echo " commit ${{ github.event.inputs.ref }} "
           echo " draft ${{ github.event.inputs.draft }} "
           echo " pre-release ${{ github.event.inputs.pre-release }} "
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout ${{ github.event.inputs.ref }}
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.ref }}
 
   Building-Artefacts:
     runs-on: ${{ matrix.os }}

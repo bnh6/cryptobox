@@ -1,6 +1,6 @@
 # https://levelup.gitconnected.com/how-to-manually-trigger-a-github-actions-workflow-4712542f1960
 
-name: CryptoBox Releases
+name: Create a Release
 on:
   workflow_dispatch:
     inputs:
@@ -58,6 +58,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       release_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}  
     steps:
       - name: Create release
         id: create_release
@@ -95,6 +96,7 @@ jobs:
           set -x
           ls -lartH ./release
           echo "RELEASE URL: ${{ needs.Create-Release.outputs.release_url }}"
+          echo "RELEASE ID: ${{ needs.Create-Release.outputs.release_id }}"
           assets=()
           for asset in ./release/*; do
             echo "adding $asset"

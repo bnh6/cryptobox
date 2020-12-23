@@ -25,10 +25,104 @@ jobs:
           echo " commit ${{ github.event.inputs.ref }} "
           echo " draft ${{ github.event.inputs.draft }} "
           echo " pre-release ${{ github.event.inputs.pre-release }} "
-  checkingout:
+  checkout:
     runs-on: ubuntu-latest
     steps:
       - name: checkout ${{ github.event.inputs.ref }}
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
+
+  Building-Artefacts:
+    if: true
+    runs-on: ${{ matrix.os }}
+    # needs: [PrepareEnvironment]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: installing deps and building code
+        run: npm ci && npm build
+
+      - name: building distributions
+        run: npm run make
+
+      - name: uploading artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release/cryptobox*
+
+  Create-Release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      release_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: ${{ github.event.inputs.draft }}
+          prerelease: ${{ github.event.inputs.pre-release }}
+          body: |
+            Workflow    = ${{ github.workflow }}
+            JobId       = ${{ github.job }}
+            Actor       = ${{ github.actor }}
+            Repo        = ${{ github.repository }}
+            Event       = ${{ github.event_name }}
+            Commit      = ${{ github.sha }}
+            Ref         = ${{ github.ref }}
+            If Pull Request:
+            Head (PR)   = ${{ github.head_ref }}
+            Base (PR)   = ${{ github.base_ref }}
+
+  Upload-Release:
+    if: true
+    runs-on: ubuntu-latest
+    needs: [Create-Release]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: download distributions
+        uses: actions/download-artifact@v1
+        with:
+          name: release
+      # https://gist.github.com/superbrothers/af84a2f8af394a62352e06537a640746
+      - name: uploading assets
+        run: |
+          set -x
+          ls -lartH ./release
+          echo "RELEASE URL: ${{ needs.Create-Release.outputs.release_url }}"
+          assets=()
+          for asset in ./release/*; do
+            echo "adding $asset"
+            assets+=("--attach" "$asset")
+          done
+          hub release edit -m "" "${assets[@]}" "${{ github.run_number }}"
+          #  hub release edit -m "" --include release/* "${{ github.run_number }}"
+
+      # - name: setting name and version variables
+      #   run: |
+      #     echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
+      #     echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+      #     echo ::set-env ARTEFACT=$(${PRODUCT_NAME}-${PRODUCT_VERSION}-${{ matrix.flavour }})
+      #     echo "ARTEFAC"=${ARTEFACT}
+      #     ls -larthR ./release
+
+      # # - name: uploding ${{ matrix.flavour }}
+      # - name: upload ${{ matrix.flavour }} to release
+      #   uses: actions/upload-release-asset@v1
+      #   with:
+      #     upload_url: ${{ needs.Create-Release.outputs.release_url }}
+      #     asset_path: release/${{ PRODUCT_NAME }}-${{ PRODUCT_VERSION }}-${{ matrix.flavour }}
+      #     asset_name: ${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
+      #     asset_content_type: application/zip

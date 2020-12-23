@@ -31,4 +31,4 @@ jobs:
       - name: checkout ${{ github.event.inputs.ref }}
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.ref }} "
+          ref: ${{ github.event.inputs.ref }}

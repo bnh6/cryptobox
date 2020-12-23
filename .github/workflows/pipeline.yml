@@ -1,4 +1,4 @@
-name: Create a Release
+name: Create a Release "${{ github.run_number }}"
 on:
   workflow_dispatch:
     inputs:
@@ -56,6 +56,7 @@ jobs:
     outputs:
       release_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}  
+      release_tag: "${{ github.run_number }}"
     steps:
       - name: Create release
         id: create_release
@@ -103,4 +104,4 @@ jobs:
             echo "adding $asset"
             assets+=("--attach" "$asset")
           done
-          hub release edit -m "" "${assets[@]}" "${{ github.run_number }}"
+          hub release edit -m "" "${assets[@]}" ${{ needs.Create-Release.outputs.tag }}"

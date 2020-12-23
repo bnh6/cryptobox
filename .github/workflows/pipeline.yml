@@ -1,149 +1,108 @@
-name: "Execute Tests"
-
+name: Create a Release
 on:
-  push:
-    branches:
-      - "*"
-  pull_request:
-    branches:
-      - "*"
   workflow_dispatch:
     inputs:
       ref:
         description: the branch, tag or SHA to checkout
         required: true
-
-env:
-  SCRIPTS: ./build-scripts
+      draft:
+        description: is it a draft?
+        default: "true"
+        required: true
 
 jobs:
-  PrepareEnvironment:
-    if: false
-    runs-on: ${{matrix.os}}
-    strategy:
-      fail-fast: false
-      max-parallel: 10
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.ref }}
-      # - name: Setup node for ${{ matrix.target }}
-      #   uses: actions/setup-node@v2-beta
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      - name: getting npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+  #   echoing-input:
+  #     name: printing the inputs
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: printing inputs
+  #         run: |
+  #           echo " commit ${{ github.event.inputs.ref }} "
+  #           echo " draft ${{ github.event.inputs.draft }} "
+  #           echo " pre-release ${{ github.event.inputs.pre-release }} "
 
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}_${{ matrix.node-version }}_${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{  matrix.os }}_${{ matrix.node-version }}
-
-      - name: installing dependencies
-        run: npm install
-
-  # CodeQualiy:
-  #   runs-on: macos-latest
-  #   if: false
-  #   steps:
-  #     - name: Linting => ${{ github.ref }}
-  #       run: |
-  #         set -xeuo pipefail
-  #         echo "linting the app"
-  #         npm ci
-  #         npm run lint
-  GitHub-Testing:
-    if: true
+  Building-Artefacts:
     runs-on: ${{ matrix.os }}
-    # needs: [PrepareEnvironment]
     strategy:
       fail-fast: false
-      max-parallel: 12
       matrix:
-        # os: [macos-latest, macos-11.0, windows-latest]
-        os: [
-            macos-latest,
-            ubuntu-latest,
-            ubuntu-20.04,
-            ubuntu-16.04,
-            windows-latest,
-          ] # macos-11.0 does not seem to work on github :(
-        # os: [macos-latest, macos-11.0, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest]
-        # based on : https://nodejs.org/en/about/releases/
-        node-version: [14.x, 15.x, 16.x]
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    #         os: [macos-latest]
+
     steps:
+      #       - name: installing deps and building code
+      #         run: mkdir release && echo test1 > ./release/cryptobox-1 && echo test2 > ./release/cryptobox-2 && echo test3 > ./release/cryptobox-3
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
 
-      - name: setup Linux environment
-        if: startsWith(matrix.os, 'ubuntu')
-        run: chmod +x ${SCRIPTS}/linux-setup.sh && ${SCRIPTS}/linux-setup.sh
-
-      - name: setup MAC environment
-        if: startsWith(matrix.os, 'macos')
-        run: chmod +x ${SCRIPTS}/mac-setup.sh && ${SCRIPTS}/mac-setup.sh
-
-      - name: setup Windows environment
-        if: startsWith(matrix.os, 'windows')
-        run: |
-          $ErrorActionPreference='Stop'
-          choco feature disable -n=showDownloadProgress
-          #  wget https://github.com/dokan-dev/dokany/releases/download/v1.2.2.1000/DokanSetup_redist.exe -OutFile DokanSetup_redist.exe
-          # .\DokanSetup_redist.exe /passive /norestart
-          # wget https://download.visualstudio.microsoft.com/download/pr/11100229/78c1e864d806e36f6035d80a0e80399e/VC_redist.x86.exe -OutFile VC_redist.x86.exe
-          # .\VC_redist.x86.exe /passive /norestart
-          curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-          Start-Process msiexec.exe -Wait -ArgumentList '/I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”’
-          curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I dokan64.msi /quiet /qn /norestart /L*V "dokan.log"'
-          curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I cryfs64.msi /quiet /qn /norestart /L*V "cryfs.log"'
-          echo "::group::Printing logs"
-          type *.log
-          echo "::endgroup::"
-          copy 'C:\Program Files\CryFS\0.10.2\bin\*' 'C:\Windows' 
-          echo "C:\Program Files\CryFS\0.10.2\bin\" >> $GITHUB_PATH
-          setx /M CRYFS_FRONTEND "noninteractive"
-          echo "::group::installing encfs4win"
-          echo "::endgroup::"
-          choco install encfs4win --pre
-          echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
-          copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
-          encfs.exe --version
-          cryfs.exe --version
-          dir "C:\Program Files\dokan"
-
-      - name: installing deps and build code
+      - name: installing deps and building code
         run: npm ci && npm build
 
-      - name: executing tests
-        run: npm run test
+      - name: building distributions
+        run: npm run make
 
-  Travis-Testing:
+      - name: uploading artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release/cryptobox*
+
+  Create-Release:
     runs-on: ubuntu-latest
-    if: false
+    needs: [Building-Artefacts]
     env:
-      BRANCH_FULL: ${{ github.ref }}
-      TRAVIS_TOKEN: ${{ secrets.TRAVIS_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      release_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}
+      release_tag: ${{ github.run_number }}
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: ${{ github.event.inputs.draft }}
+          #           prerelease: ${{ github.event.inputs.pre-release }}
+          body: |
+            Workflow    = ${{ github.workflow }}
+            JobId       = ${{ github.job }}
+            Actor       = ${{ github.actor }}
+            Repo        = ${{ github.repository }}
+            Event       = ${{ github.event_name }}
+            Commit      = ${{ github.sha }}
+            Ref         = ${{ github.ref }}
+            If Pull Request:
+            Head (PR)   = ${{ github.head_ref }}
+            Base (PR)   = ${{ github.base_ref }}
+
+  Upload-Release:
+    runs-on: ubuntu-latest
+    needs: [Create-Release]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
-      - run: set -xeuo pipefail
-      - run: echo ::set-env name=BRANCH::$(basename $BRANCH_FULL)
-      # it requires the travis_token secret
-      # TODO transform this into github action (independent)
-      - name: Testing on Travis => ${{ github.ref }}
+
+      - name: download distributions
+        uses: actions/download-artifact@v1
+        with:
+          name: release
+      # https://gist.github.com/superbrothers/af84a2f8af394a62352e06537a640746
+      - name: uploading assets
         run: |
-          echo ${{ matrix.target }}
-          cd ./build
-          pip install -r requirements.txt
-          python3 travis.py
+          set -x
+          rm -rf ./release/*.blockmap
+          ls -lartH ./release
+          echo "RELEASE URL: ${{ needs.Create-Release.outputs.release_url }}"
+          echo "RELEASE ID: ${{ needs.Create-Release.outputs.release_id }}"
+          assets=()
+          for asset in ./release/*; do
+            echo "adding $asset"
+            assets+=("--attach" "$asset")
+          done
+          hub release edit -m "" "${assets[@]}" "${{ needs.Create-Release.outputs.tag }}"

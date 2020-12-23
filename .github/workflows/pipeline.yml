@@ -9,11 +9,11 @@ on:
         required: true
       draft:
         description: is it a draft?
-        default: true
+        default: "true"
         required: true
       pre-release:
         description: is it pre-release
-        default: false
+        default: "false"
         required: true
 jobs:
   echoing-input:

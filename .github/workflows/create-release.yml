@@ -1,27 +1,107 @@
-# https://levelup.gitconnected.com/how-to-manually-trigger-a-github-actions-workflow-4712542f1960
-
-name: Build Release for a commit
+name: Create a Release
 on:
   workflow_dispatch:
     inputs:
-      commit:
-        description: commit hash
+      ref:
+        description: the branch, tag or SHA to checkout
         required: true
       draft:
         description: is it a draft?
-        default: true
+        default: "true"
         required: true
-      pre-release:
-        description: is it pre-release
-        default: true
-        required: true
+
 jobs:
-  testing-input:
-    name: printing the inputs
-    runs-on: ubuntu-latest
+  #   echoing-input:
+  #     name: printing the inputs
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: printing inputs
+  #         run: |
+  #           echo " commit ${{ github.event.inputs.ref }} "
+  #           echo " draft ${{ github.event.inputs.draft }} "
+  #           echo " pre-release ${{ github.event.inputs.pre-release }} "
+
+  Building-Artefacts:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    #         os: [macos-latest]
+
     steps:
-      - name: printing inputs
+      #       - name: installing deps and building code
+      #         run: mkdir release && echo test1 > ./release/cryptobox-1 && echo test2 > ./release/cryptobox-2 && echo test3 > ./release/cryptobox-3
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: installing deps and building code
+        run: npm ci && npm build
+
+      - name: building distributions
+        run: npm run make
+
+      - name: uploading artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release/cryptobox*
+
+  Create-Release:
+    runs-on: ubuntu-latest
+    needs: [Building-Artefacts]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      release_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}
+      release_tag: "${{ github.run_number }}"
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: ${{ github.event.inputs.draft }}
+          #           prerelease: ${{ github.event.inputs.pre-release }}
+          body: |
+            Workflow    = ${{ github.workflow }}
+            JobId       = ${{ github.job }}
+            Actor       = ${{ github.actor }}
+            Repo        = ${{ github.repository }}
+            Event       = ${{ github.event_name }}
+            Commit      = ${{ github.sha }}
+            Ref         = ${{ github.ref }}
+            If Pull Request:
+            Head (PR)   = ${{ github.head_ref }}
+            Base (PR)   = ${{ github.base_ref }}
+
+  Upload-Release:
+    runs-on: ubuntu-latest
+    needs: [Create-Release]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: download distributions
+        uses: actions/download-artifact@v1
+        with:
+          name: release
+      # https://gist.github.com/superbrothers/af84a2f8af394a62352e06537a640746
+      - name: uploading assets
         run: |
-          echo " commit ${{ github.event.inputs.commit }} "
-          echo " draft ${{ github.event.inputs.draft }} "
-          echo " pre-release ${{ github.event.inputs.pre-release }} "
+          set -x
+          ls -lartH ./release
+          echo "RELEASE URL: ${{ needs.Create-Release.outputs.release_url }}"
+          echo "RELEASE ID: ${{ needs.Create-Release.outputs.release_id }}"
+          assets=()
+          for asset in ./release/*; do
+            echo "adding $asset"
+            assets+=("--attach" "$asset")
+          done
+          hub release edit -m "" "${assets[@]}" ${{ needs.Create-Release.outputs.tag }}"

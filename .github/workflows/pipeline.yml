@@ -11,10 +11,7 @@ on:
         description: is it a draft?
         default: "true"
         required: true
-      release-name:
-        description: Release Name
-        default: "${{ github.run_number }}"
-        required: true
+ 
 jobs:
 #   echoing-input:
 #     name: printing the inputs

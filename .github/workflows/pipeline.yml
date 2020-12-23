@@ -230,20 +230,26 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: release
-      
-      - name: setting name and version variables
-        run: |
-          echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
-          echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
-          echo ::set-env ARTEFACT=$(${PRODUCT_NAME}-${PRODUCT_VERSION}-${{ matrix.flavour }})
-          echo "ARTEFAC"=${ARTEFACT}
-          ls -larthR ./release
 
-      # - name: uploding ${{ matrix.flavour }}
-      - name: upload ${{ matrix.flavour }} to release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ needs.Create-Release.outputs.release_url }}
-          asset_path: release/${{ PRODUCT_NAME }}-${{ PRODUCT_VERSION }}-${{ matrix.flavour }}
-          asset_name: ${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
-          asset_content_type: application/zip
+      - name: uploading assets
+      - run: |
+        set -x
+        sudo apt install hub -y
+        hub release edit -m "" --include release/* "${GITHUB_REF##*/}"
+      
+      # - name: setting name and version variables
+      #   run: |
+      #     echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
+      #     echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
+      #     echo ::set-env ARTEFACT=$(${PRODUCT_NAME}-${PRODUCT_VERSION}-${{ matrix.flavour }})
+      #     echo "ARTEFAC"=${ARTEFACT}
+      #     ls -larthR ./release
+
+      # # - name: uploding ${{ matrix.flavour }}
+      # - name: upload ${{ matrix.flavour }} to release
+      #   uses: actions/upload-release-asset@v1
+      #   with:
+      #     upload_url: ${{ needs.Create-Release.outputs.release_url }}
+      #     asset_path: release/${{ PRODUCT_NAME }}-${{ PRODUCT_VERSION }}-${{ matrix.flavour }}
+      #     asset_name: ${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
+      #     asset_content_type: application/zip

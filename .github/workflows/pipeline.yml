@@ -9,17 +9,17 @@ on:
         description: is it a draft?
         default: "true"
         required: true
- 
+
 jobs:
-#   echoing-input:
-#     name: printing the inputs
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: printing inputs
-#         run: |
-#           echo " commit ${{ github.event.inputs.ref }} "
-#           echo " draft ${{ github.event.inputs.draft }} "
-#           echo " pre-release ${{ github.event.inputs.pre-release }} "
+  #   echoing-input:
+  #     name: printing the inputs
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: printing inputs
+  #         run: |
+  #           echo " commit ${{ github.event.inputs.ref }} "
+  #           echo " draft ${{ github.event.inputs.draft }} "
+  #           echo " pre-release ${{ github.event.inputs.pre-release }} "
 
   Building-Artefacts:
     runs-on: ${{ matrix.os }}
@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-#         os: [macos-latest]
+    #         os: [macos-latest]
 
     steps:
-#       - name: installing deps and building code
-#         run: mkdir release && echo test1 > ./release/cryptobox-1 && echo test2 > ./release/cryptobox-2 && echo test3 > ./release/cryptobox-3
+      #       - name: installing deps and building code
+      #         run: mkdir release && echo test1 > ./release/cryptobox-1 && echo test2 > ./release/cryptobox-2 && echo test3 > ./release/cryptobox-3
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
@@ -55,8 +55,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       release_url: ${{ steps.create_release.outputs.upload_url }}
-      release_id: ${{ steps.create_release.outputs.id }}  
-      release_tag: "${{ github.run_number }}"
+      release_id: ${{ steps.create_release.outputs.id }}
+      release_tag: ${{ github.run_number }}
     steps:
       - name: Create release
         id: create_release
@@ -65,7 +65,7 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           draft: ${{ github.event.inputs.draft }}
-#           prerelease: ${{ github.event.inputs.pre-release }}
+          #           prerelease: ${{ github.event.inputs.pre-release }}
           body: |
             Workflow    = ${{ github.workflow }}
             JobId       = ${{ github.job }}
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
-      
+
       - name: download distributions
         uses: actions/download-artifact@v1
         with:
@@ -96,6 +96,7 @@ jobs:
       - name: uploading assets
         run: |
           set -x
+          rm -rf ./release/*.blockmap
           ls -lartH ./release
           echo "RELEASE URL: ${{ needs.Create-Release.outputs.release_url }}"
           echo "RELEASE ID: ${{ needs.Create-Release.outputs.release_id }}"

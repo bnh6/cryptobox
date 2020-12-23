@@ -34,7 +34,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
 
   Building-Artefacts:
-    if: true
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -86,7 +85,6 @@ jobs:
             Base (PR)   = ${{ github.base_ref }}
 
   Upload-Release:
-    if: true
     runs-on: ubuntu-latest
     needs: [Create-Release]
     env:
@@ -108,21 +106,3 @@ jobs:
             assets+=("--attach" "$asset")
           done
           hub release edit -m "" "${assets[@]}" "${{ github.run_number }}"
-          #  hub release edit -m "" --include release/* "${{ github.run_number }}"
-
-      # - name: setting name and version variables
-      #   run: |
-      #     echo ::set-env PRODUCT_NAME=$(node -p "require('./package.json').productName")
-      #     echo ::set-env PRODUCT_VERSION=$(node -p "require('./package.json').productName")
-      #     echo ::set-env ARTEFACT=$(${PRODUCT_NAME}-${PRODUCT_VERSION}-${{ matrix.flavour }})
-      #     echo "ARTEFAC"=${ARTEFACT}
-      #     ls -larthR ./release
-
-      # # - name: uploding ${{ matrix.flavour }}
-      # - name: upload ${{ matrix.flavour }} to release
-      #   uses: actions/upload-release-asset@v1
-      #   with:
-      #     upload_url: ${{ needs.Create-Release.outputs.release_url }}
-      #     asset_path: release/${{ PRODUCT_NAME }}-${{ PRODUCT_VERSION }}-${{ matrix.flavour }}
-      #     asset_name: ${{PRODUCT_NAME}}-${{PRODUCT_VERSION}}-${{ matrix.flavour }}
-      #     asset_content_type: application/zip

@@ -207,25 +207,23 @@ jobs:
     needs: [Create-Release]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PRODUCT_NAME: "not-set"
-      PRODUCT_VERSION: "not-set"
-    strategy:
-      fail-fast: false # upload files independently
-      max-parallel: 10
-      matrix:
-        flavour:
-          [
-            "linux-amd64.deb",
-            "linux-i386.deb",
-            "linux-i686.rpm",
-            "linux-x86_64.rpm",
-            "linux-ia32.tar.gz",
-            "linux-x64.tar.gz",
-            "mac.dmg",
-            "win-ia32.msi",
-            "win-x64.msi",
-            "win.exe",
-          ]
+    # strategy:
+    #   fail-fast: false # upload files independently
+    #   max-parallel: 10
+    #   matrix:
+    #     flavour:
+    #       [
+    #         "linux-amd64.deb",
+    #         "linux-i386.deb",
+    #         "linux-i686.rpm",
+    #         "linux-x86_64.rpm",
+    #         "linux-ia32.tar.gz",
+    #         "linux-x64.tar.gz",
+    #         "mac.dmg",
+    #         "win-ia32.msi",
+    #         "win-x64.msi",
+    #         "win.exe",
+    #       ]
     steps:
       # - name: download ${{ matrix.flavour }}
       - name: download distributions

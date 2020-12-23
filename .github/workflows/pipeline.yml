@@ -35,21 +35,23 @@ jobs:
         os: [macos-latest]
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.ref }}
-
       - name: installing deps and building code
-        run: npm ci && npm build
+        run: mkdir release && echo test1 > ./release/test1 && echo test2 > ./release/test2 && echo test3 > ./release/test3
+#       - uses: actions/checkout@v2
+#         with:
+#           ref: ${{ github.event.inputs.ref }}
 
-      - name: building distributions
-        run: npm run make
+#       - name: installing deps and building code
+#         run: npm ci && npm build
 
-      - name: uploading artefacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: release
-          path: release/cryptobox*
+#       - name: building distributions
+#         run: npm run make
+
+#       - name: uploading artefacts
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: release
+#           path: release/cryptobox*
 
   Create-Release:
     runs-on: ubuntu-latest

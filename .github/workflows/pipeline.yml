@@ -1,4 +1,4 @@
-name: Create a Release "${{ github.run_number }}"
+name: Create a Release
 on:
   workflow_dispatch:
     inputs:

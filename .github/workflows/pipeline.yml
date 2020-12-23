@@ -47,11 +47,11 @@ jobs:
 #       - name: building distributions
 #         run: npm run make
 
-#       - name: uploading artefacts
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: release
-#           path: release/cryptobox*
+      - name: uploading artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release/cryptobox*
 
   Create-Release:
     runs-on: ubuntu-latest

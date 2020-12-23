@@ -2,7 +2,7 @@ name: removing old artifacts
 on:
   schedule:
     # Every hour
-    - cron: "0 * * * *"
+    - cron: "6 * * * *"
 
 jobs:
   remove-old-artifacts:

@@ -21,8 +21,8 @@ git push --delete origin $(hub release --include-drafts --format "%T ")
 
 
 for url in $(hub api /repos/bnh6/cryptobox/actions/artifacts | jq -r '.artifacts[].url' | sed -e "s/https:\/\/api.github.com//g"); do
-    echo "\n$url" && hub api -X DELETE  ${url}
-    sleep 2 # avoid rate limit
+    echo "\n$url";
+    hub api --obey-ratelimit -X DELETE  ${url}
 done
 # for id in $(hub api /repos/bnh6/cryptobox/actions/artifacts | jq '.artifacts[].id '); do
 # echo "\n/repos/bnh6/actions/artifacts/$id"

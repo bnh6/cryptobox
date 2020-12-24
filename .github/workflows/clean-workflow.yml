@@ -28,7 +28,7 @@ jobs:
         run: |
           WORKFLOW=${{ github.event.inputs.WORKFLOW }}
 
-          if [[ WORKFLOW ]]; then
+          if [[ WORKFLOW ]] && [[ $WORKFLOW != "" ]]; then
             URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
           else
               URL="/repos/bnh6/cryptobox/actions/runs"

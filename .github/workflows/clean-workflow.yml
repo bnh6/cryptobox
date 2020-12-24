@@ -10,14 +10,13 @@ on:
       WORKFLOW:
         description: use a specific workflow (filename)?
         required: false
-      
 
 jobs:
   clean-workflow:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
     steps:
       - name: checkout code
         uses: actions/checkout@v2
@@ -27,7 +26,7 @@ jobs:
 
       - name: execute cleaning job
         run: |
-          WORKFLOW = 
+          WORKFLOW=${{ github.event.inputs.WORKFLOW }}
 
           if [[ -z WORKFLOW ]]; then
             URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
@@ -54,4 +53,3 @@ jobs:
               TOTAL=$(hub api -X GET "${URL}" | jq " .total_count ")
               echo "UPDATED TOTAL => $TOTAL"
           done
-

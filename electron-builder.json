@@ -1,38 +1,56 @@
 {
     "appId": "dev.bnh6.cryptobox",
     "productName": "cryptobox",
-    "copyright": "Copyright © 2020 ${author}",
+    "copyright": "Copyright © 2021 ${author}",
     "directories": {
         "output": "release"
     },
+    "artifactName":"${productName}-${version}-${os}-${arch}.${ext}",
+
     "mac": {
         "icon": "static/resources/cryptobox.icns",
         "target": ["dmg"],
         "type": "distribution",
         "category":"Utilities",
-        "darkModeSupport": "true"
-    },
-    "linux":{
-        "icon": "static/resources/cryptobox.png",
-        "category": "Utility",
-        "target": ["deb","rpm", "tar.gz"]
+        "darkModeSupport": "true",
     },
     "dmg": {
         "backgroundColor": "#3f4247",
         "title": "${productName} ${version}",
-        "icon": "static/resources/cloud-enc.icns"
+        "icon": "static/resources/cryptobox.icns"
+    },
+    "linux":{
+        "icon": "static/resources/cryptobox.png",
+        "category": "Utility",
+        "synopsis": "bla bla",
+        "description": "bla bla bla bla bla bla",
+        "target": [
+            {
+                "target": "deb",
+                "arch": [ "x64", "ia32" ],
+            },
+            {
+                "target": "rpm",
+                "arch": [ "x64", "ia32" ],
+            },
+            {
+                "target": "tar.gz",
+                "arch": [ "x64", "ia32" ]
+            }
+        ]
     },
     "win": {
         "icon": "static/resources/cryptobox.ico",
         "legalTrademarks": "Cryptobox by BNH6",
+        "publisherName": "BNH6",
         "target": [
             {
               "target": "portable",
-              "arch": [ "x64", "ia32" ]
+              "arch": [ "x64", "ia32" ],
             },
             {
                 "target": "msi",
-                "arch": [ "x64", "ia32" ]
+                "arch": [ "x64", "ia32" ],
             }
         ]
     }

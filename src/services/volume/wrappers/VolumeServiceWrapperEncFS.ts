@@ -47,9 +47,10 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
                 break;
 
             case "linux":
-                command = `encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
+                command = `echo '${password}' | \
+                 encfs '${volume.encryptedFolderPath}' '${volume.decryptedFolderPath}' \
                 --standard \
-                --stdinpass='${password}' \
+                --stdinpass \
                 --nocache \
                 --require-macs \
                 -ohard_remove`;

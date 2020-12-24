@@ -1,6 +1,6 @@
 import VolumeService from "../services/volume/VolumeService";
 import { ErrorType, ServiceError } from "../services/ServiceError";
-import PasswordService from "../services/password/PasswordService";
+// import PasswordService from "../services/password/PasswordService";
 import { Volume } from "../entities/Volume";
 import { expect } from "chai";
 import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceWrapperFactory";
@@ -22,7 +22,7 @@ volumeEncryptionImplementations.forEach(e => {
     const volumeImplementationEnum: VolumeEncryptionImpl = (<any>VolumeEncryptionImpl)[e];
     const implementationName = VolumeEncryptionImpl[volumeImplementationEnum];
 
-    const passwordService = new PasswordService();
+    // const passwordService = new PasswordService();
     const volumeService = new VolumeService(volumeImplementationEnum);
 
     const iddle_umount_time = 2; // time in minutes to unmount device on inactivity
@@ -51,12 +51,12 @@ volumeEncryptionImplementations.forEach(e => {
                 volumeService.createDirectory(volume.encryptedFolderPath);
                 if (os.platform() !== "win32")
                     volumeService.createDirectory(volume.decryptedFolderPath);
-                try {
-                    await passwordService.savePassword(password, volume);
-                } catch (error) {
-                    console.error("Error to create the password, aborting ...");
-                    throw error;
-                }
+                // try {
+                //     await passwordService.savePassword(password, volume);
+                // } catch (error) {
+                //     console.error("Error to create the password, aborting ...");
+                //     throw error;
+                // }
             });
 
             it(`[${implementationName}] is the impmementation method supported`, () => {
@@ -163,12 +163,12 @@ volumeEncryptionImplementations.forEach(e => {
             after(async () => {
                 volumeService.deleteDirectory(volume.decryptedFolderPath);
                 volumeService.deleteDirectory(volume.encryptedFolderPath);
-                try {
-                    await passwordService.deletePassword(volume);
-                } catch (error) {
-                    console.error("Error to delete the password, aborting ...");
-                    throw error;
-                }
+                // try {
+                //     await passwordService.deletePassword(volume);
+                // } catch (error) {
+                //     console.error("Error to delete the password, aborting ...");
+                //     throw error;
+                // }
             });
 
         });

@@ -17,40 +17,41 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
 
-    - name: checkout code
-      uses: actions/checkout@v2
+      - name: prepare env
+        run: sudo apt install -y jq
 
-    - name: prepare env
-      run: sudo apt install -y jq
+      - name: execute cleaning job
+        run: |
+          WORKFLOW = 
 
-    - name: execute cleaning job
-      run: |
-        WORKFLOW = 
+          if [[ -z WORKFLOW ]]; then
+            URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
+          else
+              URL="/repos/bnh6/cryptobox/actions/runs"
+          fi
+          echo "URL => $URL"
 
-        if [[ -z WORKFLOW ]]; then
-          URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
-        else
-            URL="/repos/bnh6/cryptobox/actions/runs"
-        fi
-        echo "URL => $URL"
+          # keep deleting while total is greater than first page size
+          PAGE_SIZE=${{ github.event.inputs.KEEP }}
+          PAGE_NUM=2
+          TOTAL=$(hub api -X GET "${URL}" | jq " .total_count ")
+          echo "PAGE_SIZE => $PAGE_SIZE"
+          echo "TOTAL => $TOTAL"
 
-        # keep deleting while total is greater than first page size
-        PAGE_SIZE=${{ github.event.inputs.KEEP }}
-        PAGE_NUM=2
-        TOTAL=$(hub api -X GET "${URL}" | jq " .total_count ")
-        echo "PAGE_SIZE => $PAGE_SIZE"
-        echo "TOTAL => $TOTAL"
+          while [ $TOTAL -gt $PAGE_SIZE ]; do
+              # delete runs for page 2
+              for id in $(hub api -X GET "$URL?per_page=${PAGE_SIZE}&page=${PAGE_NUM}" | jq -r '.workflow_runs[].id' ); do
+                  echo "deleting $id"
+                  hub api --obey-ratelimit -X DELETE /repos/bnh6/cryptobox/actions/runs/${id}
+              done
 
-        while [ $TOTAL -gt $PAGE_SIZE ]; do
-            # delete runs for page 2
-            for id in $(hub api -X GET "$URL?per_page=${PAGE_SIZE}&page=${PAGE_NUM}" | jq -r '.workflow_runs[].id' ); do
-                echo "deleting $id"
-                hub api --obey-ratelimit -X DELETE /repos/bnh6/cryptobox/actions/runs/${id}
-            done
-
-            # update the total
-            TOTAL=$(hub api -X GET "${URL}" | jq " .total_count ")
-            echo "UPDATED TOTAL => $TOTAL"
-        done
+              # update the total
+              TOTAL=$(hub api -X GET "${URL}" | jq " .total_count ")
+              echo "UPDATED TOTAL => $TOTAL"
+          done
 

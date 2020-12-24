@@ -28,6 +28,8 @@ jobs:
         run: |
           WORKFLOW=${{ github.event.inputs.WORKFLOW }}
 
+          # TODO take workflow from yml files and not input.
+
           if [[ WORKFLOW ]] && [[ $WORKFLOW != "" ]]; then
             URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
           else

@@ -26,9 +26,9 @@ jobs:
 
       - name: execute cleaning job
         run: |
-          WORKFLOW=${{ github.event.inputs.WORKFLOW }}
+          WORKFLOW=
 
-          if [[ -z WORKFLOW ]]; then
+          if [ -z WORKFLOW ]; then
             URL="/repos/bnh6/cryptobox/actions/workflows/${WORKFLOW}/runs"
           else
               URL="/repos/bnh6/cryptobox/actions/runs"

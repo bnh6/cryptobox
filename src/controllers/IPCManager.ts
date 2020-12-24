@@ -2,79 +2,80 @@ import { ipcMain } from "electron";
 import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
 import * as UIHelper from "./UIHelper";
+import PasswordService from "../services/password/PasswordService";
 
 import { MountVolume } from "../applications/MountVolume";
-import { PasswordApplication } from "../applications/PasswordApp";
 import { Volume } from "../entities/Volume";
-import { Password } from "../entities/Password";
 
 log.info("IPCManager loaded !");
 
 ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
-  log.info("[IPC_MAIN] native directoy dialog ...");
-  let directory = UIHelper.getDirectoryNatively();
-  if (directory) {
-    event.returnValue = directory[0];
-  } else {
-    event.returnValue = null;
-  }
+    log.info("[IPC_MAIN] native directoy dialog ...");
+    const directory = UIHelper.getDirectoryNatively();
+    if (directory) {
+        event.returnValue = directory[0];
+    } else {
+        event.returnValue = null;
+    }
 });
 
 ipcMain.on(constants.IPC_MOUNT_UNMOUNT, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
+    const source = arg["source"];
+    log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-  let volume = new Volume(source);
+    const volume = new Volume(source);
 
-  log.info("IPC mount/umount");
-  let mountApp = new MountVolume(volume);
-  event.returnValue = mountApp.mount();
+    log.info("IPC mount/umount");
+    const mountApp = new MountVolume(volume);
+    event.returnValue = mountApp.mount();
 });
 
 ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] isMounted for  "${source}"`);
-  let volume = new Volume(source);
+    const source = arg["source"];
+    log.info(`[IPC_MAIN] isMounted for  "${source}"`);
+    const volume = new Volume(source);
 
-  let mountApp = new MountVolume(volume);
-  event.returnValue = mountApp.isMount();
+    const mountApp = new MountVolume(volume);
+    event.returnValue = mountApp.isMount();
 });
 
-ipcMain.on(constants.IPC_SAVE_PASSWOD, (event, arg) => {
-  let source = arg["source"];
-  let passwordStr = arg["password"];
-  log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
+ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
+    const source = arg["source"];
+    const password = arg["password"];
+    // TODO validate parameters
+    log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
-  let volume = new Volume(source);
-  let password = new Password(passwordStr);
+    const volume = new Volume(source);
 
-  let passwdApp = new PasswordApplication();
-  passwdApp.savePassword(password, volume);
+    //TODO trycatch and async
+    const passwordservice = new PasswordService();
+    await passwordservice.savePassword(password, volume);
 
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
-ipcMain.on(constants.IPC_PASSWORD_EXIST, (event, arg) => {
-  let source = arg["source"];
-  log.info(`[IPC_MAIN] password exists for "${source}"`);
+ipcMain.on(constants.IPC_PASSWORD_EXIST, async (event, arg) => {
+    const source = arg["source"];
+    log.info(`[IPC_MAIN] password exists for "${source}"`);
+    const volume = new Volume(source);
 
-  let volume = new Volume(source);
+    //TODO trycatch and async
+    const passwordservice = new PasswordService();
+    const passwordExists = await passwordservice.passwordExist(volume);
+    if (!passwordExists) {
+        UIHelper.passwordPrompt(volume);
+    }
 
-  let passwdApp = new PasswordApplication();
-  if (!passwdApp.findPassword(volume)) {
-    UIHelper.passwordPrompt(volume);
-  }
-
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
 ipcMain.on(constants.IPC_NOTIFICATION, (event, arg) => {
-  let message = arg["message"];
-  log.info(`[IPC_MAIN] notification "${message}"`);
+    const message = arg["message"];
+    log.info(`[IPC_MAIN] notification "${message}"`);
 
-  UIHelper.notify(message);
+    UIHelper.notify(message);
 
-  event.returnValue = "success";
+    event.returnValue = "success";
 });
 
 // UIHelper.passwordPrompt( new Volume("/tmp/testfdd /sdf"));

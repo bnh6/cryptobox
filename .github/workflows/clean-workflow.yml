@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       KEEP:
-        description: number of worflows execution to keep
+        description: number of worflows exec to keep
         required: true
         default: 100
       WORKFLOW:

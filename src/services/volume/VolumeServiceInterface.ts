@@ -7,6 +7,7 @@ export default interface VolumeServiceInterface {
     isVolumeOperationsSupported(): boolean;
     createDirectory(path: string): void;
     deleteDirectory(path: string): void;
+    mountUnmount(volume: Volume): void;
 
     // eslint-disable-next-line semi
 }

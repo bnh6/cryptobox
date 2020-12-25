@@ -6,6 +6,7 @@ import VolumeServiceInterface from "./VolumeServiceInterface";
 import { ServiceError, ErrorType } from "../ServiceError";
 import VolumeServiceWrapperInterface from "./wrappers/VolumeServiceWrapperInterface";
 import { VolumeServiceWrapperFactory, VolumeEncryptionImpl } from "./wrappers/VolumeServiceWrapperFactory";
+import PasswordService from "../password/PasswordService";
 
 
 export default class VolumeService implements VolumeServiceInterface {
@@ -87,7 +88,24 @@ export default class VolumeService implements VolumeServiceInterface {
 
         } catch (error) {
             if (error instanceof ServiceError) throw error;
-            log.error(`Error to to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
+            log.error(`Error to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
+            throw new ServiceError(ErrorType.UnexpectedError);
+        }
+    }
+
+    async mountUnmount(volume: Volume) {
+        try {
+            const isMounted = this.isMounted(volume);
+            if (isMounted) {
+                this.unmount(volume);
+            } else {
+                const passwordService = new PasswordService;
+                const password = await passwordService.searchForPassword(volume);
+                this.mount(volume, password);
+            }
+        } catch (error) {
+            if (error instanceof ServiceError) throw error;
+            log.error(`Error to mount/unmount ${volume.encryptedFolderPath} => ${error}`);
             throw new ServiceError(ErrorType.UnexpectedError);
         }
     }

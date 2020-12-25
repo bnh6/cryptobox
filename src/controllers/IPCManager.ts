@@ -3,12 +3,19 @@ import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
 import * as UIHelper from "./UIHelper";
 import PasswordService from "../services/password/PasswordService";
-
-import { MountVolume } from "../applications/MountVolume";
+import { ServiceError, ErrorType } from "../services/ServiceError";
+import VolumeService from "../services/volume/VolumeService";
 import { Volume } from "../entities/Volume";
+import Message from "./Message";
+
+// import { MountVolume } from "../applications/MountVolume";
 
 log.info("IPCManager loaded !");
 
+/**
+ * opens a native dialogue to choose the directory, not all directories are available.
+ * returns a string representing the fullpath (directory)
+ */
 ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
     log.info("[IPC_MAIN] native directoy dialog ...");
     const directory = UIHelper.getDirectoryNatively();
@@ -19,15 +26,50 @@ ipcMain.on(constants.IPC_GET_DIRECTORY, (event) => {
     }
 });
 
-ipcMain.on(constants.IPC_MOUNT_UNMOUNT, (event, arg) => {
+
+/**
+ * takes a source folder and mount/unmount the directory.
+ * expects the password to exist for the directory
+ * returns a Message
+ */
+ipcMain.on(constants.IPC_MOUNT_UNMOUNT, async (event, arg) => {
     const source = arg["source"];
     log.info(`[IPC_MAIN] mount/umount for  "${source}"`);
 
     const volume = new Volume(source);
+    let msg = new Message();
 
-    log.info("IPC mount/umount");
-    const mountApp = new MountVolume(volume);
-    event.returnValue = mountApp.mount();
+    const passwordservice = new PasswordService();
+
+    try {
+        if (!passwordservice.passwordExist(volume)) {
+            msg.succeed = false;
+            msg.message = `try again when there is a password for ${volume.encryptedFolderPath}`;
+            event.returnValue = msg;
+        } else {
+            const volumeService = new VolumeService();
+            const wasMonted = await volumeService.isMounted(volume);
+            log.info(`${volume} is already mounted? = ${msg.isMounted}`);
+
+            volumeService.mountUnmount(volume)
+
+            // do we need have separated messages?
+            if (wasMonted) msg.message = "unmounted with success";
+            else msg.message = "mounted with success";
+
+            msg.isMounted = await volumeService.isMounted(volume);
+            msg.succeed = true;
+        }
+    } catch (error) {
+        if (error instanceof ServiceError) {
+
+        } else {
+
+        }
+    }
+
+
+    event.returnValue = msg;
 });
 
 ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {

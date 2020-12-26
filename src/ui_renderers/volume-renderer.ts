@@ -56,7 +56,7 @@ function checkIfPasswordExist(source: string): void {
 //         new window.Notification(constants.WINDOWS_TITLE, {
 //             body: message,
 //             silent: true,
-//             icon: path.join(__dirname, "../../static/resources/cloud-enc.png")
+//             icon: path.join(__dirname, "../../static/resources/cryptobox.png")
 //         });
 
 //     myNotification.onclick = () => {

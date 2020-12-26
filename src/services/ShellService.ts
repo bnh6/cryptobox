@@ -18,13 +18,13 @@ export function execute(
 
     // TODO handle error better
     if (result && result.error) {
-
+        
         // cropping stderr and stdout, cause sometimes it throws endless garbage
         // remember that commands may contain sensitive information ...
         log.error(`Suffered an error to execute the command [${command}], 
-        code=${result.status}, \
-        stdout[0-256]=[${result.stdout.subarray(0, 256)}], \ 
-        stderr[0-256]=[${result.stderr.subarray(0, 256)}], 
+        code=${result.status},
+        stdout[0-256]=[${result.stdout.subarray(0, 256)}],
+        stderr[0-256]=[${result.stderr.subarray(0, 256)}],
         error = [${result.error}]`);
         throw new ServiceError(ErrorType.UnexpectedError);
     }

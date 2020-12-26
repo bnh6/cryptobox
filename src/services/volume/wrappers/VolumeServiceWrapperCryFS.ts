@@ -2,8 +2,6 @@ import { Volume } from "../../../entities/Volume";
 import VolumeServiceWrapperInterface from "./VolumeServiceWrapperInterface";
 import { ServiceError, ErrorType } from "../../ServiceError";
 import * as os from "os";
-import * as shell from "../../../utils/ShellUtil";
-
 
 /**
  * this class gives the commands for CryFS and it handles OS specificity

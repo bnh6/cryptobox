@@ -13,7 +13,7 @@ export function notify(message: string) {
         // subtitle: "testing subtitle",
         body: message,
         silent: true,
-        icon: path.join(__dirname, "../../static/resources/cloud-enc.png"),
+        icon: path.join(__dirname, "../../static/resources/cryptobox.png"),
     });
 
     myNotification.show();
@@ -21,7 +21,7 @@ export function notify(message: string) {
     //     new window.Notification(constants.WINDOWS_TITLE, {
     //         body: message,
     //         silent: true,
-    //         icon: path.join(__dirname, "../../static/resources/cloud-enc.png")
+    //         icon: path.join(__dirname, "../../static/resources/cryptobox.png")
     //     });
 
     // myNotification.onclick = () => {

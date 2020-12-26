@@ -6,15 +6,10 @@ import { expect } from "chai";
 import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceWrapperFactory";
 import * as os from "os";
 import * as path from "path";
-import { fdatasyncSync } from "fs";
-
-// // disbaling logs for cleaner stdout (is this a good thing???)
-// import log from "../utils/LogUtil";
-// log.transports.file.level = false;
-// log.transports.console.level = false;
 
 
-// iterating over implementations
+
+// iterating over implementations (cryfs and encfs)
 const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k => !isNaN(Number(k)) === false);
 volumeEncryptionImplementations.forEach(e => {
 
@@ -30,16 +25,21 @@ volumeEncryptionImplementations.forEach(e => {
     // creating directories and passwords ...
     const password = Math.random().toString(36).substr(2, 16);
     const volume = new Volume(os.homedir() + path.sep + "CRYPTOBOX_ENC" + Math.random().toString(12).substr(2, 10));
-    // volume.decryptedFolderPath = os.homedir() + path.sep +\
-    // "CRYPTOBOX_DEC" + Math.random().toString(12).substr(2, 10);
+    
+    // on windows, should drive letters
     if (os.platform() === "win32")
         volume.decryptedFolderPath = "K:"; // testing driver letters on windows
     else
-        volume.decryptedFolderPath = os.tmpdir() + path.sep + "DEC" + Math.random().toString(12).substr(2, 10);
-
+        // volume.decryptedFolderPath = os.homedir() + path.sep +\
+        // "CRYPTOBOX_DEC" + Math.random().toString(12).substr(2, 10);
+        volume.decryptedFolderPath = os.tmpdir() + path.sep + 
+            "CRYPTOBOX_ENC_DEC" + Math.random().toString(12).substr(2, 10);
+    
+            
     console.log(`encrypted folder = ${volume.encryptedFolderPath}`);
     console.log(`decrypted folder = ${volume.decryptedFolderPath}`);
     console.log(`volume alias = ${volume.getVolumeAlias()}`);
+
 
     // if volumeEncryptionImplementation is not supported, skiping tests ...
     const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();
@@ -49,14 +49,8 @@ volumeEncryptionImplementations.forEach(e => {
         `  >>>>  EXECUTING VOLUME SERVICE TESTS [${implementationName}]  <<<<  `, () => {
             before(async () => {
                 volumeService.createDirectory(volume.encryptedFolderPath);
-                if (os.platform() !== "win32")
-                    volumeService.createDirectory(volume.decryptedFolderPath);
-                // try {
-                //     await passwordService.savePassword(password, volume);
-                // } catch (error) {
-                //     console.error("Error to create the password, aborting ...");
-                //     throw error;
-                // }
+                // if (os.platform() !== "win32")
+                //     volumeService.createDirectory(volume.decryptedFolderPath);
             });
 
             it(`[${implementationName}] is the impmementation method supported`, () => {
@@ -71,15 +65,7 @@ volumeEncryptionImplementations.forEach(e => {
 
             it(`[${implementationName}] mounting with success`, async () => {
                 expect(async () => {
-                    // TODO enabling the password lookup, causes the execution to carryon and do not wait.
-                    // need to investigate it.
-                    // const _password = await passwordService.searchForPassword(volume);
-                    // console.log(_password, password, password === _password);
                     await volumeService.mount(volume, password);
-                    // also does not work :(
-                    // passwordService.searchForPassword(volume).then(async () => {
-                    //     await volumeService.mount(volume, password);
-                    // });
                 }).not.to.throw();
             });
 
@@ -100,24 +86,15 @@ volumeEncryptionImplementations.forEach(e => {
             });
 
             it(`[${implementationName}] trying to mount with wrong password`, async () => {
-                volumeService.mount(volume, "ThisShouldNotWork").catch(error => {
-                    // TODO, this is not working
-                    expect(error).to.be.instanceOf(ServiceError).
-                        with.property("message", ErrorType.WrongPassword.toString());
+                try {
+                    await volumeService.mount(volume, "thisshould not work");
+                } catch (err) {
+                    expect(err).to.be.instanceOf(ServiceError).
+                        with.property("message", ErrorType[ErrorType.WrongPassword]);
+                }
+            }).timeout(25000);
 
-                    // https://github.com/chaijs/chai/issues/930
-                    // should.exist(error).and.be.an.instanceOf(ServiceError).
-                    //     with.property("message", ErrorType.WrongPassword.toString());
-
-
-                    // expect(error).to.be.an.instanceOf(ServiceError);
-                    // console.log(error.message);
-                    // console.log(ErrorType.WrongPassword.toString());
-                    // expect(error.message).to.eq(ErrorType.WrongPassword.toString());
-                });
-            });
-
-            it(`[${implementationName}] shuould not be mounted (after wrong password)`, async () => {
+            it(`[${implementationName}] should not be mounted (after wrong password)`, async () => {
                 const mounted = await volumeService.isMounted(volume);
                 expect(mounted).to.false;
             });

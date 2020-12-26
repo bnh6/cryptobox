@@ -1,10 +1,11 @@
-const zxcvbn = require("zxcvbn");
-// import zxcvbn from "zxcvbn";
+// const zxcvbn = require("zxcvbn");
+import * as zxcvbn from "zxcvbn";
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
+import Message from "../controllers/Message";
 import * as querystring from "querystring";
 import { remote } from "electron";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 
 const query = querystring.parse(location.search);
 const source = query["?source"];
@@ -33,12 +34,13 @@ function submit_password_form() {
         password: passwd.value,
         source: source,
     };
-    const result = ipcRenderer.send(constants.IPC_SAVE_PASSWOD, args);
-    console.log("returned data", result);
 
-    // notify("Password saved with success")
+    const result:Message = ipcRenderer.sendSync(constants.IPC_SAVE_PASSWOD, args);
+    log.debug("[RENDERER] save password result", result);
+
     ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
-        message: "Password saved with success",
+        message: result.message,
+        error: !result.succeed,
     });
 
     closeWindow();
@@ -52,7 +54,7 @@ passwd.onkeypress = () => {
     const resp = zxcvbn(passwd.value);
     // value = "\nscore = " + resp.score;
     let value = "";
-    if (resp.feedback.suggestions != "")
+    if (resp.feedback.suggestions != null)
         value += "suggestion = " + resp.feedback.suggestions + "\n\n";
     if (resp.feedback.warning != "")
         value += "feedback = " + resp.feedback.warning + "\n\n";
@@ -90,7 +92,7 @@ function defineBadge(respScore: any): string {
 //         new window.Notification(constants.WINDOWS_TITLE, {
 //             body: message,
 //             silent: true,
-//             icon: path.join(__dirname, "../../static/resources/cloud-enc.png"),
+//             icon: path.join(__dirname, "../../static/resources/cryptobox.png"),
 
 //         });
 

@@ -3,7 +3,7 @@
     "title": "CrytoBox",
     "missing_volume_encryption": "Required at least EncFS or CryFS installed, intructions...",
     "main_page": {
-      "password": "What would you like to do?",
+      "password_save_success": "Saved password with success",
       "encrypted_folder": "Open a vault",
       "decrypted_folder": "Close a vault",
       "mount_label": "Create a vault",

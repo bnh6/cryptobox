@@ -1,12 +1,15 @@
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
+import Message from "../controllers/Message";
 
 log.debug("volume-rendered starting ...");
 
 const source = <HTMLInputElement>document.getElementById("source");
 const cloudEncForm = <HTMLFormElement>document.getElementById("cloudEncForm");
 const mountBtn = <HTMLButtonElement>document.getElementById("mountBtn");
+
+
 
 source.onclick = () => {
     log.debug(
@@ -16,40 +19,58 @@ source.onclick = () => {
     if (directory) {
         source.value = directory;
         checkIfPasswordExist(source.value);
+
+        // in case the volume was left mounted ...
         updateMountBtn();
     }
 };
 
 cloudEncForm.onsubmit = () => {
     log.debug("form submit");
-    const args = {
-        source: source.value,
-    };
-    log.debug(`IPC requesting to mount/umount ${source.value}`);
-    const response = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
-    log.info(`IPC here is the result ${JSON.stringify(response)}`);
-    updateMountBtn();
+    const args = { source: source.value, };
+    
+    log.debug(`[RENDERER] requesting to mount/umount ${source.value}`);
+    const result:Message = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
+    log.info(`[RENDERER] result= ${JSON.stringify(result)}`);
 
-    // notify(response.message)
+    // if (result.succeed) { updateMountBtn(); }
+    updateMountBtn(); 
+
     ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
-        message: response.message,
+        message: result.message,
+        error: !result.succeed,
     });
-
-    return false;
+    return false; // to not reload the page
 };
 
 function updateMountBtn() {
-    const response = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
+    const result:Message = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
         source: source.value,
     });
-    mountBtn.innerText = response.isMounted ? "UNmount" : "Mount";
+
+    log.debug(`[RENDERER] updateMountBtn: ${JSON.stringify(result)}`);
+    
+    mountBtn.innerText = result.isMounted ? "UNmount" : "Mount";
+
+    if (!result.succeed)
+        ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
+            message: result.message,
+            error: !result.succeed,
+        });
+        
 }
 
 function checkIfPasswordExist(source: string): void {
-    const response = ipcRenderer.sendSync(constants.IPC_PASSWORD_EXIST, {
+    const result:Message = ipcRenderer.sendSync(constants.IPC_PASSWORD_EXIST, {
         source: source,
     });
-    log.debug("IPC check if password exist", response);
+    log.debug("[RENDERER] check if password exist", result);
+
+    if (!result.succeed)
+        ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
+            message: result.message,
+            error: !result.succeed,
+        });
 }
 
 // function notify(message) {
@@ -57,7 +78,7 @@ function checkIfPasswordExist(source: string): void {
 //         new window.Notification(constants.WINDOWS_TITLE, {
 //             body: message,
 //             silent: true,
-//             icon: path.join(__dirname, "../../static/resources/cloud-enc.png")
+//             icon: path.join(__dirname, "../../static/resources/cryptobox.png")
 //         });
 
 //     myNotification.onclick = () => {

@@ -1,11 +1,13 @@
 import { Volume } from "../../entities/Volume";
-import log from "../../utils/LogUtil";
-import * as shell from "../../utils/ShellUtil";
+import log from "../LogService";
+import * as shell from "../ShellService";
 import * as fs from "fs";
 import VolumeServiceInterface from "./VolumeServiceInterface";
 import { ServiceError, ErrorType } from "../ServiceError";
 import VolumeServiceWrapperInterface from "./wrappers/VolumeServiceWrapperInterface";
 import { VolumeServiceWrapperFactory, VolumeEncryptionImpl } from "./wrappers/VolumeServiceWrapperFactory";
+import PasswordService from "../password/PasswordService";
+import * as os from "os";
 
 
 export default class VolumeService implements VolumeServiceInterface {
@@ -33,12 +35,18 @@ export default class VolumeService implements VolumeServiceInterface {
                 return;
             }
 
+            //  cryfs does not create folder automatically on mac/linux
+            if (os.platform() !== "win32")
+                if (!this.exists(volume.decryptedFolderPath)){
+                    this.createDirectory(volume.decryptedFolderPath);
+                }
+
             const command = this.wrapper.getMountCommand(volume, password);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 
             if (code === 0) return;
             else {
-                const error = ServiceError.errorFromCryFS(code);
+                const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
                 log.error(`Error ${error} to Mount volume, code=${code} stdout=${stdout}, stderr=${stderr}`);
                 throw error;
             }
@@ -61,7 +69,7 @@ export default class VolumeService implements VolumeServiceInterface {
 
             if (code === 0) return;
             else {
-                const error = ServiceError.errorFromCryFS(code);
+                const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
                 const msg = `Error ${error} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
                 throw error;
             }
@@ -80,16 +88,65 @@ export default class VolumeService implements VolumeServiceInterface {
             if (code === 0) return true;
             if (code === 1) return false;
 
-            const error = ServiceError.errorFromCryFS(code);
+            const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
             const msg = `Error ${error} to check whether ${volume.decryptedFolderPath} is mounted,` +
                 `code = ${code} stdout = ${stdout}, stderr = ${stderr}`;
             throw error;
 
         } catch (error) {
             if (error instanceof ServiceError) throw error;
-            log.error(`Error to to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
+            log.error(`Error to check whether ${volume.decryptedFolderPath} is mounted, error => ${error}`);
             throw new ServiceError(ErrorType.UnexpectedError);
         }
+    }
+
+    /**
+     * if mounted -> unmount
+     * else -> mount
+     * @param volume 
+     */
+    async mountUnmount(volume: Volume) {
+        try {
+            const isMounted = await this.isMounted(volume);
+            if (isMounted) {
+                await this.unmount(volume);
+            } else {
+                const passwordService = new PasswordService;
+                const password = await passwordService.searchForPassword(volume);
+                await this.mount(volume, password);
+            }
+        } catch (error) {
+            if (error instanceof ServiceError) throw error;
+            log.error(`Error to mount/unmount ${volume.encryptedFolderPath} => ${error}`);
+            throw new ServiceError(ErrorType.UnexpectedError);
+        }
+    }
+
+    /**
+     * list which implementations are supported
+     * this function prob should go somewhere else ...
+     */
+    async supportedImplementations(): Promise<VolumeEncryptionImpl[]>{
+        let suportedImplementations: VolumeEncryptionImpl[];
+        try {
+
+            for (const impl in VolumeEncryptionImpl) {
+                if (isNaN(Number(impl))){
+                    
+                    const implementationInEnum: VolumeEncryptionImpl = (<any>VolumeEncryptionImpl)[impl];
+                    const volsvc = new VolumeService(implementationInEnum);
+
+                    if (volsvc.isVolumeOperationsSupported())
+                        suportedImplementations.push(implementationInEnum);
+                }
+            }
+            return suportedImplementations;
+
+        } catch (error) {
+            log.error("Error to list supported implementation");
+            throw new ServiceError(ErrorType.UnexpectedError);
+        }
+        
     }
 
 

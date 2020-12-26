@@ -3,26 +3,23 @@ import { Volume } from "../entities/Volume";
 import { dialog, BrowserWindow, Notification } from "electron";
 import * as path from "path";
 import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 
-export function notify(message: string) {
-    log.info("is notification supported ", Notification.isSupported()); // TODO do something with it
+export function notify(message: string, error: boolean = false) {
+    log.debug("is notification supported ", Notification.isSupported()); // TODO do something when is not
+
+    let title = constants.WINDOWS_TITLE;
+    if (error) { title = ">> ERROR << - " + title; }
 
     const myNotification = new Notification({
-        title: constants.WINDOWS_TITLE,
+        title: title,
         // subtitle: "testing subtitle",
         body: message,
         silent: true,
-        icon: path.join(__dirname, "../../static/resources/cloud-enc.png"),
+        icon: path.join(__dirname, "../../static/resources/cryptobox.png"),
     });
 
     myNotification.show();
-    // const myNotification =
-    //     new window.Notification(constants.WINDOWS_TITLE, {
-    //         body: message,
-    //         silent: true,
-    //         icon: path.join(__dirname, "../../static/resources/cloud-enc.png")
-    //     });
 
     // myNotification.onclick = () => {
     //     console.log('Notification clicked')
@@ -50,6 +47,7 @@ export function passwordPrompt(volume: Volume) {
         title: "Provide a Password...",
         autoHideMenuBar: true,
         webPreferences: {
+            enableRemoteModule: true,
             nodeIntegration: true,
             sandbox: false,
             additionalArguments: [volume.encryptedFolderPath],

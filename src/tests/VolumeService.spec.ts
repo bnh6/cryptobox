@@ -96,7 +96,7 @@ volumeEncryptionImplementations.forEach(e => {
                     expect(err).to.be.instanceOf(ServiceError).
                         with.property("message", ErrorType[ErrorType.WrongPassword]);
                 }
-            }).timeout(15000);
+            }).timeout(25000);
 
             it(`[${implementationName}] should not be mounted (after wrong password)`, async () => {
                 const mounted = await volumeService.isMounted(volume);

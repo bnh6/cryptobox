@@ -1,9 +1,5 @@
 $ErrorActionPreference='Stop'
 choco feature disable -n=showDownloadProgress
-#  wget https://github.com/dokan-dev/dokany/releases/download/v1.2.2.1000/DokanSetup_redist.exe -OutFile DokanSetup_redist.exe
-# .\DokanSetup_redist.exe /passive /norestart
-# wget https://download.visualstudio.microsoft.com/download/pr/11100229/78c1e864d806e36f6035d80a0e80399e/VC_redist.x86.exe -OutFile VC_redist.x86.exe
-# .\VC_redist.x86.exe /passive /norestart
 curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
 Start-Process msiexec.exe -Wait -ArgumentList '/I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”’
 curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi

@@ -1,5 +1,5 @@
 import { Volume } from "../../entities/Volume";
-import log from "../../utils/LogUtil";
+import log from "../LogService";
 import * as shell from "../ShellService";
 import * as fs from "fs";
 import VolumeServiceInterface from "./VolumeServiceInterface";

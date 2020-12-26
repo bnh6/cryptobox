@@ -1,4 +1,4 @@
-import log from "./LogUtil";
+import log from "../services/LogService";
 import { constants } from "./constants";
 // import { execSync } from 'child_process';  // since node 4
 import { spawnSync } from "child_process"; // since node 12

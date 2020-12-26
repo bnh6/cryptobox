@@ -3,7 +3,7 @@ import { Volume } from "../entities/Volume";
 import { dialog, BrowserWindow, Notification } from "electron";
 import * as path from "path";
 import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 
 export function notify(message: string) {
     log.debug("is notification supported ", Notification.isSupported()); // TODO do something when is not

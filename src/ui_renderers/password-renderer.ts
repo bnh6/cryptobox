@@ -4,7 +4,7 @@ import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
 import * as querystring from "querystring";
 import { remote } from "electron";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 
 const query = querystring.parse(location.search);
 const source = query["?source"];

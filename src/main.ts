@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
-import log from "./utils/LogUtil";
+import log from "./services/LogService";
 import * as store from "./services/ConfigService";
 import * as ShellHelper from "./utils/ShellUtil";
 

@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
 import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 import * as UIHelper from "./UIHelper";
 import PasswordService from "../services/password/PasswordService";
 import { ServiceError, ErrorType } from "../services/ServiceError";

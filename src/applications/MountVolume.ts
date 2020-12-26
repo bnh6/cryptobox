@@ -1,4 +1,4 @@
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 import { EncryptionService } from "../services/encryption_deprecated/EncryptionService";
 import { EncryptionServiceFactory } from "../services/encryption_deprecated/EncryptionServiceFactory";
 import PasswordService from "../services/password/PasswordService";

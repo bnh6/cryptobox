@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 import Message from "../controllers/Message";
 
 log.debug("volume-rendered starting ...");

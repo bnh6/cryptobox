@@ -14,7 +14,7 @@ console.log(`generated volume = [${volume.getVolumeAlias()}]`);
 
 
 // disbaling logs for cleaner stdout (is this a good thing???)
-import log from "../utils/LogUtil";
+import log from "../services/LogService";
 log.transports.file.level = false;
 log.transports.console.level = false;
 

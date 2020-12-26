@@ -1,4 +1,4 @@
-import log from "../utils/LogUtil";
+import log from "./LogService";
 import { spawnSync } from "child_process"; // since node 12
 import { ErrorType, ServiceError } from "./ServiceError";
 

@@ -33,8 +33,8 @@ before_install:
       id
       # sudo apt clean
       sudo apt update
-      # sudo apt install encfs -y
-      # sudo apt install snapd -y
+      sudo apt install encfs -y
+      sudo apt install cryfs -y
        sudo apt install  libsecret-1-dev      
     fi
 script:

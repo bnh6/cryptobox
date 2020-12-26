@@ -20,12 +20,13 @@ before_install:
       echo -e "\n\n\t>>>> running on MAC\t\t"
       csrutil status
       id
+      brew cask install osxfuse
+      echo "instyalled"
       # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       # brew update
       # brew cask install osxfuse --appdir=/tmp
-      # brew install encfs
+      brew install encfs
       # sudo security unlock-keychain -u
-      npm run test
     fi
     if [ $TRAVIS_OS_NAME = 'linux' ]; then
       echo -e "\n\n\t>>>> running on LINUX\t\t"

@@ -1,9 +1,7 @@
 
 choco feature disable -n=showDownloadProgress
 
-curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
-
-start /wait msiexec.exe /I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”
+choco install vcredist2015
 
 curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
 start /wait msiexec.exe /I dokan64.msi /quiet /qn /norestart /L*V "dokan.log"

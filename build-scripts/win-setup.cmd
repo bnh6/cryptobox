@@ -1,7 +1,7 @@
 
 choco feature disable -n=showDownloadProgress
 
-choco install vcredist2015
+choco install vcredist2017
 
 choco install -y dokany
 

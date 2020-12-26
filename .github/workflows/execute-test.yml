@@ -94,7 +94,7 @@ jobs:
       - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
         run:  ./build-scripts/win-setup.cmd
-        shell: powershell
+        shell: pwsh
           
 
       - name: installing deps and build code

@@ -1,4 +1,3 @@
-$ErrorActionPreference='Stop'
 choco feature disable -n=showDownloadProgress
 curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe
 Start-Process msiexec.exe -Wait -ArgumentList '/I vc_redist.x64.exe /quiet /qn /norestart /L*V “vc.log”’

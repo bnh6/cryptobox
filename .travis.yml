@@ -20,7 +20,7 @@ before_install:
       echo -e "\n\n\t>>>> running on MAC\t\t"
       csrutil status
       id
-      brew cask install osxfuse
+      brew  install osxfuse --cask
       echo "instyalled"
       brew install encfs
       brew install cryfs

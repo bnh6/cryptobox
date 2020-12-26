@@ -34,6 +34,8 @@ export enum ErrorType {
 
     UnsupportedOS,
 
+    ErrorToInstallImplementations,
+
 
 }
 

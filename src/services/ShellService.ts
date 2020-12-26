@@ -43,3 +43,27 @@ export function execute(
 
     return [result.status, result.stdout.toString(), result.stderr.toString()];
 }
+
+
+export async function ifNotInstalledInstall(appName: string, appVersionCmd: string, appInstallCmd: string) {
+    // checking if installed
+    const [code, stdout, stderr] = await this.execute(appVersionCmd, [], false);
+    if (code === 0) {
+        log.debug(`${appName} is installed, code = ${code}, stdout=[${stdout}]`);
+        return;
+
+    // not installed, trying to install.
+    } else if (code === 127) { // TODO will this work on Windows as well.
+        const [code, stdout, stderr] = await this.execute(appInstallCmd, [], false);
+        if (code !== 0) {
+            log.error(`error to install ${appName} , \
+                code=${code} stdout=${stdout}, stderr=${stderr}`);
+            throw new ServiceError(ErrorType.ErrorToInstallImplementations);
+        }
+    } else {
+        log.error(`error to determine if ${appName} is installed, \
+            code=${code} stdout=${stdout}, stderr=${stderr}`);
+        throw new ServiceError(ErrorType.ErrorToInstallImplementations);
+    }
+
+}

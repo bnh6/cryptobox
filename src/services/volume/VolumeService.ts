@@ -7,6 +7,7 @@ import { ServiceError, ErrorType } from "../ServiceError";
 import VolumeServiceWrapperInterface from "./wrappers/VolumeServiceWrapperInterface";
 import { VolumeServiceWrapperFactory, VolumeEncryptionImpl } from "./wrappers/VolumeServiceWrapperFactory";
 import PasswordService from "../password/PasswordService";
+import * as os from "os";
 
 
 export default class VolumeService implements VolumeServiceInterface {
@@ -34,10 +35,11 @@ export default class VolumeService implements VolumeServiceInterface {
                 return;
             }
 
-            //  cryfs does not create folder automatically
-            if (!this.exists(volume.decryptedFolderPath)){
-                this.createDirectory(volume.decryptedFolderPath);
-            }
+            //  cryfs does not create folder automatically on mac/linux
+            if (os.platform() !== "win32")
+                if (!this.exists(volume.decryptedFolderPath)){
+                    this.createDirectory(volume.decryptedFolderPath);
+                }
 
             const command = this.wrapper.getMountCommand(volume, password);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);

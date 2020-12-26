@@ -36,7 +36,7 @@ export function execute(
     // remember that commands may contain sensitive information ...
     const isDev = process.argv0.includes("node_modules");
     log.info(`isDev = ${isDev}`);
-    console.log(
+    log.debug(
         `  => [${result.status}] -- executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}, \
         stdout ${result.stdout.toString()}, stderr=[${result.stderr.toString()}]`
     );

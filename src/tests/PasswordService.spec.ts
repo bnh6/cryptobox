@@ -11,10 +11,13 @@ const passwordService: PasswordService = new PasswordService();
 console.log(`generated password = [${password}]`);
 console.log(`generated volume = [${volume.getVolumeAlias()}]`);
 
-// // disbaling logs for cleaner stdout (is this a good thing???)
-// import log from "../utils/LogUtil";
-// log.transports.file.level = false;
-// log.transports.console.level = false;
+
+
+// disbaling logs for cleaner stdout (is this a good thing???)
+import log from "../utils/LogUtil";
+log.transports.file.level = false;
+log.transports.console.level = false;
+
 
 
 async function cleanPassword() {

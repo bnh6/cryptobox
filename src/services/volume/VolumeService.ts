@@ -1,6 +1,6 @@
 import { Volume } from "../../entities/Volume";
 import log from "../../utils/LogUtil";
-import * as shell from "../../utils/ShellUtil";
+import * as shell from "../ShellService";
 import * as fs from "fs";
 import VolumeServiceInterface from "./VolumeServiceInterface";
 import { ServiceError, ErrorType } from "../ServiceError";

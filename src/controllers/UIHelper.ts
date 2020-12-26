@@ -6,7 +6,7 @@ import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
 
 export function notify(message: string) {
-    log.info("is notification supported ", Notification.isSupported()); // TODO do something with it
+    log.debug("is notification supported ", Notification.isSupported()); // TODO do something when is not
 
     const myNotification = new Notification({
         title: constants.WINDOWS_TITLE,

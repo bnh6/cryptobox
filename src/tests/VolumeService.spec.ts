@@ -7,10 +7,14 @@ import { VolumeEncryptionImpl } from "../services/volume/wrappers/VolumeServiceW
 import * as os from "os";
 import * as path from "path";
 
+
+
 // // disbaling logs for cleaner stdout (is this a good thing???)
 import log from "../utils/LogUtil";
-log.transports.file.level = "info";
-log.transports.console.level = "info";
+log.transports.file.level = false;
+log.transports.console.level = false;
+
+
 
 
 // iterating over implementations (cryfs and encfs)
@@ -40,10 +44,10 @@ volumeEncryptionImplementations.forEach(e => {
             "CRYPTOBOX_ENC_DEC" + Math.random().toString(12).substr(2, 10);
     
             
-
     console.log(`encrypted folder = ${volume.encryptedFolderPath}`);
     console.log(`decrypted folder = ${volume.decryptedFolderPath}`);
     console.log(`volume alias = ${volume.getVolumeAlias()}`);
+
 
     // if volumeEncryptionImplementation is not supported, skiping tests ...
     const volumeEncryptionSupport = volumeService.isVolumeOperationsSupported();

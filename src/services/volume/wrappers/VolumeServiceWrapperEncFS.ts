@@ -106,6 +106,6 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
     }
 
     proccessErrorCode(code: number): ServiceError {
-        return new ServiceError(0);
+        return ServiceError.errorFromEncFS(code);
     }
 }

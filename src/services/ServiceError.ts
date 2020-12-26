@@ -1,12 +1,16 @@
 export class ServiceError extends Error {
     // TODO ensure only the error from Enum will be raised
     constructor(m: ErrorType) {
-        super(m.toString());
+        super(ErrorType[m]);
         this.name = "ServiceError";
     }
 
     public static errorFromCryFS(code: number): ServiceError{
-        return new ServiceError(ErrorType.UnexpectedError);
+        return new ServiceError(parseCryFSErrors(code));
+    }
+
+    public static errorFromEncFS(code: number): ServiceError{
+        return new ServiceError(parseEncFSErrors(code));
     }
 }
 
@@ -32,6 +36,21 @@ export enum ErrorType {
 
 
 }
+
+
+function parseEncFSErrors(code: number): ErrorType {
+    const CryFSErrorMap:Map<number, ErrorType> = new Map([
+        [1, ErrorType.UnexpectedError], 
+        [127, ErrorType.WrongPassword], 
+    ]);
+
+    if (!CryFSErrorMap.has(code))
+        return CryFSErrorMap.get(1);//unknown error code
+    else
+        return CryFSErrorMap.get(code);
+}
+
+
 
 function parseCryFSErrors(code: number): ErrorType {
     const CryFSErrorMap:Map<number, ErrorType> = new Map([
@@ -102,3 +121,6 @@ function parseCryFSErrors(code: number): ErrorType {
     else
         return CryFSErrorMap.get(code);
 }
+
+
+

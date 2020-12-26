@@ -22,21 +22,19 @@ before_install:
       id
       brew install --cask osxfuse
       echo "instyalled"
-      brew install encfs
-      brew install cryfs
+      brew install encfs cryfs
       # sudo security unlock-keychain -u
     fi
     if [ $TRAVIS_OS_NAME = 'linux' ]; then
       echo -e "\n\n\t>>>> running on LINUX\t\t"
       id
-      # sudo apt clean
       sudo apt update
-      sudo apt install encfs -y
-      sudo apt install cryfs -y
-       sudo apt install  libsecret-1-dev      
+      sudo apt install encfs cryfs libsecret-1-dev -y
     fi
 script:
   - |
+    encfs --version || true
+    cryfs --version || true
     npm install
     npm run build
     npm run lint

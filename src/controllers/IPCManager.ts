@@ -49,9 +49,9 @@ ipcMain.on(constants.IPC_MOUNT_UNMOUNT, async (event, arg) => {
         } else {
             const volumeService = new VolumeService();
             const wasMonted = await volumeService.isMounted(volume);
-            log.info(`${volume} is already mounted? = ${msg.isMounted}`);
+            log.info(`${volume} is already mounted? = ${wasMonted}`);
 
-            volumeService.mountUnmount(volume);
+            await volumeService.mountUnmount(volume);
 
             // do we need have separated messages?
             if (wasMonted) msg.message = "unmounted with success";
@@ -170,66 +170,3 @@ ipcMain.on(constants.IPC_NOTIFICATION, (event, arg) => {
 
     event.returnValue = "success";
 });
-
-// UIHelper.passwordPrompt( new Volume("/tmp/testfdd /sdf"));
-
-// ipcMain.on(constants.IPC_ACCT_EXISTS, (event, arg) => {
-//   var source = arg["source"];
-//   log.info(`checking if password exists for source folder: [${source}]`);
-
-//   if (!source || source === "") {
-//     log.error(`missing source folder [${source}]`.red);
-//   }
-
-//   let password = null;
-
-//   if (os.platform() === "darwin") {
-//     var pm = new PasswordManager(source);
-//     password = pm.searchForPassword();
-//   } else if (os.platform() === "linux") {
-//     password = "12345"; // forced password while Linux password manager is not defined
-//   }
-
-//   if (password) {
-//     event.returnValue = !!UIHelper.confirmPasswordUse();
-//   } else {
-//     log.info(`password not found for ${source}`);
-//     event.returnValue = false;
-//     // TODO create password
-//   }
-// });
-
-// ipcMain.on(constants.IPC_IS_MOUNTED, (event, arg) => {
-//   var destination = arg["destination"];
-//   log.info(`check if ${destination} is mounted`);
-
-//   const encryptionManager = encryptionManagerFactory.create();
-//   var mounted = encryptionManager.isMounted(destination);
-//   if (mounted) event.returnValue = true;
-//   else event.returnValue = false;
-// });
-
-// ipcMain.on(constants.IPC_MOUNT_UNMOUNT, (event, arg) => {
-//   var source = arg["source"];
-//   var destination = arg["destination"];
-//   var volumeName = arg["volumeName"];
-
-//   log.info(
-//     `mount/unmount on source: [${source}], destination: [${destination}], volumenName: [${volumeName}]`
-//   );
-
-//   //   var encMngr = new EncryptionManager();
-//   const encMngr = encryptionManagerFactory.create();
-
-//   if (!encMngr.isMounted(destination)) {
-//     log.log(`{destination} is not mounted, mounting`);
-//     encMngr.mount(source, destination, volumeName);
-//     log.log(`${source} -> ${destination} mounted with success`);
-//     event.returnValue = "Mounted";
-//   } else {
-//     log.log(`${destination} is  mounted, umounting`);
-//     encMngr.unmount(destination);
-//     log.log(`${destination} unounted with success`);
-//     event.returnValue = "Unmounted";
-//   }
-// });

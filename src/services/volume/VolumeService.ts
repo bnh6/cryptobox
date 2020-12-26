@@ -95,13 +95,13 @@ export default class VolumeService implements VolumeServiceInterface {
 
     async mountUnmount(volume: Volume) {
         try {
-            const isMounted = this.isMounted(volume);
+            const isMounted = await this.isMounted(volume);
             if (isMounted) {
-                this.unmount(volume);
+                await this.unmount(volume);
             } else {
                 const passwordService = new PasswordService;
                 const password = await passwordService.searchForPassword(volume);
-                this.mount(volume, password);
+                await this.mount(volume, password);
             }
         } catch (error) {
             if (error instanceof ServiceError) throw error;

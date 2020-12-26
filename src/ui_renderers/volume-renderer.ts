@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
 import log from "../utils/LogUtil";
+import Message from "../controllers/Message";
 
 log.debug("volume-rendered starting ...");
 
@@ -22,24 +23,22 @@ source.onclick = () => {
 
 cloudEncForm.onsubmit = () => {
     log.debug("form submit");
-    const args = {
-        source: source.value,
-    };
+    const args = { source: source.value, };
+    
     log.debug(`IPC requesting to mount/umount ${source.value}`);
-    const response = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
+    const response:Message = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
     log.info(`IPC here is the result ${JSON.stringify(response)}`);
     updateMountBtn();
 
-    // notify(response.message)
     ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
         message: response.message,
     });
 
-    return false;
+    return false; // to not reload the page
 };
 
 function updateMountBtn() {
-    const response = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
+    const response:Message = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
         source: source.value,
     });
     mountBtn.innerText = response.isMounted ? "UNmount" : "Mount";

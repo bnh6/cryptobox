@@ -9,5 +9,5 @@ export default class Message {
     message: string
     // volume status
     isMounted: boolean
-};
+}
 

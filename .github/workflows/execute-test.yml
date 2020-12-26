@@ -72,7 +72,6 @@ jobs:
             macos-latest,
             ubuntu-latest,
             ubuntu-20.04,
-            ubuntu-16.04,
             windows-latest,
           ] # macos-11.0 does not seem to work on github :(
         # os: [macos-latest, macos-11.0, ubuntu-latest, ubuntu-20.04, ubuntu-16.04, windows-latest]

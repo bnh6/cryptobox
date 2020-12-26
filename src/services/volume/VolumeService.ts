@@ -34,6 +34,11 @@ export default class VolumeService implements VolumeServiceInterface {
                 return;
             }
 
+            //  cryfs does not create folder automatically
+            if (!this.exists(volume.decryptedFolderPath)){
+                this.createDirectory(volume.decryptedFolderPath);
+            }
+
             const command = this.wrapper.getMountCommand(volume, password);
             const [code, stdout, stderr] = await shell.execute(command, [], false, 25000);
 

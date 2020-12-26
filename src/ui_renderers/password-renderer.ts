@@ -2,6 +2,7 @@
 import * as zxcvbn from "zxcvbn";
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
+import Message from "../controllers/Message";
 import * as querystring from "querystring";
 import { remote } from "electron";
 import log from "../services/LogService";
@@ -20,9 +21,7 @@ const cancel = <HTMLButtonElement>document.getElementById("cancelBtn");
 passwdLabel.innerHTML = `Password for folder "${source}"`;
 
 function closeWindow() {
-    const electron = require("electron");
-    console.log(electron.remote);
-    const window = electron.remote.getCurrentWindow();
+    const window = remote.getCurrentWindow();
     window.close();
 }
 
@@ -35,12 +34,13 @@ function submit_password_form() {
         password: passwd.value,
         source: source,
     };
-    const result = ipcRenderer.send(constants.IPC_SAVE_PASSWOD, args);
-    console.log("returned data", result);
 
-    // notify("Password saved with success")
+    const result:Message = ipcRenderer.sendSync(constants.IPC_SAVE_PASSWOD, args);
+    log.debug("[RENDERER] save password result", result);
+
     ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
-        message: "Password saved with success",
+        message: result.message,
+        error: !result.succeed,
     });
 
     closeWindow();

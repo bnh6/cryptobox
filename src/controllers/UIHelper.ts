@@ -5,11 +5,14 @@ import * as path from "path";
 import { constants } from "../utils/constants";
 import log from "../services/LogService";
 
-export function notify(message: string) {
+export function notify(message: string, error: boolean = false) {
     log.debug("is notification supported ", Notification.isSupported()); // TODO do something when is not
 
+    let title = constants.WINDOWS_TITLE;
+    if (error) { title = ">> ERROR << - " + title; }
+
     const myNotification = new Notification({
-        title: constants.WINDOWS_TITLE,
+        title: title,
         // subtitle: "testing subtitle",
         body: message,
         silent: true,
@@ -17,12 +20,6 @@ export function notify(message: string) {
     });
 
     myNotification.show();
-    // const myNotification =
-    //     new window.Notification(constants.WINDOWS_TITLE, {
-    //         body: message,
-    //         silent: true,
-    //         icon: path.join(__dirname, "../../static/resources/cryptobox.png")
-    //     });
 
     // myNotification.onclick = () => {
     //     console.log('Notification clicked')

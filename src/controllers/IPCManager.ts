@@ -12,7 +12,6 @@ import Message from "./Message";
 log.info("IPCManager loaded !");
 
 
-
 /**
  * opens a native dialogue to choose the directory, not all directories are available.
  * returns a string representing the fullpath (directory)
@@ -119,13 +118,14 @@ ipcMain.on(constants.IPC_SAVE_PASSWOD, async (event, arg) => {
     try {
         await passwordservice.savePassword(password, volume);
         msg.succeed = true;
+        msg.message = "Password saved with success";
     } catch (error) {
         msg.succeed = false;
         if (error instanceof ServiceError) {
-            msg.message = error.message;
+            msg.message = `Error ${error.message} to save password`;
         } else {
             log.error(`[IPC_MAIN] Generic error saving password => ${error}`);
-            msg.message = ErrorType.UnexpectedError.toString();
+            msg.message = `Error ${ErrorType[ErrorType.UnexpectedError]} to save password`;
         }
     }
     event.returnValue = msg;
@@ -164,9 +164,12 @@ ipcMain.on(constants.IPC_PASSWORD_EXIST, async (event, arg) => {
 
 ipcMain.on(constants.IPC_NOTIFICATION, (event, arg) => {
     const message = arg["message"];
-    log.info(`[IPC_MAIN] notification "${message}"`);
+    let error = arg["error"];
+    if (error === null) { error = false;}
 
-    UIHelper.notify(message);
+    log.debug(`[IPC_MAIN] notification message=[${message}], error[${error}]`);
+
+    UIHelper.notify(message, error);
 
     event.returnValue = "success";
 });

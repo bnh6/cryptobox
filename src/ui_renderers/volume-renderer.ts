@@ -25,30 +25,41 @@ cloudEncForm.onsubmit = () => {
     log.debug("form submit");
     const args = { source: source.value, };
     
-    log.debug(`IPC requesting to mount/umount ${source.value}`);
-    const response:Message = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
-    log.info(`IPC here is the result ${JSON.stringify(response)}`);
-    updateMountBtn();
+    log.debug(`[RENDERER] requesting to mount/umount ${source.value}`);
+    const result:Message = ipcRenderer.sendSync(constants.IPC_MOUNT_UNMOUNT, args);
+    log.info(`[RENDERER] result= ${JSON.stringify(result)}`);
+
+    if (result.succeed) { updateMountBtn(); }
 
     ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
-        message: response.message,
+        message: result.message,
+        error: !result.succeed,
     });
-
     return false; // to not reload the page
 };
 
 function updateMountBtn() {
-    const response:Message = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
+    const result:Message = ipcRenderer.sendSync(constants.IPC_IS_MOUNTED, {
         source: source.value,
     });
-    mountBtn.innerText = response.isMounted ? "UNmount" : "Mount";
+
+    log.debug("[RENDERER] check if password exist", result);
+
+    result
+        
 }
 
 function checkIfPasswordExist(source: string): void {
-    const response = ipcRenderer.sendSync(constants.IPC_PASSWORD_EXIST, {
+    const result:Message = ipcRenderer.sendSync(constants.IPC_PASSWORD_EXIST, {
         source: source,
     });
-    log.debug("IPC check if password exist", response);
+    log.debug("[RENDERER] check if password exist", result);
+
+    if (!result.succeed)
+        ipcRenderer.sendSync(constants.IPC_NOTIFICATION, {
+            message: result.message,
+            error: !result.succeed,
+        });
 }
 
 // function notify(message) {

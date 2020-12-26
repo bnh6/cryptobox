@@ -15,8 +15,6 @@ log.transports.file.level = false;
 log.transports.console.level = false;
 
 
-
-
 // iterating over implementations (cryfs and encfs)
 const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k => !isNaN(Number(k)) === false);
 volumeEncryptionImplementations.forEach(e => {
@@ -57,8 +55,8 @@ volumeEncryptionImplementations.forEach(e => {
         `  >>>>  EXECUTING VOLUME SERVICE TESTS [${implementationName}]  <<<<  `, () => {
             before(async () => {
                 volumeService.createDirectory(volume.encryptedFolderPath);
-                if (os.platform() !== "win32")
-                    volumeService.createDirectory(volume.decryptedFolderPath);
+                // if (os.platform() !== "win32")
+                //     volumeService.createDirectory(volume.decryptedFolderPath);
             });
 
             it(`[${implementationName}] is the impmementation method supported`, () => {

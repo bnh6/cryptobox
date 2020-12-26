@@ -69,7 +69,7 @@ export default class VolumeServiceWrapperCryFS implements VolumeServiceWrapperIn
     }
 
 
-    proccessErrorCode(code: number): ServiceError {
+    proccessErrorCode(code: number, stderr:string): ServiceError {
         return ServiceError.errorFromCryFS(code);
     }
 }

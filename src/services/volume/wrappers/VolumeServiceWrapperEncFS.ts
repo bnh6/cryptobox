@@ -76,7 +76,6 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
 
                 if (volume.ttl > 0)
                     command = command + ` --idle ${volume.ttl}`;
-
                 break;
 
             default: throw new ServiceError(ErrorType.UnsupportedOS);
@@ -105,7 +104,14 @@ export default class VolumeServiceWrapperEncFS implements VolumeServiceWrapperIn
         return command;
     }
 
-    proccessErrorCode(code: number): ServiceError {
+    proccessErrorCode(code: number, stdout: string, stderr: string): ServiceError {
+        // EncFS returns code 1 for wrong password on linux
+        if (os.platform() === "linux" /* && code === 1 */) {
+            if ((stderr && stderr.toLowerCase().includes("password incorrect") ||
+                (stdout && stdout.toLowerCase().includes("password incorrect"))) ){
+                return new ServiceError(ErrorType.WrongPassword);
+            }
+        }
         return ServiceError.errorFromEncFS(code);
     }
 }

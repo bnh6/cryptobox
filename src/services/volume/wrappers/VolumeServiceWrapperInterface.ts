@@ -5,7 +5,7 @@ export default interface VolumeServiceWrapperInterface{
     getMountCommand(volume: Volume, password: String): string;
     getIsMountedCommand(volume: Volume): string;
     getIsVolumeOperationsSupportedCommand(): string;
-    proccessErrorCode(code: number): ServiceError;
+    proccessErrorCode(code: number, stdout: string, stderr:string): ServiceError;
 
 // eslint-disable-next-line semi
 }

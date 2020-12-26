@@ -39,7 +39,7 @@ export default class VolumeService implements VolumeServiceInterface {
 
             if (code === 0) return;
             else {
-                const error = this.wrapper.proccessErrorCode(code);
+                const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
                 log.error(`Error ${error} to Mount volume, code=${code} stdout=${stdout}, stderr=${stderr}`);
                 throw error;
             }
@@ -62,7 +62,7 @@ export default class VolumeService implements VolumeServiceInterface {
 
             if (code === 0) return;
             else {
-                const error = this.wrapper.proccessErrorCode(code);
+                const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
                 const msg = `Error ${error} to UNmount volume, stdout=${stdout}, stderr=${stderr}`;
                 throw error;
             }
@@ -81,7 +81,7 @@ export default class VolumeService implements VolumeServiceInterface {
             if (code === 0) return true;
             if (code === 1) return false;
 
-            const error = this.wrapper.proccessErrorCode(code);
+            const error = this.wrapper.proccessErrorCode(code, stdout, stderr);
             const msg = `Error ${error} to check whether ${volume.decryptedFolderPath} is mounted,` +
                 `code = ${code} stdout = ${stdout}, stderr = ${stderr}`;
             throw error;

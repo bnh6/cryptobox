@@ -9,12 +9,6 @@ import * as path from "path";
 
 
 
-// // disbaling logs for cleaner stdout (is this a good thing???)
-// import log from "../services/LogService";
-// log.transports.file.level = false;
-// log.transports.console.level = false;
-
-
 // iterating over implementations (cryfs and encfs)
 const volumeEncryptionImplementations = Object.keys(VolumeEncryptionImpl).filter(k => !isNaN(Number(k)) === false);
 volumeEncryptionImplementations.forEach(e => {

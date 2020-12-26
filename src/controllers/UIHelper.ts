@@ -50,6 +50,7 @@ export function passwordPrompt(volume: Volume) {
         title: "Provide a Password...",
         autoHideMenuBar: true,
         webPreferences: {
+            enableRemoteModule: true,
             nodeIntegration: true,
             sandbox: false,
             additionalArguments: [volume.encryptedFolderPath],
@@ -62,7 +63,7 @@ export function passwordPrompt(volume: Volume) {
     });
 
     // enable debug
-    // promptWindow.webContents.openDevTools();
+    promptWindow.webContents.openDevTools();
 
     // Load the HTML dialog box
     promptWindow.loadFile(path.join(__dirname, "../../static/ui/password.html"), {

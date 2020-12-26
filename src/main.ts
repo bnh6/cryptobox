@@ -43,6 +43,7 @@ function createWindow() {
         resizable: true,
         icon: path.join(__dirname, icoPath),
         webPreferences: {
+            // enableRemoteModule: true, // otherwise remote will undefined on renderers
             nodeIntegration: true,
             preload: path.join(__dirname, "preload.js"),
         },

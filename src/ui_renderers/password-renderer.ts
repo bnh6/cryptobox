@@ -1,5 +1,5 @@
-const zxcvbn = require("zxcvbn");
-// import zxcvbn from "zxcvbn";
+// const zxcvbn = require("zxcvbn");
+import * as zxcvbn from "zxcvbn";
 import { ipcRenderer } from "electron";
 import { constants } from "../utils/constants";
 import * as querystring from "querystring";
@@ -20,7 +20,9 @@ const cancel = <HTMLButtonElement>document.getElementById("cancelBtn");
 passwdLabel.innerHTML = `Password for folder "${source}"`;
 
 function closeWindow() {
-    const window = remote.getCurrentWindow();
+    const electron = require("electron");
+    console.log(electron.remote);
+    const window = electron.remote.getCurrentWindow();
     window.close();
 }
 
@@ -52,7 +54,7 @@ passwd.onkeypress = () => {
     const resp = zxcvbn(passwd.value);
     // value = "\nscore = " + resp.score;
     let value = "";
-    if (resp.feedback.suggestions != "")
+    if (resp.feedback.suggestions != null)
         value += "suggestion = " + resp.feedback.suggestions + "\n\n";
     if (resp.feedback.warning != "")
         value += "feedback = " + resp.feedback.warning + "\n\n";

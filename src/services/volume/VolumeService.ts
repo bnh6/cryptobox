@@ -93,6 +93,11 @@ export default class VolumeService implements VolumeServiceInterface {
         }
     }
 
+    /**
+     * if mounted -> unmount
+     * else -> mount
+     * @param volume 
+     */
     async mountUnmount(volume: Volume) {
         try {
             const isMounted = await this.isMounted(volume);
@@ -108,6 +113,33 @@ export default class VolumeService implements VolumeServiceInterface {
             log.error(`Error to mount/unmount ${volume.encryptedFolderPath} => ${error}`);
             throw new ServiceError(ErrorType.UnexpectedError);
         }
+    }
+
+    /**
+     * list which implementations are supported
+     * this function prob should go somewhere else ...
+     */
+    async supportedImplementations(): Promise<VolumeEncryptionImpl[]>{
+        let suportedImplementations: VolumeEncryptionImpl[];
+        try {
+
+            for (const impl in VolumeEncryptionImpl) {
+                if (isNaN(Number(impl))){
+                    
+                    const implementationInEnum: VolumeEncryptionImpl = (<any>VolumeEncryptionImpl)[impl];
+                    const volsvc = new VolumeService(implementationInEnum);
+
+                    if (volsvc.isVolumeOperationsSupported())
+                        suportedImplementations.push(implementationInEnum);
+                }
+            }
+            return suportedImplementations;
+
+        } catch (error) {
+            log.error("Error to list supported implementation");
+            throw new ServiceError(ErrorType.UnexpectedError);
+        }
+        
     }
 
 

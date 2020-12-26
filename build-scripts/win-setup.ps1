@@ -23,4 +23,3 @@ echo "C:\Program Files (x86)\encfs'\" >> $GITHUB_PATH
 copy "C:\Program Files (x86)\encfs\*" "C:\Windows"
 encfs.exe --version
 cryfs.exe --version
-dir "C:\Program Files\dokan"

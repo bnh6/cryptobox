@@ -93,8 +93,8 @@ jobs:
 
       - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
-        run: call .\build-scripts\win-setup.ps1
-        shell: cmld
+        run: call .\build-scripts\win-setup.cmd
+        shell: cmd
           
 
       - name: installing deps and build code

@@ -22,10 +22,8 @@ before_install:
       id
       brew cask install osxfuse
       echo "instyalled"
-      # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      # brew update
-      # brew cask install osxfuse --appdir=/tmp
       brew install encfs
+      brew install cryfs
       # sudo security unlock-keychain -u
     fi
     if [ $TRAVIS_OS_NAME = 'linux' ]; then

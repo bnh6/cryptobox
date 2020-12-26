@@ -3,8 +3,7 @@ choco feature disable -n=showDownloadProgress
 
 choco install vcredist2015
 
-curl.exe --output dokan64.msi --location  https://github.com/dokan-dev/dokany/releases/latest/download/Dokan_x64.msi
-start /wait msiexec.exe /I dokan64.msi /quiet /qn /norestart /L*V "dokan.log"
+choco install -y dokany
 
 curl.exe --output cryfs64.msi --location --url https://github.com/cryfs/cryfs/releases/download/0.10.2/cryfs-0.10.2-win64.msi
 start /wait msiexec.exe /I cryfs64.msi /quiet /qn /norestart /L*V "cryfs.log"

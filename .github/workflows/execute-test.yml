@@ -93,7 +93,7 @@ jobs:
 
       - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
-        run: call .\build-scripts\win-setup.cmd
+        run:  ./build-scripts/win-setup.cmd
         shell: powershell
           
 

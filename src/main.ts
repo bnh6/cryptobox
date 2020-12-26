@@ -1,8 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
-import log from "./utils/LogUtil";
+import log from "./services/LogService";
 import * as store from "./services/ConfigService";
-import * as ShellHelper from "./utils/ShellUtil";
 
 // TODO th proccess env was missing /usr/local/bin, where encfs is...
 process.env.PATH += ":/usr/local/bin";
@@ -43,6 +42,7 @@ function createWindow() {
         resizable: true,
         icon: path.join(__dirname, icoPath),
         webPreferences: {
+            // enableRemoteModule: true, // otherwise remote will undefined on renderers
             nodeIntegration: true,
             preload: path.join(__dirname, "preload.js"),
         },
@@ -62,7 +62,6 @@ function createWindow() {
 }
 
 app.on("ready", () => {
-    startupPreReq();
     loadScripts();
     createWindow();
 
@@ -86,19 +85,4 @@ process.on("uncaughtException", function (error) {
 
 function loadScripts() {
     import("./controllers/IPCManager");
-
-    //   const scripts = fs.readdirSync("./dist/client");
-    //   scripts.forEach(function(script: string) {
-    //     script.endsWith(".js") &&
-    //       import("./client/" + script) &&
-    //       log.debug(`imported: ${script} `);
-    //   });
-}
-
-function startupPreReq() {
-    ShellHelper.checkOSSupport();
-    if (!ShellHelper.checkRequirements()) {
-        log.error("environment does not meet requirements ...");
-        app.quit();
-    }
 }

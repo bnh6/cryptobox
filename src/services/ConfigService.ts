@@ -1,4 +1,4 @@
-import log from "../utils/LogUtil";
+import log from "./LogService";
 import { constants } from "../utils/constants";
 import * as Store from "electron-store";
 import * as path from "path";

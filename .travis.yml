@@ -20,24 +20,21 @@ before_install:
       echo -e "\n\n\t>>>> running on MAC\t\t"
       csrutil status
       id
-      # # # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      # brew update
-      # brew cask install osxfuse --appdir=/tmp
-      # brew install encfs
+      brew install --cask osxfuse
+      echo "instyalled"
+      brew install encfs cryfs
       # sudo security unlock-keychain -u
-      npm run test
     fi
     if [ $TRAVIS_OS_NAME = 'linux' ]; then
       echo -e "\n\n\t>>>> running on LINUX\t\t"
       id
-      # sudo apt clean
       sudo apt update
-      # sudo apt install encfs -y
-      # sudo apt install snapd -y
-       sudo apt install  libsecret-1-dev      
+      sudo apt install encfs cryfs libsecret-1-dev -y
     fi
 script:
   - |
+    encfs --version || true
+    cryfs --version || true
     npm install
     npm run build
     npm run lint

@@ -93,15 +93,9 @@ jobs:
       - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
-        run:  |
-          npm install 
-          npm run build
-          npm run install-impl
-          # ./build-scripts/win-setup
+        run: ./build-scripts/win-setup
           
         
-          
-
       - name: installing deps and build code
         run: npm ci && npm build
 

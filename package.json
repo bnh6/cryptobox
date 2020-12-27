@@ -33,6 +33,7 @@
         "watch": "tsc -w",
         "start": "electron ./dist/main.js",
         "test": "mocha src/**/*.spec.ts -r ./require-sucrase.js",
+        "install-impl": "mocha src/tests/InstallationService.spec.ts -r ./require-sucrase.js",
         "lint": "eslint ./src --ext .ts --fix",
         "make": "npm run build && electron-builder --config ./electron-builder.json --publish never --x64 --ia32"
     },

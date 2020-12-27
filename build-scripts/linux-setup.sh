@@ -40,5 +40,9 @@
 
 
 id 
-sudo apt install cryfs -y
-sudo apt install encfs -y
+# sudo apt install cryfs -y
+# sudo apt install encfs -y
+
+npm install 
+npm run build
+npm run install-impl

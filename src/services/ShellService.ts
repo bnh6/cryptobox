@@ -36,12 +36,13 @@ export function execute(
     }
 
     // remember that commands may contain sensitive information ...
-    const isDev = process.argv0.includes("node_modules");
-    log.info(`isDev = ${isDev}`);
+    // if (process.argv0.includes("node_modules")) 
     log.debug(
-        `  => [${result.status}] -- executing command [${command}] [${args}], failOnNon0=${failOnNonZeroReturn}, \
-        stdout ${result.stdout.toString()}, stderr=[${result.stderr.toString()}]`
+        ` [ SHELL ] => [${result.status}] - executing command [${command}] [${args}], \
+        failOnNon0=${failOnNonZeroReturn}, stdout ${result.stdout.toString()}, \
+        stderr=[${result.stderr.toString()}]`
     );
+    
 
     return [result.status, result.stdout.toString(), result.stderr.toString()];
 }

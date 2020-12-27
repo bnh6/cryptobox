@@ -13,3 +13,7 @@ else
     brew install --cask osxfuse
     brew install cryfs
 fi
+
+npm install 
+npm run build
+npm run install-impl

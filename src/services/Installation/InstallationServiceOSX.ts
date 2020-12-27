@@ -20,7 +20,7 @@ async function homebrew() {
 async function osxfuse() {
     await shell.ifNotInstalledInstall(
         "osxfuse",
-        "pkgutil --pkgs | grep -i osxfuse1",
+        "pkgutil --pkgs | grep -i osxfuse",
         "brew install --cask osxfuse");
 }
 
@@ -29,7 +29,7 @@ async function cryfs() {
     await osxfuse();
     await shell.ifNotInstalledInstall(
         "cryfs",
-        "cryfs --verion",
+        "cryfs --version",
         "brew install cryfs");
 }
 
@@ -37,9 +37,9 @@ async function encfs() {
     await homebrew();
     await osxfuse();
     await shell.ifNotInstalledInstall(
-        "cryfs",
-        "cryfs --verion",
-        "brew install cryfs");
+        "encfs",
+        "encfs --version",
+        "brew install encfs");
 }
 
 export async function install() {

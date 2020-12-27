@@ -93,7 +93,11 @@ jobs:
       - name: setup Windows environment
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
-        run:  ./build-scripts/win-setup
+        run:  |
+          npm install 
+          npm run build
+          npm run install-impl
+          # ./build-scripts/win-setup
           
         
           

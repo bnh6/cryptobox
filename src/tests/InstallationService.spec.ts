@@ -3,7 +3,7 @@ import * as os from "os";
 import * as installService from "../services/Installation/InstallationService";
 import * as shell from "../services/ShellService";
 
-describe("  >>>>  EXECUTING INSTALATION SERVICE  TESTS  <<<<  ", () => {
+describe("  >>>>  EXECUTING INSTALATION SERVICE  TESTS  <<<<  ", async () => {
     it(`installing implementations on ${os.platform()}`, async () => {
         expect(async () => {
             await installService.install();

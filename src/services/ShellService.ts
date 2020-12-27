@@ -16,17 +16,19 @@ export function execute(
         windowsHide: true,
     });
 
-    // TODO handle error better
-    if (result && result.error) {
-        
-        // // cropping stderr and stdout, cause sometimes it throws endless garbage
-        // // remember that commands may contain sensitive information ...
-        // log.error(`Suffered an error to execute the command [${command}], 
-        // code=${result.status},
-        // stdout[0-256]=[${result.stdout.subarray(0, 256)}],
-        // stderr[0-256]=[${result.stderr.subarray(0, 256)}],
-        // error = [${result.error}]`);
-        // throw new ServiceError(ErrorType.UnexpectedError);
+    if (result && result.error) {   
+        // in dev mode
+        if (process.argv0.includes("node_modules")) {
+            // cropping stderr and stdout, cause sometimes it throws endless garbage
+            // remember that commands may contain sensitive information ...
+            log.error(`Suffered an error to execute the command [${command}], 
+            code=${result.status},
+            stdout[0-256]=[${result.stdout.subarray(0, 256)}],
+            stderr[0-256]=[${result.stderr.subarray(0, 256)}],
+            error = [${result.error}]`);
+        }
+
+        throw new ServiceError(ErrorType.UnexpectedError);
     }
 
     if (failOnNonZeroReturn && result && result.status && 0 !== result.status) {

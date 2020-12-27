@@ -22,7 +22,7 @@ async function chocolatey() {
    
     await shell.ifNotInstalledInstall(
         "cholocatey",
-        "choco -?",
+        "choco source --help", //smaller output  (version is deprecated)
         cmdCommand);
     
     // "curl.exe --output dokan64.msi --location  \
@@ -43,10 +43,13 @@ async function dokany() {
 }
 
 async function vcpp() {
+    // HKEY_LOCAL_MACHINE\SOFTWARE[\Wow6432Node]\Microsoft\VisualStudio\14.0\VC\Runtimes\{x86|x64|ARM}
+    // according to https://docs.microsoft.com/en-us/cpp/windows/redistributing-visual-cpp-files?view=msvc-160
     await shell.ifNotInstalledInstall(
         "visual c++",
-        "Get-WmiObject -Class Win32_Product -Filter \"Name LIKE '%Visual C++ 2017%'\"",
-        "choco install vcredist2017");
+        "if exists \"C:\\Windows\\System32\\VCRUNTIME140.dll\" (exit /b 0) else (exit /b 1) ",
+        // "Get-WmiObject -Class Win32_Product -Filter \"Name LIKE '%Visual C++ 2017%'\"",
+        "choco install -y vcredist2017");
     
     // "curl.exe --output vc_redist.x64.exe --location --url https://aka.ms/vs/16/release/vc_redist.x64.exe \
     //     && start /wait msiexec.exe /I vc_redist.x64.exe /quiet /qn /norestart /L*V \"vc.log\" ");
@@ -62,7 +65,7 @@ async function encfs() {
     await shell.ifNotInstalledInstall(
         "cryfs",
         "cryfs --verion",
-        "choco install encfs4win --pre");
+        "choco install -y encfs4win --pre");
 }
 
 

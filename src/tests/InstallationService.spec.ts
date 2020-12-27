@@ -6,7 +6,7 @@ import * as shell from "../services/ShellService";
 describe("  >>>>  EXECUTING INSTALATION SERVICE  TESTS  <<<<  ", () => {
     it(`installing implementations on ${os.platform()}`, async () => {
         expect(async () => {
-            installService.install();
+            await installService.install();
         }).not.throw();
     }).timeout(420000); //7min
 

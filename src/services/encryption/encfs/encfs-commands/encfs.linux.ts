@@ -1,7 +1,7 @@
-import { Command, CommandParams } from "../../../types/command";
-import { EncryptionServiceActions } from "../../../types/encryption-service-actions";
-import { SupportedEncryptionServices } from "../../../types/supported-encryption-services";
-import { SupportedOS } from "../../../types/supported-os";
+import { Command, CommandParams } from "../../../../types/command";
+import { EncryptionServiceActions } from "../../../../types/encryption-service-actions";
+import { SupportedEncryptionServices } from "../../../../types/supported-encryption-services";
+import { SupportedOS } from "../../../../types/supported-os";
 
 export const encFSLinux: Command[] = [
   {

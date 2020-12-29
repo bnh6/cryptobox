@@ -55,30 +55,55 @@ export const CryFSErrorMap: Map<number, AppError> = new Map([
         "The file system uses a different cipher than the one specified on the command line using the --cipher argument.",
     },
   ],
+  [
+    16,
+    {
+      type: ErrorsType.InaccessibleBaseDir,
+      message:
+        "Base directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory).",
+    },
+  ],
+  [
+    17,
+    {
+      type: ErrorsType.InaccessibleMountDir,
+      message:
+        "Mount directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)",
+    },
+  ],
+  [
+    18,
+    {
+      type: ErrorsType.BaseDirInsideMountDir,
+      message: "Base directory can't be a subdirectory of the mount directory",
+    },
+  ],
+  [
+    19,
+    {
+      type: ErrorsType.InvalidFileSystem,
+      message: "Something's wrong with the file system.",
+    },
+  ],
+  [
+    20,
+    {
+      type: ErrorsType.FileSystemIdChanged,
+      message: `The filesystem id in the config file is different to the last time a filesystem was loaded from this basedir.
+               This could mean an attacker replaced the file system with a different one.
+               You can pass the --allow -replaced -filesystem option to allow this.`,
+    },
+  ],
+  [
+    21,
+    {
+      type: ErrorsType.EncryptionKeyChanged,
+      message: `The filesystem encryption key differs from the last time we loaded this filesystem.
+               This could mean an attacker replaced the file system with a different one.
+               You can pass the--allow -replaced - filesystem option to allow this.`,
+    },
+  ],
 ]);
-
-//   // Base directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-//   [16, ErrorsType.UnexpectedError], //"InaccessibleBaseDir"],
-
-//   // Mount directory doesn't exist or is inaccessible (i.e. not read or writable or not a directory)
-//   [17, ErrorsType.UnexpectedError], //"InaccessibleMountDir"],
-
-//   // Base directory can't be a subdirectory of the mount directory
-//   [18, ErrorsType.UnexpectedError], //"BaseDirInsideMountDir"],
-
-//   // Something's wrong with the file system.
-//   [19, ErrorsType.UnexpectedError], //"InvalidFilesystem"],
-
-//   // The filesystem id in the config file is different to the last time we loaded
-//   // a filesystem from this basedir.
-//   // This could mean an attacker replaced the file system with a different one.
-//   // You can pass the--allow - replaced - filesystem option to allow this.
-//   [20, ErrorsType.UnexpectedError], //"FilesystemIdChanged"],
-
-//   // The filesystem encryption key differs from the last time we loaded this filesystem.
-//   // This could mean an attacker replaced the file system with a different one.
-//   // You can pass the--allow - replaced - filesystem option to allow this.
-//   [21, ErrorsType.UnexpectedError], //"EncryptionKeyChanged"],
 
 //   // The command line options and the file system disagree on whether missing blocks
 //   // should be treated as integrity violations.

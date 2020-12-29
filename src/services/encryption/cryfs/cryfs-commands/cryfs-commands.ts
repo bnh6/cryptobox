@@ -1,11 +1,11 @@
-import { Command, CommandFunction } from "../../../types/command";
-import { CommandsMap } from "../../../types/commands-map";
-import { SupportedEncryptionServices } from "../../../types/supported-encryption-services";
-import { EncryptionServiceActions } from "../../../types/encryption-service-actions";
+import { Command, CommandFunction } from "../../../../types/command";
+import { CommandsMap } from "../../../../types/commands-map";
+import { SupportedEncryptionServices } from "../../../../types/supported-encryption-services";
+import { EncryptionServiceActions } from "../../../../types/encryption-service-actions";
 import { cryFSLinux } from "./cryfs.linux";
 import { cryFSMacOS } from "./cryfs.macOS";
 import { cryFSWindows } from "./cryfs.windows";
-import { SupportedOS } from "../../../types/supported-os";
+import { SupportedOS } from "../../../../types/supported-os";
 
 const cryFSCommands: CommandsMap = new Map<
   [

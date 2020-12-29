@@ -1,11 +1,11 @@
-import { Command, CommandFunction } from "../../../types/command";
-import { CommandsMap } from "../../../types/commands-map";
-import { SupportedEncryptionServices } from "../../../types/supported-encryption-services";
-import { EncryptionServiceActions } from "../../../types/encryption-service-actions";
+import { Command, CommandFunction } from "../../../../types/command";
+import { CommandsMap } from "../../../../types/commands-map";
+import { SupportedEncryptionServices } from "../../../../types/supported-encryption-services";
+import { EncryptionServiceActions } from "../../../../types/encryption-service-actions";
 import { encFSLinux } from "./encfs.linux";
 import { encFSMacOS } from "./encfs.macOS";
 import { encFSWindows } from "./encfs.windows";
-import { SupportedOS } from "../../../types/supported-os";
+import { SupportedOS } from "../../../../types/supported-os";
 
 const encFSCommands: CommandsMap = new Map<
   [
